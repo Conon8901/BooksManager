@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		112820522144CBB8006C4A26 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112820512144CBB8006C4A26 /* AddViewController.swift */; };
+		118C1CF621510A8A007DFE0D /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118C1CF521510A8A007DFE0D /* AddViewController.swift */; };
 		11ADD1B42143CFA0000A725E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADD1B32143CFA0000A725E /* ListViewController.swift */; };
 		11D77CB3212C2B0500E9B7CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */; };
 		11D77CB8212C2B0500E9B7CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CB6212C2B0500E9B7CE /* Main.storyboard */; };
@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		112820512144CBB8006C4A26 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		118C1CF521510A8A007DFE0D /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		11ADD1B32143CFA0000A725E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		11D77CAF212C2B0500E9B7CE /* BooksManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BooksManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,8 +73,8 @@
 			children = (
 				11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */,
 				11ADD1B32143CFA0000A725E /* ListViewController.swift */,
-				112820512144CBB8006C4A26 /* AddViewController.swift */,
 				11D77CD92131DC2000E9B7CE /* BarCodeViewController.swift */,
+				118C1CF521510A8A007DFE0D /* AddViewController.swift */,
 				11D77CD0212F120800E9B7CE /* NoteViewController.swift */,
 				11D77CD52130C17000E9B7CE /* SavedViewController.swift */,
 				11FABCC7213D986F00229F28 /* CSViewController.swift */,
@@ -163,7 +163,7 @@
 			files = (
 				11FABCC8213D986F00229F28 /* CSViewController.swift in Sources */,
 				11D77CD62130C17000E9B7CE /* SavedViewController.swift in Sources */,
-				112820522144CBB8006C4A26 /* AddViewController.swift in Sources */,
+				118C1CF621510A8A007DFE0D /* AddViewController.swift in Sources */,
 				11D77CD3212F12C000E9B7CE /* Declarations.swift in Sources */,
 				11ADD1B42143CFA0000A725E /* ListViewController.swift in Sources */,
 				11D77CD1212F120800E9B7CE /* NoteViewController.swift in Sources */,
