@@ -1,0 +1,46 @@
+/* 
+  Localizable.strings
+  BooksManager
+
+  Created by 黒岩修 on H30/08/21.
+  Copyright © 平成30年 黒岩修. All rights reserved.
+*/
+
+"CANCEL" = "Nuligo";
+"CLOSE" = "Fermi";
+"SAVED" = "Konservitoj";
+"ADD" = "Aldoni";
+"EDIT" = "Redakti";
+"ADDSUCCESSED" = "Aldonitas";
+"BACK" = "Reiri";
+"LIST_SETTING" = "Agordo";
+"LIST_VCTITLE" = "Listo";
+"EDIT" = "Edit";
+"LIST_NOBOOKS1" = "Ne estas libroj.";
+"LIST_NOBOOKS2" = "Aldonu librojn de la supra dekstra butono.";
+"LIST_SAVE" = "Konservi";
+"LIST_SAVECHECK" = "Konservas \"%@\"?";
+"LIST_ALREADY" = "Ĉi Tiu Libro Jam Estis Savita";
+"LIST_SETTING" = "Agordo";
+"ADD_VCTITLE" = "Aldoni Libron";
+"ADD_TITLE" = "Titolo";
+"ADD_AUTHOR" = "Aŭtoro";
+"ADD_NOTE" = "Noto";
+"ADD_FILLIN" = "Enigu la Titolo.";
+"ADD_EMPTY" = "Ĉu Vi Vere Volas sen Aŭtora Nomo?";
+"ADD_OK" = "Bone";
+"ADD_CONTINUE" = "Fari Kontinue";
+"ADD_ALREADY_OTHER" = "Estas Sama Libro en Alia Kategorio";
+"SAVED_NOBOOKS1" = "Ne estas konservita libroj.";
+"SAVED_NOBOOKS2" = "Per longa premo de ĉelo, vi povas konservi interesan libron ktp.";
+"BARCODE_FRAME" = "Vidigu la strekkodo en ĉi tiu kadro";
+"BARCODE_SUCCESS" = "Lego Sukcesis";
+"BARCODE_REFLECT" = "Reflekti en la Aldona Ekrano";
+"BARCODE_UNABLE" = "Ne Eblis Ricevi la Informon";
+"BARCODE_AMAZON" = "Malfermi la Artikla Paĝo de Amazon";
+"CS_VCTITLE" = "Agordo de Kategorioj";
+"CS_NEW" = "Nova Kategorio";
+"CS_LIST" = "Listo de Kategorioj";
+"CS_ALREADY" = "Estas Kategorio kun la Sama Nomo";
+"CS_FILLIN" = "Enigu";
+"CS_CHANGE" = "Ŝanĝo de la Nomo";

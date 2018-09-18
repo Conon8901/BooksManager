@@ -1,0 +1,15 @@
+
+/* Class = "UINavigationItem"; title = "一覧"; ObjectID = "1LX-85-T7S"; */
+"1LX-85-T7S.title" = "一覧";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "2WT-1q-XeA"; */
+"2WT-1q-XeA.text" = "Title";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "J9Q-EY-VH2"; */
+"J9Q-EY-VH2.text" = "Subtitle";
+
+/* Class = "UIBarButtonItem"; title = "設定"; ObjectID = "VtE-le-3b8"; */
+"VtE-le-3b8.title" = "設定";
+
+/* Class = "UIBarButtonItem"; title = "編集"; ObjectID = "iSr-g6-Jff"; */
+"iSr-g6-Jff.title" = "編集";
