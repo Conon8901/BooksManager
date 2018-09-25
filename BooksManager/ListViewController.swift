@@ -78,6 +78,14 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         table.addGestureRecognizer(saveRecognizer)
         tabs.addGestureRecognizer(openCSRecognizer)
         
+        let tabsBorder = UIView()
+        let viewHeight = CGFloat(1)
+        let viewY = UIApplication.shared.statusBarFrame.size.height + self.navigationController!.navigationBar.frame.size.height + tabs.frame.size.height - viewHeight
+        tabsBorder.frame = CGRect(x: 0, y: viewY, width: view.frame.size.width, height: viewHeight)
+        tabsBorder.backgroundColor = UIColor(white: 200/255, alpha: 1)
+        view.addSubview(tabsBorder)
+        view.bringSubview(toFront: tabsBorder)
+        
         tabs.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         
         checkTableState()
@@ -97,7 +105,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if variables.shared.isFromCS {
             variables.shared.isFromCS = false
             
-            tabs.scrollToItem(at: IndexPath(row: variables.shared.categories.count, section: 0), at: .right, animated: false)
+            tabs.scrollToItem(at: IndexPath(row: variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
             
             tabs.reloadData()
         }
@@ -113,10 +121,6 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let cell = tabs.dequeueReusableCell(withReuseIdentifier: "LCategoryCell", for: indexPath)
         let label = cell.contentView.viewWithTag(1) as! UILabel
         let selectingCellBottomBar = cell.contentView.viewWithTag(2)!
-        let tabsBottomBar = cell.contentView.viewWithTag(3)!
-        
-        tabsBottomBar.backgroundColor = UIColor(white: 200/255, alpha: 1)
-        tabsBottomBar.isUserInteractionEnabled = false
         
         cell.isUserInteractionEnabled = !table.isEditing
         
@@ -126,6 +130,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if indexPath.row == variables.shared.categories.count {
             label.text = "LIST_SETTING".localized
             label.textColor = .white
+            label.numberOfLines = 2
             cell.backgroundColor = variables.shared.complementaryColor
         } else {
             label.text = variables.shared.categories[indexPath.row]
@@ -165,7 +170,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             checkTableState()
             
             DispatchQueue.main.async {
-                self.tabs.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+                self.tabs.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             }
         }
     }

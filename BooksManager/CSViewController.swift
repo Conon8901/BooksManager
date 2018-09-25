@@ -15,7 +15,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     @IBOutlet var newTF: UITextField!
     @IBOutlet var categoryTable: UITableView!
     @IBOutlet var backButton: UIBarButtonItem!
-    @IBOutlet var viewOnScroll: UIView!
+    @IBOutlet var backgroundView: UIView!
     
     @IBOutlet var tableHeight: NSLayoutConstraint!
     @IBOutlet var viewHeight: NSLayoutConstraint!
@@ -64,7 +64,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         categoryTable.setEditing(true, animated: false)
         
         outsideTappedRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.closeKeyboard))
-        viewOnScroll.addGestureRecognizer(outsideTappedRecognizer)
+        backgroundView.addGestureRecognizer(outsideTappedRecognizer)
         
         viewWidth.constant = view.frame.size.width
         viewSet()
@@ -72,7 +72,6 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print(categoryTable.allowsSelectionDuringEditing)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,13 +141,12 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select")
         let alert = UIAlertController(
             title: "CS_CHANGE".localized,
             message: nil,
             preferredStyle: .alert)
         
-        let changeAction = UIAlertAction(title: "ALERT_BUTTON_ADD".localized, style: .default) { (action: UIAlertAction!) -> Void in
+        let changeAction = UIAlertAction(title: "CS_RENAME".localized, style: .default) { (action: UIAlertAction!) -> Void in
             let textField = alert.textFields![0] as UITextField
             let newName = textField.text!
             
@@ -164,17 +162,35 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
                     
                     self.saveData.set(variables.shared.categories, forKey: variables.shared.categoryKey)
                     self.saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
-                } else {
                     
+                    self.categoryTable.reloadData()
+                } else {
+                    let alert = UIAlertController(
+                        title: "CS_ALREADY".localized,
+                        message: nil,
+                        preferredStyle: .alert)
+                    
+                    alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
+                    
+                    self.present(alert, animated: true, completion: nil)
                 }
             } else {
+                let alert = UIAlertController(
+                    title: "CS_FILLIN".localized,
+                    message: nil,
+                    preferredStyle: .alert)
                 
+                alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
+                
+                self.present(alert, animated: true, completion: nil)
             }
         }
         
-        let cancelAction = UIAlertAction(title: "ALERT_BUTTON_CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
+        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
         
-        alert.addTextField { (textField: UITextField!) -> Void in }
+        alert.addTextField { (textField: UITextField!) -> Void in
+            textField.text = variables.shared.categories[indexPath.row]
+        }
         
         alert.addAction(cancelAction)
         alert.addAction(changeAction)
@@ -219,7 +235,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             }
         } else {
             let alert = UIAlertController(
-                title: "CS_ALREADY".localized,
+                title: "CS_FILLIN".localized,
                 message: nil,
                 preferredStyle: .alert)
             

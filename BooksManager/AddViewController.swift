@@ -55,8 +55,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         authorTF.font = .systemFont(ofSize: 20)
         noteTV.font = .systemFont(ofSize: 17)
         
+        titleTF.clearButtonMode = .whileEditing
+        authorTF.clearButtonMode = .whileEditing
+        
         titleTF.delegate = self
         authorTF.delegate = self
+        
+        titleTF.becomeFirstResponder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,6 +144,11 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
                 
                 self.present(alert, animated: true, completion: nil)
+                
+                titleTF.text = ""
+                authorTF.text = ""
+                
+                titleTF.becomeFirstResponder()
             }
         } else {
             let alert = UIAlertController(

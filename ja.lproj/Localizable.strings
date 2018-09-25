@@ -28,7 +28,7 @@
 "ADD_EMPTY" = "著者名なしでよろしいですか？";
 "ADD_OK" = "了解";
 "ADD_CONTINUE" = "連続で行う";
-"ADD_ALREADY_OTHER" = "他のカテゴリに同一の本があります";
+"ADD_ALREADY" = "他のカテゴリに同一の本があります";
 "SAVED_NOBOOKS1" = "保存された本がありません";
 "SAVED_NOBOOKS2" = "セルを長押しすることで面白かった本等を保存できます";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";
@@ -43,3 +43,4 @@
 "CS_ALREADY" = "同名のカテゴリがあります";
 "CS_FILLIN" = "入力してください";
 "CS_CHANGE" = "カテゴリ名変更";
+"CS_RENAME" = "変更";

@@ -19,7 +19,7 @@
 "LIST_SAVE" = "Save";
 "LIST_SAVECHECK" = "Save \"%@\"?";
 "LIST_ALREADY" = "This Book Has Already Been Saved";
-"LIST_SETTING" = "Setting";
+"LIST_SETTING" = "Category\nSetting";
 "ADD_VCTITLE" = "Add a Book";
 "ADD_TITLE" = "Title";
 "ADD_AUTHOR" = "Author";
@@ -28,10 +28,10 @@
 "ADD_EMPTY" = "Are You Sure to Add Without Author Name?";
 "ADD_OK" = "OK";
 "ADD_CONTINUE" = "Do Continuously";
-"ADD_ALREADY_OTHER" = "There Already is the Same Book in Other Category";
+"ADD_ALREADY" = "There Already is the Same Book in Other Category";
 "SAVED_NOBOOKS1" = "There are no saved books.";
 "SAVED_NOBOOKS2" = "By holding down a cell, you can save an interesting book etc.";
-"BARCODE_FRAME" = "Make display the barcode in this frame";
+"BARCODE_FRAME" = "Display the barcode in this frame";
 "BARCODE_SUCCESS" = "Reading Successed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
 "BARCODE_UNABLE" = "Unable to Get the Information";
@@ -43,3 +43,4 @@
 "CS_ALREADY" = "There Already is a Category with the Same Name";
 "CS_FILLIN" = "Fill in";
 "CS_CHANGE" = "Change of the Name";
+"CS_RENAME" = "Rename";
