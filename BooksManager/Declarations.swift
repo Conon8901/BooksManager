@@ -30,6 +30,10 @@ extension UIBarButtonItem {
     }
 }
 
+func getBookSearchAPIAddress(nTh: Int) -> String {
+    return "https://www.googleapis.com/books/v1/volumes?q=intitle:%@&startIndex=\(variables.shared.resultsNumber*nTh)&maxResults=\(variables.shared.resultsNumber)"
+}
+
 class variables {
     static let shared = variables()
     
@@ -40,6 +44,8 @@ class variables {
     let alKey = "booksData"
     let saveKey = "savedBooksData"
     let categoryKey = "CategoryData"
+    
+    let resultsNumber = 40
     
     var booksData = [String: [[String]]]()
     
@@ -53,4 +59,8 @@ class variables {
     var currentCategory = 0
     
     var currentBookIndex = 0
+    
+    var searchText = ""
+    var gottenTitle: String?
+    var gottenAuthor: String?
 }

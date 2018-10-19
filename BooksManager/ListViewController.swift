@@ -163,14 +163,16 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             let next = storyboard!.instantiateViewController(withIdentifier: "CSNavView")
             self.present(next, animated: true, completion: nil)
         } else {
-            variables.shared.currentCategory = indexPath.row
-            
-            tabs.reloadData()
-            
-            checkTableState()
-            
-            DispatchQueue.main.async {
-                self.tabs.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            if indexPath.row != variables.shared.currentCategory {
+                variables.shared.currentCategory = indexPath.row
+                
+                tabs.reloadData()
+                
+                checkTableState()
+                
+                DispatchQueue.main.async {
+                    self.tabs.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                }
             }
         }
     }

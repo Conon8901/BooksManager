@@ -14,7 +14,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     @IBOutlet var listLabel: UILabel!
     @IBOutlet var newTF: UITextField!
     @IBOutlet var categoryTable: UITableView!
-    @IBOutlet var backButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var backgroundView: UIView!
     
     @IBOutlet var tableHeight: NSLayoutConstraint!
@@ -43,7 +43,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         super.viewDidLoad()
         
         navigationItem.title = "CS_VCTITLE".localized
-        backButton.title = "BACK".localized
+        cancelButton.title = "CANCEL".localized
         
         newLabel.text = "CS_NEW".localized
         listLabel.text = "CS_LIST".localized
@@ -78,7 +78,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         variables.shared.isFromCS = true
     }
     
-    @IBAction func backTapped() {
+    @IBAction func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     

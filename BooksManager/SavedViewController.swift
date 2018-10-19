@@ -11,7 +11,7 @@ import UIKit
 class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: - 宣言
-    @IBOutlet var backButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var table: UITableView!
     @IBOutlet var savedBooksEmptyView: UIView!
     @IBOutlet var noSavedBooksLabel1: UILabel!
@@ -25,6 +25,8 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         
         navigationItem.title = "SAVED".localized
+        
+        cancelButton.title = "CANCEL".localized
         
         noSavedBooksLabel1.text = "SAVED_NOBOOKS1".localized
         noSavedBooksLabel2.text = "SAVED_NOBOOKS2".localized

@@ -12,7 +12,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - 宣言
     
-    @IBOutlet var backButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var titleTF: UITextField!
     @IBOutlet var authorLabel: UILabel!
@@ -21,6 +21,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var noteTV: UITextView!
     @IBOutlet var continuouslyLabel: UILabel!
     @IBOutlet var continuouslySwitch: UISwitch!
+    @IBOutlet var searchButton: UIButton!
     
     @IBOutlet var addButton: UIButton! {
         didSet {
@@ -39,17 +40,24 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var titleByBarcode: String?
     var authorByBarcode: String?
     
+    var titleBySearch: String?
+    var authorBySearch: String?
+    
+    var searchText = ""
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "ADD_VCTITLE".localized
-        backButton.title = "BACK".localized
+        cancelButton.title = "CANCEL".localized
         titleLabel.text = "ADD_TITLE".localized
         authorLabel.text = "ADD_AUTHOR".localized
         noteLabel.text = "ADD_NOTE".localized
         continuouslyLabel.text = "ADD_CONTINUE".localized
+        searchButton.isEnabled = false
+        searchButton.setImage(UIImage(named: "search.png"), for: .normal)
         
         titleTF.font = .systemFont(ofSize: 20)
         authorTF.font = .systemFont(ofSize: 20)
@@ -72,6 +80,16 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             if let author = authorByBarcode {
                 authorTF.text = author
                 authorByBarcode = nil
+            }
+        }
+        
+        if let title = variables.shared.gottenTitle {
+            titleTF.text = title
+            variables.shared.gottenTitle = nil
+            
+            if let author = variables.shared.gottenAuthor {
+                authorTF.text = author
+                variables.shared.gottenAuthor = nil
             }
         }
     }
@@ -186,6 +204,16 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - TextField
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
+            searchButton.isEnabled = false
+        } else {
+            searchButton.isEnabled = true
+        }
+        
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -201,7 +229,16 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {//応急
-        let BarcodeVC = segue.destination as! BarCodeViewController
-        BarcodeVC.addVC = self
+        let next = segue.destination
+        if let BarcodeVC = next as? BarCodeViewController {
+            BarcodeVC.addVC = self
+        }
+    }
+    
+    @IBAction func searchTapped() {//お探しの本が検索結果に表示されないことがあります。
+        variables.shared.searchText = titleTF.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+        
+        let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")
+        self.present(next, animated: true, completion: nil)
     }
 }

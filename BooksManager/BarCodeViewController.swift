@@ -121,7 +121,9 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                             if let items = json["items"] as? [[String: AnyObject]] {
                                 if let item = items.first {
                                     if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
-                                        title = volumeInfo["title"] as? String
+                                        if let titleString = volumeInfo["title"] as? String {
+                                            title = titleString
+                                        }
                                         
                                         if let authorsArray = volumeInfo["authors"] as? [String] {
                                             author = authorsArray.joined(separator: ", ")

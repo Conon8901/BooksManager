@@ -288,14 +288,14 @@
                         <viewLayoutGuide key="safeArea" id="AwZ-dr-at2"/>
                     </view>
                     <navigationItem key="navigationItem" title="SAVED" id="gPK-gt-C1d">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="4Gi-QW-YCs">
+                        <barButtonItem key="leftBarButtonItem" title="CANCEL" id="4Gi-QW-YCs">
                             <connections>
                                 <action selector="cancelTapped" destination="7N2-MO-OPV" id="NtR-df-fLy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="backButton" destination="4Gi-QW-YCs" id="yZR-JV-tp5"/>
+                        <outlet property="cancelButton" destination="4Gi-QW-YCs" id="yZR-JV-tp5"/>
                         <outlet property="noSavedBooksLabel1" destination="3vg-2M-AQr" id="ujw-vS-xos"/>
                         <outlet property="noSavedBooksLabel2" destination="poD-Ij-ZGU" id="hWO-ci-buL"/>
                         <outlet property="savedBooksEmptyView" destination="Lph-gc-wTy" id="cBj-0D-lff"/>
@@ -316,9 +316,32 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a59-Tq-kr0" userLabel="Title Background">
                                 <rect key="frame" x="0.0" y="48" width="375" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btG-Q1-BXk">
+                                        <rect key="frame" x="335" y="0.0" width="40" height="40"/>
+                                        <connections>
+                                            <action selector="searchTapped" destination="5ba-8c-W09" eventType="touchUpInside" id="eQl-gD-SD7"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mac-J9-ws4" userLabel="Title Text Field">
+                                        <rect key="frame" x="16" y="0.0" width="319" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="mac-J9-ws4" firstAttribute="leading" secondItem="a59-Tq-kr0" secondAttribute="leading" constant="16" id="2sI-2B-2Ps"/>
                                     <constraint firstAttribute="height" constant="40" id="8W7-8T-AhY"/>
+                                    <constraint firstItem="btG-Q1-BXk" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="C34-yF-3hg"/>
+                                    <constraint firstItem="mac-J9-ws4" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="KHR-ZE-KMW"/>
+                                    <constraint firstItem="btG-Q1-BXk" firstAttribute="leading" secondItem="mac-J9-ws4" secondAttribute="trailing" id="TSj-fF-Edt"/>
+                                    <constraint firstAttribute="bottom" secondItem="btG-Q1-BXk" secondAttribute="bottom" id="hJK-xl-k7f"/>
+                                    <constraint firstAttribute="trailing" secondItem="mac-J9-ws4" secondAttribute="trailing" constant="40" id="l1f-UN-tNK"/>
+                                    <constraint firstAttribute="trailing" secondItem="btG-Q1-BXk" secondAttribute="trailing" id="pvR-Mc-8oo"/>
+                                    <constraint firstAttribute="bottom" secondItem="mac-J9-ws4" secondAttribute="bottom" id="uVS-cK-VXH"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aoh-Hm-Ucy" userLabel="Author Background">
@@ -346,13 +369,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mac-J9-ws4" userLabel="Title Text Field">
-                                <rect key="frame" x="16" y="48" width="343" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4qJ-IU-3f2" userLabel="Author Text Field">
                                 <rect key="frame" x="16" y="124.5" width="343" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -426,23 +442,19 @@
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="YXj-9c-sMy" secondAttribute="trailing" constant="20" symbolic="YES" id="9fg-sC-qpl"/>
                             <constraint firstItem="Hb4-cs-o8Z" firstAttribute="trailing" secondItem="tiN-i7-43d" secondAttribute="trailing" constant="16" id="BJf-Od-yik"/>
                             <constraint firstItem="4qJ-IU-3f2" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="BYO-t0-BNe"/>
-                            <constraint firstItem="Hb4-cs-o8Z" firstAttribute="trailing" secondItem="mac-J9-ws4" secondAttribute="trailing" constant="16" id="BnY-tJ-eeW"/>
                             <constraint firstItem="a59-Tq-kr0" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="DjG-AK-qHY"/>
                             <constraint firstItem="KyK-sh-ETm" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="GM6-nf-ceZ"/>
                             <constraint firstItem="Hb4-cs-o8Z" firstAttribute="trailing" secondItem="4qJ-IU-3f2" secondAttribute="trailing" constant="16" id="Ga2-ur-hKg"/>
-                            <constraint firstItem="mac-J9-ws4" firstAttribute="bottom" secondItem="a59-Tq-kr0" secondAttribute="bottom" id="HIs-Ko-cya"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KyK-sh-ETm" secondAttribute="trailing" constant="20" symbolic="YES" id="IAt-l4-xc0"/>
                             <constraint firstItem="a59-Tq-kr0" firstAttribute="trailing" secondItem="Hb4-cs-o8Z" secondAttribute="trailing" id="MxG-hb-wCi"/>
                             <constraint firstItem="tiN-i7-43d" firstAttribute="top" secondItem="8mL-JI-ACs" secondAttribute="bottom" constant="8" id="NPu-hm-9vL"/>
                             <constraint firstItem="cVU-sf-ae5" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="Q7t-AE-DHl"/>
                             <constraint firstItem="Aoh-Hm-Ucy" firstAttribute="top" secondItem="4qJ-IU-3f2" secondAttribute="top" id="RKS-es-hvX"/>
-                            <constraint firstItem="mac-J9-ws4" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="ZiD-03-Ubm"/>
                             <constraint firstItem="8mL-JI-ACs" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="Zne-9O-FuJ"/>
                             <constraint firstItem="4qJ-IU-3f2" firstAttribute="bottom" secondItem="Aoh-Hm-Ucy" secondAttribute="bottom" id="aQU-Q0-UoX"/>
                             <constraint firstItem="hkv-CV-YaA" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="biT-Ck-yMJ"/>
                             <constraint firstItem="tiN-i7-43d" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="cbp-Ne-JFi"/>
                             <constraint firstItem="YXj-9c-sMy" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="dG2-e6-ZBa"/>
-                            <constraint firstItem="mac-J9-ws4" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="euc-SN-w98"/>
                             <constraint firstItem="Aoh-Hm-Ucy" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" id="gdG-Hz-KLy"/>
                             <constraint firstItem="a59-Tq-kr0" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" id="k8j-eg-pr9"/>
                             <constraint firstItem="Hb4-cs-o8Z" firstAttribute="bottom" secondItem="hkv-CV-YaA" secondAttribute="bottom" constant="40" id="kwa-As-Dnl"/>
@@ -450,7 +462,6 @@
                             <constraint firstItem="Aoh-Hm-Ucy" firstAttribute="trailing" secondItem="Hb4-cs-o8Z" secondAttribute="trailing" id="u4q-SM-IBp"/>
                             <constraint firstItem="cVU-sf-ae5" firstAttribute="top" secondItem="tiN-i7-43d" secondAttribute="bottom" constant="50" id="uLi-O2-3cG"/>
                             <constraint firstItem="KyK-sh-ETm" firstAttribute="top" secondItem="Hb4-cs-o8Z" secondAttribute="top" constant="20" id="uaQ-KS-9bM"/>
-                            <constraint firstItem="a59-Tq-kr0" firstAttribute="top" secondItem="mac-J9-ws4" secondAttribute="top" id="vO1-1R-T6g"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8mL-JI-ACs" secondAttribute="trailing" constant="20" symbolic="YES" id="xr0-af-riy"/>
                             <constraint firstItem="4qJ-IU-3f2" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="zIC-I2-rrq"/>
                             <constraint firstItem="Aoh-Hm-Ucy" firstAttribute="top" secondItem="YXj-9c-sMy" secondAttribute="bottom" constant="8" id="za8-Xn-DqJ"/>
@@ -458,7 +469,7 @@
                         <viewLayoutGuide key="safeArea" id="Hb4-cs-o8Z"/>
                     </view>
                     <navigationItem key="navigationItem" title="ADD" id="lKQ-dv-l9B">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="e3f-yd-GHT">
+                        <barButtonItem key="leftBarButtonItem" title="CANCEL" id="e3f-yd-GHT">
                             <connections>
                                 <action selector="cancelTapped" destination="5ba-8c-W09" id="vGb-e4-5y3"/>
                             </connections>
@@ -473,11 +484,12 @@
                         <outlet property="addButton" destination="cVU-sf-ae5" id="2Ms-BP-OlF"/>
                         <outlet property="authorLabel" destination="YXj-9c-sMy" id="JyE-1i-Mpd"/>
                         <outlet property="authorTF" destination="4qJ-IU-3f2" id="zMT-nz-5cF"/>
-                        <outlet property="backButton" destination="e3f-yd-GHT" id="bOy-aE-mqO"/>
+                        <outlet property="cancelButton" destination="e3f-yd-GHT" id="bOy-aE-mqO"/>
                         <outlet property="continuouslyLabel" destination="MuT-FA-okB" id="36T-b6-u3Z"/>
                         <outlet property="continuouslySwitch" destination="PxV-Kj-I2l" id="tle-33-lFo"/>
                         <outlet property="noteLabel" destination="8mL-JI-ACs" id="Eai-TI-Y5f"/>
                         <outlet property="noteTV" destination="tiN-i7-43d" id="0Ve-xo-1dx"/>
+                        <outlet property="searchButton" destination="btG-Q1-BXk" id="eLL-8o-P75"/>
                         <outlet property="titleLabel" destination="KyK-sh-ETm" id="09D-Hu-njz"/>
                         <outlet property="titleTF" destination="mac-J9-ws4" id="pur-Bu-s5k"/>
                     </connections>
@@ -624,16 +636,16 @@
                         <viewLayoutGuide key="safeArea" id="WN1-1j-0jv"/>
                     </view>
                     <navigationItem key="navigationItem" title="CS" id="jim-S7-MIN">
-                        <barButtonItem key="leftBarButtonItem" title="BACK" id="V4c-Ur-Beu">
+                        <barButtonItem key="leftBarButtonItem" title="CANCEL" id="V4c-Ur-Beu">
                             <connections>
-                                <action selector="backTapped" destination="KVF-6h-3j4" id="gMm-T9-99T"/>
+                                <action selector="cancelTapped" destination="KVF-6h-3j4" id="gMm-T9-99T"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="ZjC-5f-1QD" id="NdY-PG-9Bm"/>
-                        <outlet property="backButton" destination="V4c-Ur-Beu" id="Xzm-SE-dBt"/>
                         <outlet property="backgroundView" destination="oi7-sH-qVj" id="jKy-9w-MQr"/>
+                        <outlet property="cancelButton" destination="V4c-Ur-Beu" id="Xzm-SE-dBt"/>
                         <outlet property="categoryTable" destination="GR6-NO-KEf" id="u7p-bY-PVY"/>
                         <outlet property="listLabel" destination="Wjc-x6-Abi" id="018-Cc-O2a"/>
                         <outlet property="newLabel" destination="ZBl-Hf-BOy" id="KKj-1P-Pd5"/>
@@ -647,6 +659,70 @@
             </objects>
             <point key="canvasLocation" x="1829.5999999999999" y="982.75862068965523"/>
         </scene>
+        <!--SEARCH-->
+        <scene sceneID="9E1-i1-P4P">
+            <objects>
+                <viewController storyboardIdentifier="SearchView" id="T01-4g-bWg" customClass="SearchViewController" customModule="BooksManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cgW-LW-sRN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SF7-dm-oz7">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SearchCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" textLabel="EYJ-EJ-lTw" detailTextLabel="lts-hf-vUq" rowHeight="60" style="IBUITableViewCellStyleSubtitle" id="I2q-7J-Nl6">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="I2q-7J-Nl6" id="nWt-yP-Yh4">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EYJ-EJ-lTw">
+                                                    <rect key="frame" x="15" y="10" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lts-hf-vUq">
+                                                    <rect key="frame" x="15" y="33.5" width="44" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="SF7-dm-oz7" firstAttribute="top" secondItem="LlB-j0-g61" secondAttribute="top" id="AkW-ac-s4r"/>
+                            <constraint firstItem="SF7-dm-oz7" firstAttribute="bottom" secondItem="LlB-j0-g61" secondAttribute="bottom" id="adu-C7-2wL"/>
+                            <constraint firstItem="SF7-dm-oz7" firstAttribute="trailing" secondItem="LlB-j0-g61" secondAttribute="trailing" id="lQF-V5-aEM"/>
+                            <constraint firstItem="SF7-dm-oz7" firstAttribute="leading" secondItem="LlB-j0-g61" secondAttribute="leading" id="wwQ-pC-O7F"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="LlB-j0-g61"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="SEARCH" id="UUw-KR-Fwd">
+                        <barButtonItem key="leftBarButtonItem" title="CANCEL" id="1Av-Dc-klq">
+                            <connections>
+                                <action selector="cancelTapped" destination="T01-4g-bWg" id="t3x-Lq-itI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cancelButton" destination="1Av-Dc-klq" id="igb-9b-Xzo"/>
+                        <outlet property="table" destination="SF7-dm-oz7" id="hyV-5b-vXd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FO0-sm-TxB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3381.5999999999999" y="1789.6551724137933"/>
+        </scene>
         <!--Bar Code View Controller-->
         <scene sceneID="XHc-SY-DaS">
             <objects>
@@ -659,12 +735,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qC6-qx-qvK">
-                                        <rect key="frame" x="13" y="25" width="56" height="34"/>
+                                        <rect key="frame" x="13" y="25" width="70" height="34"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="56" id="b5Y-dL-ADF"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="1" id="b5Y-dL-ADF"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <state key="normal" title="Cancel"/>
+                                        <state key="normal" title="CANCEL"/>
                                         <connections>
                                             <action selector="cancelTapped" destination="PXb-Jw-Dby" eventType="touchUpInside" id="B9e-ac-VFb"/>
                                         </connections>
@@ -694,7 +770,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rNp-H2-flt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3382" y="1809"/>
+            <point key="canvasLocation" x="4177" y="1790"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="061-9Z-KCX">
@@ -767,6 +843,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rhm-KZ-Lzc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="983"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="td2-Zg-k8L">
+            <objects>
+                <navigationController storyboardIdentifier="SearchNavView" automaticallyAdjustsScrollViewInsets="NO" id="C2T-ob-Oav" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="lh9-zV-xEX">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="T01-4g-bWg" kind="relationship" relationship="rootViewController" id="WFf-2B-RVr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="evd-BF-hLi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2582" y="1790"/>
         </scene>
     </scenes>
 </document>
