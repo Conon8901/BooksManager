@@ -12,6 +12,7 @@
 "ADD" = "Add";
 "EDIT" = "Edit";
 "ADDSUCCESSED" = "Added";
+"BACK" = "Back";
 "LIST_SETTING" = "Setting";
 "LIST_VCTITLE" = "List";
 "LIST_NOBOOKS1" = "There are no books.";
@@ -29,6 +30,7 @@
 "ADD_OK" = "OK";
 "ADD_CONTINUE" = "Do Continuously";
 "ADD_ALREADY" = "There Already is the Same Book in Other Category";
+"NOTE_TITLE" = "Details";
 "SAVED_NOBOOKS1" = "There are no saved books.";
 "SAVED_NOBOOKS2" = "By holding down a cell, you can save an interesting book etc.";
 "BARCODE_FRAME" = "Display the barcode in this frame";

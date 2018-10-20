@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+//バーコードを読み取るVC
 class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     @IBOutlet var previewView: UIView!
@@ -100,7 +101,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         var reflectAction = UIAlertAction()
                         
                         //GoogleBooksAPIに該当する本が登録されているか確認
-                            //let disenabledISBN = "9784560087893" //ニューエクスプレスプラス ノルウェー語
                         let URLString = String(format: "https://www.googleapis.com/books/v1/volumes?q=isbn:%@", readed)
                         let url = URL(string: URLString)!
                         

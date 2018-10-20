@@ -24,7 +24,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     let saveData = UserDefaults.standard
     
     var saveRecognizer = UILongPressGestureRecognizer()
-    var openCSRecognizer = UILongPressGestureRecognizer()
+    var openCSVCRecognizer = UILongPressGestureRecognizer()
+    
+    var numberBeforeGoingToAddVC = 0
+    var categoriesBeforeGoingToCSVC = [String]()
     
     //MARK: - LifeCycle
     
@@ -38,32 +41,29 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         savedBooksButton.title = "SAVED".localized
         
         nobooksLabel1.text = "LIST_NOBOOKS1".localized
-        nobooksLabel1.textColor = variables.shared.empryLabelColor
+        nobooksLabel1.textColor = Variables.shared.empryLabelColor
         nobooksLabel2.text = "LIST_NOBOOKS2".localized
-        nobooksLabel2.textColor = variables.shared.empryLabelColor
+        nobooksLabel2.textColor = Variables.shared.empryLabelColor
         
         saveRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.saveBook))
-        openCSRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCS))
+        openCSVCRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
         
-        //開いているカテゴリ
-        variables.shared.currentCategory = 0
+        Variables.shared.currentCategory = 0
         
-//        saveData.register(defaults: [variables.shared.alKey: ["NEW": []], variables.shared.categoryKey: "NEW", variables.shared.saveKey: []])
-        
-        if let dic = saveData.object(forKey: variables.shared.alKey) as? [String: [[String]]] {
-            variables.shared.booksData = dic
+        if let dic = saveData.object(forKey: Variables.shared.alKey) as? [String: [[String]]] {
+            Variables.shared.booksData = dic
         } else {
-            variables.shared.booksData["NEW"] = []
+            Variables.shared.booksData["NEW"] = []
         }
         
-        if let arr = saveData.object(forKey: variables.shared.categoryKey) as? [String] {
-            variables.shared.categories = arr
+        if let arr = saveData.object(forKey: Variables.shared.categoryKey) as? [String] {
+            Variables.shared.categories = arr
         } else {
-            variables.shared.categories.append("NEW")
+            Variables.shared.categories.append("NEW")
         }
         
-        if let arr = saveData.object(forKey: variables.shared.saveKey) as? [[String]] {
-            variables.shared.savedBooks = arr
+        if let arr = saveData.object(forKey: Variables.shared.saveKey) as? [[String]] {
+            Variables.shared.savedBooks = arr
         }
         
         tabs.delegate = self
@@ -76,7 +76,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         table.allowsSelection = true
         
         table.addGestureRecognizer(saveRecognizer)
-        tabs.addGestureRecognizer(openCSRecognizer)
+        tabs.addGestureRecognizer(openCSVCRecognizer)
         
         let tabsBorder = UIView()
         let viewHeight = CGFloat(1)
@@ -96,16 +96,13 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             table.deselectRow(at: index, animated: true)
         }
         
-        if variables.shared.isFromAddView {
-            variables.shared.isFromAddView = false
-            
+        let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
+        if currentNumber > numberBeforeGoingToAddVC {
             checkTableState()
         }
         
-        if variables.shared.isFromCS {
-            variables.shared.isFromCS = false
-            
-            tabs.scrollToItem(at: IndexPath(row: variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
+        if categoriesBeforeGoingToCSVC != Variables.shared.categories {
+            tabs.scrollToItem(at: IndexPath(row: Variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
             
             tabs.reloadData()
         }
@@ -114,7 +111,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //MARK: - CollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return variables.shared.categories.count + 1
+        return Variables.shared.categories.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -124,20 +121,20 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         cell.isUserInteractionEnabled = !table.isEditing
         
-        selectingCellBottomBar.backgroundColor = variables.shared.themeColor
+        selectingCellBottomBar.backgroundColor = Variables.shared.themeColor
         selectingCellBottomBar.alpha = 0
         
-        if indexPath.row == variables.shared.categories.count {
+        if indexPath.row == Variables.shared.categories.count {
             label.text = "LIST_SETTING".localized
             label.textColor = .white
             label.numberOfLines = 2
-            cell.backgroundColor = variables.shared.complementaryColor
+            cell.backgroundColor = Variables.shared.themeColor.complementary
         } else {
-            label.text = variables.shared.categories[indexPath.row]
+            label.text = Variables.shared.categories[indexPath.row]
             label.textColor = .black
             cell.backgroundColor = .white
             
-            if indexPath == IndexPath(row: variables.shared.currentCategory, section: 0) {
+            if indexPath == IndexPath(row: Variables.shared.currentCategory, section: 0) {
                 selectingCellBottomBar.alpha = 1
             }
         }
@@ -157,14 +154,16 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == variables.shared.categories.count {
+        if indexPath.row == Variables.shared.categories.count {
             setNotEditing()
+            
+            categoriesBeforeGoingToCSVC = Variables.shared.categories
             
             let next = storyboard!.instantiateViewController(withIdentifier: "CSNavView")
             self.present(next, animated: true, completion: nil)
         } else {
-            if indexPath.row != variables.shared.currentCategory {
-                variables.shared.currentCategory = indexPath.row
+            if indexPath.row != Variables.shared.currentCategory {
+                Variables.shared.currentCategory = indexPath.row
                 
                 tabs.reloadData()
                 
@@ -180,18 +179,18 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.count
+        return Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell")!
         
-        cell.textLabel?.text = variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][0]
+        cell.textLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]
         
-        if variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][1] == "" {
+        if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1] == "" {
             cell.detailTextLabel?.text = " "
         } else {
-            cell.detailTextLabel?.text = variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][1]
+            cell.detailTextLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1]
         }
         
         return cell
@@ -214,12 +213,12 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.remove(at: indexPath.row)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .top)
         
-        saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
         
-        if variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.count == 0 {
+        if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
             setNotEditing()
             
             booksEmptyView.alpha = 0.0
@@ -233,19 +232,18 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movingItem = variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![sourceIndexPath.row]
+        let movingItem = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![sourceIndexPath.row]
         
-        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.remove(at: sourceIndexPath.row)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.remove(at: sourceIndexPath.row)
         
-        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.insert(movingItem, at: destinationIndexPath.row)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.insert(movingItem, at: destinationIndexPath.row)
         
-        saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        variables.shared.currentBookIndex = indexPath.row
-        
         let nextVC = self.storyboard!.instantiateViewController(withIdentifier: "NoteView") as! NoteViewController
+        nextVC.currentBookIndex = indexPath.row
         
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -263,10 +261,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @objc func saveBook(recognizer: UILongPressGestureRecognizer) {
         if let indexPath = table.indexPathForRow(at: recognizer.location(in: table)) {
             if recognizer.state == .began  {
-                let savotaBook = Array(variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][0...1])
+                let savotaBook = Array(Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0...1])
                 
                 var isSameBookExists = false
-                for book in variables.shared.savedBooks {
+                for book in Variables.shared.savedBooks {
                     if Array(book[0...1]) == savotaBook {
                         isSameBookExists = true
                         break
@@ -275,7 +273,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 if isSameBookExists {
                     let alert = UIAlertController(
-                        title: String(format: "LIST_ALREADY".localized, variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][0]),
+                        title: String(format: "LIST_ALREADY".localized, Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]),
                         message: nil,
                         preferredStyle: .alert)
                     
@@ -284,15 +282,15 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     self.present(alert, animated: true, completion: nil)
                 } else {
                     let alert = UIAlertController(
-                        title: String(format: "LIST_SAVECHECK".localized, variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![indexPath.row][0]),
+                        title: String(format: "LIST_SAVECHECK".localized, Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]),
                         message: nil,
                         preferredStyle: .alert)
                     
                     let saveAction = UIAlertAction(title: "LIST_SAVE".localized, style: .default) { (action: UIAlertAction!) -> Void in
                         
-                        variables.shared.savedBooks.append(savotaBook)
+                        Variables.shared.savedBooks.append(savotaBook)
                         
-                        self.saveData.set(variables.shared.savedBooks, forKey: variables.shared.saveKey)
+                        self.saveData.set(Variables.shared.savedBooks, forKey: Variables.shared.saveKey)
                     }
                     
                     let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
@@ -328,7 +326,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func checkTableState() {
-        if variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.count == 0 {
+        if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
             setParts(isTableEmpty: true)
         } else {
             setParts(isTableEmpty: false)
@@ -337,10 +335,19 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
-    @objc func openCS() {
+    @objc func openCSVC() {
         setNotEditing()
         
+        categoriesBeforeGoingToCSVC = Variables.shared.categories
+        
         let next = storyboard!.instantiateViewController(withIdentifier: "CSNavView")
+        self.present(next, animated: true, completion: nil)
+    }
+    
+    @IBAction func composeTapped() {
+        numberBeforeGoingToAddVC = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
+        
+        let next = storyboard!.instantiateViewController(withIdentifier: "AddNavView")
         self.present(next, animated: true, completion: nil)
     }
 }

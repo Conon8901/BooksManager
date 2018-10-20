@@ -31,14 +31,14 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         noSavedBooksLabel1.text = "SAVED_NOBOOKS1".localized
         noSavedBooksLabel2.text = "SAVED_NOBOOKS2".localized
         
-        noSavedBooksLabel1.textColor = variables.shared.empryLabelColor
-        noSavedBooksLabel2.textColor = variables.shared.empryLabelColor
+        noSavedBooksLabel1.textColor = Variables.shared.empryLabelColor
+        noSavedBooksLabel2.textColor = Variables.shared.empryLabelColor
         
         table.delegate = self
         table.dataSource = self
         table.tableFooterView = UIView()
         
-        if variables.shared.savedBooks.count != 0 {
+        if Variables.shared.savedBooks.count != 0 {
             savedBooksEmptyView.isHidden = true
         } else {
             savedBooksEmptyView.isHidden = false
@@ -48,17 +48,17 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
     //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return variables.shared.savedBooks.count
+        return Variables.shared.savedBooks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SavedCell")
         
-        cell?.textLabel?.text = variables.shared.savedBooks[indexPath.row][0]
-        if variables.shared.savedBooks[indexPath.row][1] == "" {
+        cell?.textLabel?.text = Variables.shared.savedBooks[indexPath.row][0]
+        if Variables.shared.savedBooks[indexPath.row][1] == "" {
             cell?.detailTextLabel?.text = " "
         } else {
-            cell?.detailTextLabel?.text = variables.shared.savedBooks[indexPath.row][1]
+            cell?.detailTextLabel?.text = Variables.shared.savedBooks[indexPath.row][1]
         }
         
         return cell!
@@ -70,12 +70,12 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            variables.shared.savedBooks.remove(at: indexPath.row)
+            Variables.shared.savedBooks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .top)
             
-            saveData.set(variables.shared.savedBooks, forKey: variables.shared.saveKey)
+            saveData.set(Variables.shared.savedBooks, forKey: Variables.shared.saveKey)
             
-            if variables.shared.savedBooks.count == 0 {
+            if Variables.shared.savedBooks.count == 0 {
                 savedBooksEmptyView.isHidden = false
                 
                 savedBooksEmptyView.alpha = 0.0

@@ -12,6 +12,7 @@
 "ADD" = "Aldoni";
 "EDIT" = "Redakti";
 "ADDSUCCESSED" = "Aldonitas";
+"BACK" = "Reiri";
 "LIST_SETTING" = "Agordo";
 "LIST_VCTITLE" = "Listo";
 "EDIT" = "Edit";
@@ -30,6 +31,7 @@
 "ADD_OK" = "Bone";
 "ADD_CONTINUE" = "Fari Kontinue";
 "ADD_ALREADY" = "Estas Sama Libro en Alia Kategorio";
+"NOTE_TITLE" = "Detalo";
 "SAVED_NOBOOKS1" = "Ne estas konservita libroj.";
 "SAVED_NOBOOKS2" = "Per longa premo de ĉelo, vi povas konservi interesan libron ktp.";
 "BARCODE_FRAME" = "Vidigu la strekkodo en ĉi tiu kadro";

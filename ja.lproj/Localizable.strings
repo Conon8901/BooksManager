@@ -12,6 +12,7 @@
 "ADD" = "追加";
 "EDIT" = "編集";
 "ADDSUCCESSED" = "追加されました";
+"BACK" = "戻る";
 "LIST_SETTING" = "設定";
 "LIST_VCTITLE" = "一覧";
 "LIST_NOBOOKS1" = "本がありません";
@@ -29,6 +30,7 @@
 "ADD_OK" = "了解";
 "ADD_CONTINUE" = "連続で行う";
 "ADD_ALREADY" = "他のカテゴリに同一の本があります";
+"NOTE_TITLE" = "詳細";
 "SAVED_NOBOOKS1" = "保存された本がありません";
 "SAVED_NOBOOKS2" = "セルを長押しすることで面白かった本等を保存できます";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";

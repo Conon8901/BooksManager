@@ -28,9 +28,14 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         cancelButton.title = "CANCEL".localized
         
-        searchText = variables.shared.searchText
+        //NEED: 論理積検索がしたい
+//        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
+//        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+//        searchText = replaced_encoded
         
-        booksList = getNewList(nTh: nThTime)
+        searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+        
+        booksList = fetchNewList(nTh: nThTime)
         
         table.reloadData()
     }
@@ -49,8 +54,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        variables.shared.gottenTitle = booksList[indexPath.row][0]
-        variables.shared.gottenAuthor = booksList[indexPath.row][1]
+        Variables.shared.gottenTitle = booksList[indexPath.row][0]
+        Variables.shared.gottenAuthor = booksList[indexPath.row][1]
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.dismiss(animated: true, completion: nil)
@@ -58,17 +63,21 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //下についたら
-        let reachedBottom = table.contentOffset.y >= table.contentSize.height - table.bounds.size.height
-        //let thisqu = scrollView.contentSize.height - scrollView.frame.height - scrollView.contentOffset.y < 500 //下まで500
-        
-        if reachedBottom && table.isDragging { //isDraggingは必要(らしい) //一部のみ更新したい //滑らかに
-            if booksList.count < totalItems {
-                let new = getNewList(nTh: nThTime)
-                
-                booksList = booksList + new
-                
-                table.reloadData()
+        if nThTime < 24 { //1000件で止める
+            //下についたら
+            let reachedBottom = table.contentOffset.y >= table.contentSize.height - table.bounds.size.height
+            //NEED: 少し前に読み込むパターン
+            //let thisqu = scrollView.contentSize.height - scrollView.frame.height - scrollView.contentOffset.y < 500 //下まで500
+            
+            //NEED: isDraggingは必要、滑らかにするために一部のみ更新できるとなお良し
+            if reachedBottom && table.isDragging {
+                if booksList.count < totalItems {
+                    let new = fetchNewList(nTh: nThTime)
+                    
+                    booksList = booksList + new
+                    
+                    table.reloadData()
+                }
             }
         }
     }
@@ -77,8 +86,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.dismiss(animated: true, completion: nil)
     }
     
-    func getNewList(nTh: Int) -> [[String]] {//限る千件
-        let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(variables.shared.resultsNumber*nTh)&maxResults=\(variables.shared.resultsNumber)"
+    func fetchNewList(nTh: Int) -> [[String]] {
+        let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
         
         let url = URL(string: URLString)!
         
@@ -94,7 +103,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             //該当件数取得
             if let number = json["totalItems"] as? Int {
-                totalItems = number
+                totalItems = number //NEED: 取得の時々で値が変わる
             }
             
             //題名・著者の取得

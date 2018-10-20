@@ -8,6 +8,7 @@
 
 import UIKit
 
+//本の追加をするVC
 class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - 宣言
@@ -28,9 +29,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             addButton.setTitle("ADD".localized, for: .normal)
             addButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
             addButton.layer.cornerRadius = 5.0
-            addButton.layer.borderColor = variables.shared.themeColor.cgColor
+            addButton.layer.borderColor = Variables.shared.themeColor.cgColor
             addButton.layer.borderWidth = 1.0
-            addButton.backgroundColor = variables.shared.themeColor
+            addButton.backgroundColor = Variables.shared.themeColor
             addButton.tintColor = .white
         }
     }
@@ -83,19 +84,15 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        if let title = variables.shared.gottenTitle {
+        if let title = Variables.shared.gottenTitle {
             titleTF.text = title
-            variables.shared.gottenTitle = nil
+            Variables.shared.gottenTitle = nil
             
-            if let author = variables.shared.gottenAuthor {
+            if let author = Variables.shared.gottenAuthor {
                 authorTF.text = author
-                variables.shared.gottenAuthor = nil
+                Variables.shared.gottenAuthor = nil
             }
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        variables.shared.isFromAddView = true
     }
     
     //MARK: - NavigationBar
@@ -115,8 +112,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         if title.characterExists() {
             var exists = false
-            for categoryName in variables.shared.categories {
-                for book in variables.shared.booksData[categoryName]! {
+            for categoryName in Variables.shared.categories {
+                for book in Variables.shared.booksData[categoryName]! {
                     if Array(book[0...1]) == [title, author] {
                         exists = true
                         break
@@ -126,9 +123,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             
             if !exists {
                 if author.characterExists() {
-                    variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.append([title, author, note])
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note])
                     
-                    saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+                    saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                     
                     self.continuouslyCheck()
                 } else {
@@ -139,9 +136,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     
                     let okAction = UIAlertAction(title: "ADD_OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                         
-                        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]!.append([title, "", note])
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note])
                         
-                        self.saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+                        self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                         
                         self.continuouslyCheck()
                     }
@@ -205,10 +202,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - TextField
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
-            searchButton.isEnabled = false
-        } else {
-            searchButton.isEnabled = true
+        print(range)
+        if textField === titleTF {
+            if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
+                searchButton.isEnabled = false
+            } else {
+                searchButton.isEnabled = true
+            }
         }
         
         return true
@@ -228,15 +228,15 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {//応急
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let next = segue.destination
         if let BarcodeVC = next as? BarCodeViewController {
             BarcodeVC.addVC = self
         }
     }
     
-    @IBAction func searchTapped() {//お探しの本が検索結果に表示されないことがあります。
-        variables.shared.searchText = titleTF.text!.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+    @IBAction func searchTapped() {//NEED: お探しの本が検索結果に表示されないことがあります。
+        Variables.shared.searchText = titleTF.text!
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")
         self.present(next, animated: true, completion: nil)

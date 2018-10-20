@@ -14,7 +14,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     @IBOutlet var listLabel: UILabel!
     @IBOutlet var newTF: UITextField!
     @IBOutlet var categoryTable: UITableView!
-    @IBOutlet var cancelButton: UIBarButtonItem!
+    @IBOutlet var backButton: UIBarButtonItem!
     @IBOutlet var backgroundView: UIView!
     
     @IBOutlet var tableHeight: NSLayoutConstraint!
@@ -32,9 +32,9 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             addButton.setTitle("ADD".localized, for: .normal)
             addButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
             addButton.layer.cornerRadius = 5.0
-            addButton.layer.borderColor = variables.shared.themeColor.cgColor
+            addButton.layer.borderColor = Variables.shared.themeColor.cgColor
             addButton.layer.borderWidth = 1.0
-            addButton.backgroundColor = variables.shared.themeColor
+            addButton.backgroundColor = Variables.shared.themeColor
             addButton.tintColor = .white
         }
     }
@@ -43,7 +43,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         super.viewDidLoad()
         
         navigationItem.title = "CS_VCTITLE".localized
-        cancelButton.title = "CANCEL".localized
+        backButton.title = "BACK".localized
         
         newLabel.text = "CS_NEW".localized
         listLabel.text = "CS_LIST".localized
@@ -74,28 +74,24 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         super.viewDidAppear(animated)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        variables.shared.isFromCS = true
-    }
-    
-    @IBAction func cancelTapped() {
+    @IBAction func backTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return variables.shared.categories.count
+        return Variables.shared.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = categoryTable.dequeueReusableCell(withIdentifier: "CSCell")
         
-        cell?.textLabel?.text = variables.shared.categories[indexPath.row]
+        cell?.textLabel?.text = Variables.shared.categories[indexPath.row]
         
         return cell!
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if variables.shared.categories.count == 1 {
+        if Variables.shared.categories.count == 1 {
             return false
         }
         
@@ -107,12 +103,12 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let target = variables.shared.categories[sourceIndexPath.row]
+        let target = Variables.shared.categories[sourceIndexPath.row]
         
-        variables.shared.categories.remove(at: sourceIndexPath.row)
-        variables.shared.categories.insert(target, at: destinationIndexPath.row)
+        Variables.shared.categories.remove(at: sourceIndexPath.row)
+        Variables.shared.categories.insert(target, at: destinationIndexPath.row)
         
-        saveData.set(variables.shared.categories, forKey: variables.shared.categoryKey)
+        saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -121,13 +117,13 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            variables.shared.booksData.removeValue(forKey: variables.shared.categories[indexPath.row])
+            Variables.shared.booksData.removeValue(forKey: Variables.shared.categories[indexPath.row])
             
-            variables.shared.categories.remove(at: indexPath.row)
+            Variables.shared.categories.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .top)
             
-            saveData.set(variables.shared.categories, forKey: variables.shared.categoryKey)
-            saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+            saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+            saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
             
             DispatchQueue.main.async {
                 self.viewSet()
@@ -151,17 +147,17 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             let newName = textField.text!
             
             if newName.characterExists() {
-                if variables.shared.categories.index(of: newName) == nil {
-                    let contents = variables.shared.booksData[variables.shared.categories[indexPath.row]]
+                if Variables.shared.categories.index(of: newName) == nil {
+                    let contents = Variables.shared.booksData[Variables.shared.categories[indexPath.row]]
                     
-                    variables.shared.booksData[newName] = contents
+                    Variables.shared.booksData[newName] = contents
                     
-                    variables.shared.booksData.removeValue(forKey: variables.shared.categories[indexPath.row])
+                    Variables.shared.booksData.removeValue(forKey: Variables.shared.categories[indexPath.row])
                     
-                    variables.shared.categories[indexPath.row] = newName
+                    Variables.shared.categories[indexPath.row] = newName
                     
-                    self.saveData.set(variables.shared.categories, forKey: variables.shared.categoryKey)
-                    self.saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+                    self.saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+                    self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                     
                     self.categoryTable.reloadData()
                 } else {
@@ -189,7 +185,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
         
         alert.addTextField { (textField: UITextField!) -> Void in
-            textField.text = variables.shared.categories[indexPath.row]
+            textField.text = Variables.shared.categories[indexPath.row]
         }
         
         alert.addAction(cancelAction)
@@ -202,13 +198,13 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     
     @IBAction func addTapped() {
         if newTF.text!.characterExists() {
-            if variables.shared.categories.index(of: newTF.text!) == nil {
-                variables.shared.categories.append(newTF.text!)
-                variables.shared.booksData[newTF.text!] = []
+            if Variables.shared.categories.index(of: newTF.text!) == nil {
+                Variables.shared.categories.append(newTF.text!)
+                Variables.shared.booksData[newTF.text!] = []
                 
-                saveData.set(variables.shared.categories, forKey: variables.shared.categoryKey)
+                saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
 
-                saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+                saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                 
                 categoryTable.reloadData()
                 
@@ -247,7 +243,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     }
     
     func viewSet() {
-        tableHeight.constant = cellHeight * CGFloat(variables.shared.categories.count)
+        tableHeight.constant = cellHeight * CGFloat(Variables.shared.categories.count)
         
         let screenHeight = UIScreen.main.bounds.size.height
         let statusBarHeight = UIApplication.shared.statusBarFrame.size.height

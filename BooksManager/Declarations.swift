@@ -30,15 +30,28 @@ extension UIBarButtonItem {
     }
 }
 
-func getBookSearchAPIAddress(nTh: Int) -> String {
-    return "https://www.googleapis.com/books/v1/volumes?q=intitle:%@&startIndex=\(variables.shared.resultsNumber*nTh)&maxResults=\(variables.shared.resultsNumber)"
+extension UIColor {
+    var complementary: UIColor {
+        let originRed = self.cgColor.components![0]
+        let originGreen = self.cgColor.components![1]
+        let originBlue = self.cgColor.components![2]
+        
+        let min_max_sum = [originRed, originGreen, originBlue].min()! + [originRed, originGreen, originBlue].max()!
+        
+        return UIColor(red: min_max_sum - originRed, green: min_max_sum - originGreen, blue: min_max_sum - originBlue, alpha: 1)
+    }
 }
 
-class variables {
-    static let shared = variables()
+//グローバル定数の書き方
+//struct Constant {
+//    static let theme = UIColor(red: 129/255, green: 153/255, blue: 88/255, alpha: 1)
+//}
+//public let theme = UIColor(red: 129/255, green: 153/255, blue: 88/255, alpha: 1)
+
+class Variables {
+    static let shared = Variables()
     
     let themeColor = UIColor(red: 129/255, green: 153/255, blue: 88/255, alpha: 1)
-    let complementaryColor = UIColor(red: 126/255, green: 102/255, blue: 167/255, alpha: 1)
     let empryLabelColor = UIColor(white: 67/255, alpha: 1)
     
     let alKey = "booksData"
@@ -53,14 +66,9 @@ class variables {
     
     var savedBooks = [[String]]()
     
-    var isFromAddView = false
-    var isFromCS = false
-    
     var currentCategory = 0
     
-    var currentBookIndex = 0
-    
-    var searchText = ""
-    var gottenTitle: String?
-    var gottenAuthor: String?
+    var searchText = "" //add -> search
+    var gottenTitle: String? //search -> add
+    var gottenAuthor: String? //search -> add
 }

@@ -14,17 +14,20 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet var noteTV: UITextView!
     @IBOutlet var doneButton: UIBarButtonItem!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var authorLabel: UILabel!
     
     var saveData = UserDefaults.standard
+    
+    var currentBookIndex: Int?
     
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![variables.shared.currentBookIndex][0]
+        navigationItem.title = "NOTE_TITLE".localized
         
-        noteTV.text = variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![variables.shared.currentBookIndex][2]
         noteTV.font = .systemFont(ofSize: 17)
         
         noteTV.delegate = self
@@ -32,16 +35,24 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         doneButton.hide()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        titleLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]//速度的に？
+        
+        authorLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][1]
+        
+        noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![variables.shared.currentBookIndex][2] = noteTV.text
-        saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2] = noteTV.text
+        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
     }
     
     //MARK: - Navi
     
     @IBAction func doneTapped() {
-        variables.shared.booksData[variables.shared.categories[variables.shared.currentCategory]]![variables.shared.currentBookIndex][2] = noteTV.text
-        saveData.set(variables.shared.booksData, forKey: variables.shared.alKey)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2] = noteTV.text
+        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
         
         noteTV.resignFirstResponder()
     }
