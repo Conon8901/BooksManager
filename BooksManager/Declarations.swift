@@ -42,12 +42,6 @@ extension UIColor {
     }
 }
 
-//グローバル定数の書き方
-//struct Constant {
-//    static let theme = UIColor(red: 129/255, green: 153/255, blue: 88/255, alpha: 1)
-//}
-//public let theme = UIColor(red: 129/255, green: 153/255, blue: 88/255, alpha: 1)
-
 class Variables {
     static let shared = Variables()
     
@@ -55,16 +49,16 @@ class Variables {
     let empryLabelColor = UIColor(white: 67/255, alpha: 1)
     
     let alKey = "booksData"
-    let saveKey = "savedBooksData"
-    let categoryKey = "CategoryData"
+    let deletedKey = "deletedBooksData"
+    let categoryKey = "categoryData"
     
     let resultsNumber = 40
     
-    var booksData = [String: [[String]]]()
+    var booksData = [String: [[String]]]() //[String: [Book]]()
     
-    var categories = [String]()
+    var categories = [String]() //
     
-    var savedBooks = [[String]]()
+    var deletedBooks = [[String]]() //[Book]()
     
     var currentCategory = 0
     
@@ -72,3 +66,12 @@ class Variables {
     var gottenTitle: String? //search -> add
     var gottenAuthor: String? //search -> add
 }
+
+/*
+class Book {
+    var title: String = ""
+    var author: String?
+    var note: String = ""
+    var isbn: Int?
+}
+ */

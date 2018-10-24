@@ -152,18 +152,20 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 }
             } else {
                 let alert = UIAlertController(
-                    title: "ADD_ALREADY".localized,
+                    title: String(format: "ADD_ALREADY".localized, titleTF.text!),
                     message: nil,
                     preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
-                
-                self.present(alert, animated: true, completion: nil)
                 
                 titleTF.text = ""
                 authorTF.text = ""
                 
-                titleTF.becomeFirstResponder()
+                let closeAction = UIAlertAction(title: "CLOSE".localized, style: .default) { (action: UIAlertAction!) -> Void in
+                    self.titleTF.becomeFirstResponder()
+                }
+                
+                alert.addAction(closeAction)
+                
+                self.present(alert, animated: true, completion: nil)
             }
         } else {
             let alert = UIAlertController(
@@ -202,7 +204,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - TextField
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print(range)
+        
         if textField === titleTF {
             if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
                 searchButton.isEnabled = false
@@ -235,7 +237,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func searchTapped() {//NEED: お探しの本が検索結果に表示されないことがあります。
+    @IBAction func searchTapped() {//TODO: お探しの本が検索結果に表示されないことがあります。
         Variables.shared.searchText = titleTF.text!
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")

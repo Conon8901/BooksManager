@@ -11,6 +11,7 @@
 		11ADD1B42143CFA0000A725E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ADD1B32143CFA0000A725E /* ListViewController.swift */; };
 		11BE6FCD21784DE700162F5A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE6FCC21784DE700162F5A /* SearchViewController.swift */; };
 		11BE6FD52178B62100162F5A /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FD42178B62100162F5A /* search.png */; };
+		11BE6FDD21803D1B00162F5A /* noimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FDC21803D1B00162F5A /* noimage.png */; };
 		11D77CB3212C2B0500E9B7CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */; };
 		11D77CB8212C2B0500E9B7CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CB6212C2B0500E9B7CE /* Main.storyboard */; };
 		11D77CBA212C2B0800E9B7CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CB9212C2B0800E9B7CE /* Assets.xcassets */; };
@@ -18,7 +19,7 @@
 		11D77CC8212C813700E9B7CE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CCA212C813700E9B7CE /* Localizable.strings */; };
 		11D77CD1212F120800E9B7CE /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CD0212F120800E9B7CE /* NoteViewController.swift */; };
 		11D77CD3212F12C000E9B7CE /* Declarations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CD2212F12C000E9B7CE /* Declarations.swift */; };
-		11D77CD62130C17000E9B7CE /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CD52130C17000E9B7CE /* SavedViewController.swift */; };
+		11D77CD62130C17000E9B7CE /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CD52130C17000E9B7CE /* HistoryViewController.swift */; };
 		11D77CDA2131DC2000E9B7CE /* BarCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CD92131DC2000E9B7CE /* BarCodeViewController.swift */; };
 		11FABCC8213D986F00229F28 /* CSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FABCC7213D986F00229F28 /* CSViewController.swift */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 		11ADD1B32143CFA0000A725E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		11BE6FCC21784DE700162F5A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		11BE6FD42178B62100162F5A /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		11BE6FDC21803D1B00162F5A /* noimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noimage.png; sourceTree = "<group>"; };
 		11D77CAF212C2B0500E9B7CE /* BooksManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BooksManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		11D77CB7212C2B0500E9B7CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -39,7 +41,7 @@
 		11D77CD0212F120800E9B7CE /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		11D77CD2212F12C000E9B7CE /* Declarations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Declarations.swift; sourceTree = "<group>"; };
 		11D77CD4212F3F3D00E9B7CE /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
-		11D77CD52130C17000E9B7CE /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		11D77CD52130C17000E9B7CE /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		11D77CD92131DC2000E9B7CE /* BarCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeViewController.swift; sourceTree = "<group>"; };
 		11FABCC7213D986F00229F28 /* CSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,13 +77,14 @@
 		11D77CB1212C2B0500E9B7CE /* BooksManager */ = {
 			isa = PBXGroup;
 			children = (
+				11BE6FDC21803D1B00162F5A /* noimage.png */,
 				11BE6FD42178B62100162F5A /* search.png */,
 				11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */,
 				11ADD1B32143CFA0000A725E /* ListViewController.swift */,
 				11D77CD92131DC2000E9B7CE /* BarCodeViewController.swift */,
 				118C1CF521510A8A007DFE0D /* AddViewController.swift */,
 				11D77CD0212F120800E9B7CE /* NoteViewController.swift */,
-				11D77CD52130C17000E9B7CE /* SavedViewController.swift */,
+				11D77CD52130C17000E9B7CE /* HistoryViewController.swift */,
 				11BE6FCC21784DE700162F5A /* SearchViewController.swift */,
 				11FABCC7213D986F00229F28 /* CSViewController.swift */,
 				11D77CD2212F12C000E9B7CE /* Declarations.swift */,
@@ -155,6 +158,7 @@
 			files = (
 				11BE6FD52178B62100162F5A /* search.png in Resources */,
 				11D77CBD212C2B0800E9B7CE /* LaunchScreen.storyboard in Resources */,
+				11BE6FDD21803D1B00162F5A /* noimage.png in Resources */,
 				11D77CC8212C813700E9B7CE /* Localizable.strings in Resources */,
 				11D77CBA212C2B0800E9B7CE /* Assets.xcassets in Resources */,
 				11D77CB8212C2B0500E9B7CE /* Main.storyboard in Resources */,
@@ -169,7 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11FABCC8213D986F00229F28 /* CSViewController.swift in Sources */,
-				11D77CD62130C17000E9B7CE /* SavedViewController.swift in Sources */,
+				11D77CD62130C17000E9B7CE /* HistoryViewController.swift in Sources */,
 				118C1CF621510A8A007DFE0D /* AddViewController.swift in Sources */,
 				11BE6FCD21784DE700162F5A /* SearchViewController.swift in Sources */,
 				11D77CD3212F12C000E9B7CE /* Declarations.swift in Sources */,

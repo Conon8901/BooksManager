@@ -8,6 +8,7 @@
 
 import UIKit
 
+//本の詳細を見るVC
 class NoteViewController: UIViewController, UITextViewDelegate {
     
     //MARK: - 宣言
@@ -16,6 +17,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var authorLabel: UILabel!
+    @IBOutlet var coverImageView: UIImageView!
     
     var saveData = UserDefaults.standard
     
@@ -26,21 +28,38 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "NOTE_TITLE".localized
+        navigationItem.title = "NOTE_VCTITLE".localized
         
         noteTV.font = .systemFont(ofSize: 17)
         
         noteTV.delegate = self
         
         doneButton.hide()
+        
+        coverImageView.image = UIImage(named: "noimage.png")
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        titleLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]//速度的に？
+        titleLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]
         
         authorLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][1]
+        if authorLabel.text == "" {
+            authorLabel.text = "NOTE_NONAME".localized
+        }
         
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
+        let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
+        
+        let constraintA = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.authorLabel, attribute: .bottom, multiplier: 1, constant: 20)
+        
+        let constraintC = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.coverImageView, attribute: .bottom, multiplier: 1, constant: 20)
+        
+        constraintA.isActive = authorLBottom > coverIVBottom
+        constraintC.isActive = !constraintA.isActive
     }
     
     override func viewWillDisappear(_ animated: Bool) {

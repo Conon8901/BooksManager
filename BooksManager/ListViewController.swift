@@ -14,7 +14,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //MARK: - 宣言
     
     @IBOutlet var composeButton: UIBarButtonItem!
-    @IBOutlet var savedBooksButton: UIBarButtonItem!
+    @IBOutlet var historyButton: UIBarButtonItem!
     @IBOutlet var tabs: UICollectionView!
     @IBOutlet var table: UITableView!
     @IBOutlet var booksEmptyView: UIView!
@@ -23,7 +23,6 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     let saveData = UserDefaults.standard
     
-    var saveRecognizer = UILongPressGestureRecognizer()
     var openCSVCRecognizer = UILongPressGestureRecognizer()
     
     var numberBeforeGoingToAddVC = 0
@@ -38,14 +37,13 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         navigationItem.rightBarButtonItems?.append(editButtonItem)
         editButtonItem.title = "EDIT".localized
-        savedBooksButton.title = "SAVED".localized
+        historyButton.title = "HISTORY".localized
         
         nobooksLabel1.text = "LIST_NOBOOKS1".localized
         nobooksLabel1.textColor = Variables.shared.empryLabelColor
         nobooksLabel2.text = "LIST_NOBOOKS2".localized
         nobooksLabel2.textColor = Variables.shared.empryLabelColor
         
-        saveRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.saveBook))
         openCSVCRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
         
         Variables.shared.currentCategory = 0
@@ -62,8 +60,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             Variables.shared.categories.append("NEW")
         }
         
-        if let arr = saveData.object(forKey: Variables.shared.saveKey) as? [[String]] {
-            Variables.shared.savedBooks = arr
+        if let arr = saveData.object(forKey: Variables.shared.deletedKey) as? [[String]] {
+            Variables.shared.deletedBooks = arr
         }
         
         tabs.delegate = self
@@ -75,7 +73,6 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         table.tableFooterView = UIView()
         table.allowsSelection = true
         
-        table.addGestureRecognizer(saveRecognizer)
         tabs.addGestureRecognizer(openCSVCRecognizer)
         
         let tabsBorder = UIView()
@@ -96,11 +93,13 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             table.deselectRow(at: index, animated: true)
         }
         
+        //本が追加されたか
         let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
         if currentNumber > numberBeforeGoingToAddVC {
             checkTableState()
         }
         
+        //カテゴリの追加編集削除並び替え
         if categoriesBeforeGoingToCSVC != Variables.shared.categories {
             tabs.scrollToItem(at: IndexPath(row: Variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
             
@@ -186,12 +185,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell")!
         
         cell.textLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]
-        
-        if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1] == "" {
-            cell.detailTextLabel?.text = " "
-        } else {
-            cell.detailTextLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1]
-        }
+        cell.detailTextLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1]
         
         return cell
     }
@@ -213,12 +207,21 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        //履歴に追加
+        let book = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row]
+        Variables.shared.deletedBooks.insert(book, at: 0)
+        if Variables.shared.deletedBooks.count >= 100 {
+            Variables.shared.deletedBooks.removeLast()
+        }
+        
         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .top)
         
+        saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
         saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
         
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
+            //FIXME: 通ってるのに動かない
             setNotEditing()
             
             booksEmptyView.alpha = 0.0
@@ -253,55 +256,9 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         table.setEditing(editing, animated: true)
         
         composeButton.isEnabled = !editing
-        savedBooksButton.isEnabled = !editing
+        historyButton.isEnabled = !editing
         
         tabs.reloadData()
-    }
-    
-    @objc func saveBook(recognizer: UILongPressGestureRecognizer) {
-        if let indexPath = table.indexPathForRow(at: recognizer.location(in: table)) {
-            if recognizer.state == .began  {
-                let savotaBook = Array(Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0...1])
-                
-                var isSameBookExists = false
-                for book in Variables.shared.savedBooks {
-                    if Array(book[0...1]) == savotaBook {
-                        isSameBookExists = true
-                        break
-                    }
-                }
-                
-                if isSameBookExists {
-                    let alert = UIAlertController(
-                        title: String(format: "LIST_ALREADY".localized, Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]),
-                        message: nil,
-                        preferredStyle: .alert)
-                    
-                    alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                } else {
-                    let alert = UIAlertController(
-                        title: String(format: "LIST_SAVECHECK".localized, Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]),
-                        message: nil,
-                        preferredStyle: .alert)
-                    
-                    let saveAction = UIAlertAction(title: "LIST_SAVE".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                        
-                        Variables.shared.savedBooks.append(savotaBook)
-                        
-                        self.saveData.set(Variables.shared.savedBooks, forKey: Variables.shared.saveKey)
-                    }
-                    
-                    let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
-                    
-                    alert.addAction(cancelAction)
-                    alert.addAction(saveAction)
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
-        }
     }
     
     func setNotEditing() {
@@ -312,17 +269,12 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         editButtonItem.style = .plain
         
         composeButton.isEnabled = true
-        savedBooksButton.isEnabled = true
+        historyButton.isEnabled = true
     }
     
     func setParts(isTableEmpty: Bool) {
-        if isTableEmpty {
-            booksEmptyView.isHidden = false
-            editButtonItem.isEnabled = false
-        } else {
-            booksEmptyView.isHidden = true
-            editButtonItem.isEnabled = true
-        }
+        booksEmptyView.isHidden = !isTableEmpty
+        editButtonItem.isEnabled = !isTableEmpty
     }
     
     func checkTableState() {

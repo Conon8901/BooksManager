@@ -8,13 +8,13 @@
 
 "CANCEL" = "Cancel";
 "CLOSE" = "Close";
-"SAVED" = "Saved";
+"HISTORY" = "History";
 "ADD" = "Add";
 "EDIT" = "Edit";
 "ADDSUCCESSED" = "Added";
 "BACK" = "Back";
-"LIST_SETTING" = "Setting";
 "LIST_VCTITLE" = "List";
+"LIST_SETTING" = "Setting";
 "LIST_NOBOOKS1" = "There are no books.";
 "LIST_NOBOOKS2" = "Add books from the top right button.";
 "LIST_SAVE" = "Save";
@@ -29,15 +29,16 @@
 "ADD_EMPTY" = "Are You Sure to Add Without Author Name?";
 "ADD_OK" = "OK";
 "ADD_CONTINUE" = "Do Continuously";
-"ADD_ALREADY" = "There Already is the Same Book in Other Category";
-"NOTE_TITLE" = "Details";
-"SAVED_NOBOOKS1" = "There are no saved books.";
-"SAVED_NOBOOKS2" = "By holding down a cell, you can save an interesting book etc.";
+"ADD_ALREADY" = "\"%@\" has already been added";
+"NOTE_VCTITLE" = "Details";
+"NOTE_NONAME" = "No Name";
+"HISTORY_NO" = "There are no deleted books.";
 "BARCODE_FRAME" = "Display the barcode in this frame";
 "BARCODE_SUCCESS" = "Reading Successed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
 "BARCODE_UNABLE" = "Unable to Get the Information";
 "BARCODE_AMAZON" = "Open the Product Page of Amazon";
+"SEARCH_VCTITLE" = "Search";
 "CS_VCTITLE" = "Categories Setting";
 "CS_NEW" = "New Category";
 "CS_LIST" = "List of Categories";

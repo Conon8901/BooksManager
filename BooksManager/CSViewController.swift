@@ -8,6 +8,7 @@
 
 import UIKit
 
+//カテゴリの追加編集をするVC
 class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var newLabel: UILabel!

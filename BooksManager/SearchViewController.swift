@@ -8,6 +8,7 @@
 
 import UIKit
 
+//本の検索をするVC
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var table: UITableView!
@@ -26,9 +27,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         table.delegate = self
         table.dataSource = self
         
+        navigationItem.title = "SEARCH_VCTITLE".localized
+        
         cancelButton.title = "CANCEL".localized
         
-        //NEED: 論理積検索がしたい
+        //TODO: タイトルの論理積検索
 //        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
 //        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
 //        searchText = replaced_encoded
@@ -66,10 +69,10 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if nThTime < 24 { //1000件で止める
             //下についたら
             let reachedBottom = table.contentOffset.y >= table.contentSize.height - table.bounds.size.height
-            //NEED: 少し前に読み込むパターン
+            //TODO: 少し前に読み込むパターン
             //let thisqu = scrollView.contentSize.height - scrollView.frame.height - scrollView.contentOffset.y < 500 //下まで500
             
-            //NEED: isDraggingは必要、滑らかにするために一部のみ更新できるとなお良し
+            //TODO: isDraggingは必要、滑らかにするために一部のみ更新できるとなお良し
             if reachedBottom && table.isDragging {
                 if booksList.count < totalItems {
                     let new = fetchNewList(nTh: nThTime)
@@ -103,7 +106,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             //該当件数取得
             if let number = json["totalItems"] as? Int {
-                totalItems = number //NEED: 取得の時々で値が変わる
+                totalItems = number //FIXME: 取得の時々で値が変わる
             }
             
             //題名・著者の取得

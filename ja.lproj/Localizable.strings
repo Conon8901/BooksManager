@@ -8,13 +8,13 @@
 
 "CANCEL" = "キャンセル";
 "CLOSE" = "閉じる";
-"SAVED" = "保存済";
+"HISTORY" = "履歴";
 "ADD" = "追加";
 "EDIT" = "編集";
 "ADDSUCCESSED" = "追加されました";
 "BACK" = "戻る";
-"LIST_SETTING" = "設定";
 "LIST_VCTITLE" = "一覧";
+"LIST_SETTING" = "設定";
 "LIST_NOBOOKS1" = "本がありません";
 "LIST_NOBOOKS2" = "右上のボタンから追加してください";
 "LIST_SAVE" = "保存";
@@ -29,15 +29,16 @@
 "ADD_EMPTY" = "著者名なしでよろしいですか？";
 "ADD_OK" = "了解";
 "ADD_CONTINUE" = "連続で行う";
-"ADD_ALREADY" = "他のカテゴリに同一の本があります";
-"NOTE_TITLE" = "詳細";
-"SAVED_NOBOOKS1" = "保存された本がありません";
-"SAVED_NOBOOKS2" = "セルを長押しすることで面白かった本等を保存できます";
+"ADD_ALREADY" = "『%@』は既に追加されています";
+"NOTE_VCTITLE" = "詳細";
+"NOTE_NONAME" = "No Name";
+"HISTORY_NO" = "削除された本がありません";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";
 "BARCODE_SUCCESS" = "読み取りに成功";
 "BARCODE_REFLECT" = "追加画面に反映する";
 "BARCODE_UNABLE" = "情報を取得できませんでした";
 "BARCODE_AMAZON" = "Amazonの商品ページを開く";
+"SEARCH_VCTITLE" = "本を検索";
 "CS_VCTITLE" = "カテゴリ設定";
 "CS_NEW" = "新規カテゴリ";
 "CS_LIST" = "カテゴリ一覧";
