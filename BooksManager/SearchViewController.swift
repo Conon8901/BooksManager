@@ -31,12 +31,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         cancelButton.title = "CANCEL".localized
         
-        //TODO: タイトルの論理積検索
+        //TODO: タイトルのAND検索
 //        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
 //        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
 //        searchText = replaced_encoded
         
-        searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+        searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         booksList = fetchNewList(nTh: nThTime)
         
@@ -59,6 +59,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         Variables.shared.gottenTitle = booksList[indexPath.row][0]
         Variables.shared.gottenAuthor = booksList[indexPath.row][1]
+        Variables.shared.gottenThumbnailStr = booksList[indexPath.row][2]
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.dismiss(animated: true, completion: nil)
@@ -114,6 +115,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 for item in items {
                     if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
                         var booktitle = ""
+                        var author = ""
                         
                         if let titleString = volumeInfo["title"] as? String {
                             booktitle = titleString
@@ -122,10 +124,16 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         
                         if let authorsArray = volumeInfo["authors"] as? [String] {
-                            let author = authorsArray.joined(separator: ", ")
-                            booksArray.append([booktitle, author])
+                            author = authorsArray.joined(separator: ", ")
                         } else {
-                            booksArray.append([booktitle, ""])
+                            author = ""
+                        }
+                        
+                        if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
+                            let thumbnailStr = imageLinks["thumbnail"]!
+                            booksArray.append([booktitle, author, thumbnailStr])
+                        } else {
+                            booksArray.append([booktitle, author, ""])
                         }
                     }
                 }

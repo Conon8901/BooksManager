@@ -221,12 +221,11 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
         
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
-            //FIXME: 通ってるのに動かない
             setNotEditing()
             
             booksEmptyView.alpha = 0.0
             
-            setParts(isTableEmpty: false)
+            setParts(isTableEmpty: true)
             
             UIView.animate(withDuration: 1, animations: { () -> Void in
                 self.booksEmptyView.alpha = 1.0

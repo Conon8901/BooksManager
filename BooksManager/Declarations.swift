@@ -65,13 +65,5 @@ class Variables {
     var searchText = "" //add -> search
     var gottenTitle: String? //search -> add
     var gottenAuthor: String? //search -> add
+    var gottenThumbnailStr: String? //search -> add
 }
-
-/*
-class Book {
-    var title: String = ""
-    var author: String?
-    var note: String = ""
-    var isbn: Int?
-}
- */

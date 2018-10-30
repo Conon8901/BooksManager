@@ -23,6 +23,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var continuouslyLabel: UILabel!
     @IBOutlet var continuouslySwitch: UISwitch!
     @IBOutlet var searchButton: UIButton!
+    @IBOutlet var clearButton: UIButton!
     
     @IBOutlet var addButton: UIButton! {
         didSet {
@@ -40,9 +41,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     var titleByBarcode: String?
     var authorByBarcode: String?
-    
-    var titleBySearch: String?
-    var authorBySearch: String?
+    var thumbnailByBarcode: String?
     
     var searchText = ""
     
@@ -64,13 +63,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         authorTF.font = .systemFont(ofSize: 20)
         noteTV.font = .systemFont(ofSize: 17)
         
-        titleTF.clearButtonMode = .whileEditing
-        authorTF.clearButtonMode = .whileEditing
-        
         titleTF.delegate = self
         authorTF.delegate = self
         
         titleTF.becomeFirstResponder()
+        
+        clearButton.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,6 +80,11 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 authorTF.text = author
                 authorByBarcode = nil
             }
+            
+            titleTF.isEnabled = false
+            authorTF.isEnabled = false
+            
+            clearButton.isHidden = false
         }
         
         if let title = Variables.shared.gottenTitle {
@@ -92,6 +95,11 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 authorTF.text = author
                 Variables.shared.gottenAuthor = nil
             }
+            
+            titleTF.isEnabled = false
+            authorTF.isEnabled = false
+            
+            clearButton.isHidden = false
         }
     }
     
@@ -123,7 +131,21 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             
             if !exists {
                 if author.characterExists() {
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note])
+                    if let thumbnail = Variables.shared.gottenThumbnailStr {
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                        
+                        Variables.shared.gottenThumbnailStr = nil
+                    } else {
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                    }
+                    
+                    if let thumbnail = thumbnailByBarcode {
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                        
+                        thumbnailByBarcode = nil
+                    } else {
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                    }
                     
                     saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                     
@@ -135,8 +157,21 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                         preferredStyle: .alert)
                     
                     let okAction = UIAlertAction(title: "ADD_OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
+                        if let thumbnail = Variables.shared.gottenThumbnailStr {
+                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, thumbnail])
+                            
+                            Variables.shared.gottenThumbnailStr = nil
+                        } else {
+                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, ""])
+                        }
                         
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note])
+                        if let thumbnail = self.thumbnailByBarcode {
+                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                            
+                            self.thumbnailByBarcode = nil
+                        } else {
+                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                        }
                         
                         self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                         
@@ -156,11 +191,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     message: nil,
                     preferredStyle: .alert)
                 
-                titleTF.text = ""
-                authorTF.text = ""
-                
                 let closeAction = UIAlertAction(title: "CLOSE".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                    self.titleTF.becomeFirstResponder()
+                    self.clearText()
                 }
                 
                 alert.addAction(closeAction)
@@ -208,8 +240,10 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         if textField === titleTF {
             if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
                 searchButton.isEnabled = false
+                clearButton.isHidden = true
             } else {
                 searchButton.isEnabled = true
+                clearButton.isHidden = false
             }
         }
         
@@ -235,6 +269,21 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         if let BarcodeVC = next as? BarCodeViewController {
             BarcodeVC.addVC = self
         }
+    }
+    
+    @IBAction func clearText() {
+        titleTF.text = ""
+        authorTF.text = ""
+        
+        clearButton.isHidden = true
+        
+        titleTF.isEnabled = true
+        authorTF.isEnabled = true
+        
+        titleTF.becomeFirstResponder()
+        
+        thumbnailByBarcode = nil
+        Variables.shared.gottenThumbnailStr = nil
     }
     
     @IBAction func searchTapped() {//TODO: お探しの本が検索結果に表示されないことがあります。

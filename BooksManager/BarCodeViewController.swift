@@ -106,6 +106,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         var title: String?
                         var author: String?
+                        var thumbnail: String?
                         
                         var canReflect = true
                         
@@ -128,6 +129,10 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                         if let authorsArray = volumeInfo["authors"] as? [String] {
                                             author = authorsArray.joined(separator: ", ")
                                         }
+                                        
+                                        if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
+                                            thumbnail = imageLinks["thumbnail"]
+                                        }
                                     }
                                 }
                             } else {
@@ -149,6 +154,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                 
                                 self.addVC?.titleByBarcode = title
                                 self.addVC?.authorByBarcode = author
+                                self.addVC?.thumbnailByBarcode = thumbnail
                                 
                                 self.dismiss(animated: true, completion: nil)
                             })

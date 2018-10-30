@@ -355,14 +355,28 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oAM-wT-bzq">
+                                        <rect key="frame" x="295" y="0.0" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="MaB-9a-uNO"/>
+                                            <constraint firstAttribute="height" constant="40" id="hcq-zb-rYz"/>
+                                        </constraints>
+                                        <state key="normal" image="clearButton.png"/>
+                                        <connections>
+                                            <action selector="clearText" destination="5ba-8c-W09" eventType="touchUpInside" id="8IX-W5-BEj"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="mac-J9-ws4" firstAttribute="leading" secondItem="a59-Tq-kr0" secondAttribute="leading" constant="16" id="2sI-2B-2Ps"/>
                                     <constraint firstAttribute="height" constant="40" id="8W7-8T-AhY"/>
                                     <constraint firstItem="btG-Q1-BXk" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="C34-yF-3hg"/>
+                                    <constraint firstItem="oAM-wT-bzq" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="EbB-se-f0F"/>
                                     <constraint firstItem="mac-J9-ws4" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="KHR-ZE-KMW"/>
                                     <constraint firstItem="btG-Q1-BXk" firstAttribute="leading" secondItem="mac-J9-ws4" secondAttribute="trailing" id="TSj-fF-Edt"/>
+                                    <constraint firstAttribute="bottom" secondItem="oAM-wT-bzq" secondAttribute="bottom" id="Xxt-qM-Irf"/>
+                                    <constraint firstItem="btG-Q1-BXk" firstAttribute="leading" secondItem="oAM-wT-bzq" secondAttribute="trailing" id="dNg-tK-s2f"/>
                                     <constraint firstAttribute="bottom" secondItem="btG-Q1-BXk" secondAttribute="bottom" id="hJK-xl-k7f"/>
                                     <constraint firstAttribute="trailing" secondItem="mac-J9-ws4" secondAttribute="trailing" constant="40" id="l1f-UN-tNK"/>
                                     <constraint firstAttribute="trailing" secondItem="btG-Q1-BXk" secondAttribute="trailing" id="pvR-Mc-8oo"/>
@@ -510,6 +524,7 @@
                         <outlet property="authorLabel" destination="YXj-9c-sMy" id="JyE-1i-Mpd"/>
                         <outlet property="authorTF" destination="4qJ-IU-3f2" id="zMT-nz-5cF"/>
                         <outlet property="cancelButton" destination="e3f-yd-GHT" id="bOy-aE-mqO"/>
+                        <outlet property="clearButton" destination="oAM-wT-bzq" id="JGY-va-T7R"/>
                         <outlet property="continuouslyLabel" destination="MuT-FA-okB" id="36T-b6-u3Z"/>
                         <outlet property="continuouslySwitch" destination="PxV-Kj-I2l" id="tle-33-lFo"/>
                         <outlet property="noteLabel" destination="8mL-JI-ACs" id="Eai-TI-Y5f"/>
@@ -521,7 +536,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x7F-Ar-XbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3382" y="983"/>
+            <point key="canvasLocation" x="3381.5999999999999" y="982.75862068965523"/>
         </scene>
         <!--CS-->
         <scene sceneID="MBh-ha-olc">
@@ -888,4 +903,7 @@
             <point key="canvasLocation" x="3520.8000000000002" y="1789.6551724137933"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="clearButton.png" width="716" height="716"/>
+    </resources>
 </document>

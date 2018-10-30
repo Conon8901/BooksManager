@@ -12,6 +12,8 @@
 		11BE6FCD21784DE700162F5A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE6FCC21784DE700162F5A /* SearchViewController.swift */; };
 		11BE6FD52178B62100162F5A /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FD42178B62100162F5A /* search.png */; };
 		11BE6FDD21803D1B00162F5A /* noimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FDC21803D1B00162F5A /* noimage.png */; };
+		11BE6FE721857D7C00162F5A /* norsk.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FE621857D7C00162F5A /* norsk.jpeg */; };
+		11BE6FE9218877E300162F5A /* clearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BE6FE8218877E200162F5A /* clearButton.png */; };
 		11D77CB3212C2B0500E9B7CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */; };
 		11D77CB8212C2B0500E9B7CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CB6212C2B0500E9B7CE /* Main.storyboard */; };
 		11D77CBA212C2B0800E9B7CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D77CB9212C2B0800E9B7CE /* Assets.xcassets */; };
@@ -30,6 +32,8 @@
 		11BE6FCC21784DE700162F5A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		11BE6FD42178B62100162F5A /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
 		11BE6FDC21803D1B00162F5A /* noimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noimage.png; sourceTree = "<group>"; };
+		11BE6FE621857D7C00162F5A /* norsk.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = norsk.jpeg; sourceTree = "<group>"; };
+		11BE6FE8218877E200162F5A /* clearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clearButton.png; sourceTree = "<group>"; };
 		11D77CAF212C2B0500E9B7CE /* BooksManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BooksManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		11D77CB7212C2B0500E9B7CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 		11D77CB1212C2B0500E9B7CE /* BooksManager */ = {
 			isa = PBXGroup;
 			children = (
+				11BE6FE8218877E200162F5A /* clearButton.png */,
+				11BE6FE621857D7C00162F5A /* norsk.jpeg */,
 				11BE6FDC21803D1B00162F5A /* noimage.png */,
 				11BE6FD42178B62100162F5A /* search.png */,
 				11D77CB2212C2B0500E9B7CE /* AppDelegate.swift */,
@@ -157,9 +163,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				11BE6FD52178B62100162F5A /* search.png in Resources */,
+				11BE6FE721857D7C00162F5A /* norsk.jpeg in Resources */,
 				11D77CBD212C2B0800E9B7CE /* LaunchScreen.storyboard in Resources */,
 				11BE6FDD21803D1B00162F5A /* noimage.png in Resources */,
 				11D77CC8212C813700E9B7CE /* Localizable.strings in Resources */,
+				11BE6FE9218877E300162F5A /* clearButton.png in Resources */,
 				11D77CBA212C2B0800E9B7CE /* Assets.xcassets in Resources */,
 				11D77CB8212C2B0500E9B7CE /* Main.storyboard in Resources */,
 			);

@@ -37,19 +37,43 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         doneButton.hide()
         
         coverImageView.image = UIImage(named: "noimage.png")
+        
+        //以下は仮
+        coverImageView.isUserInteractionEnabled = true
+        let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+        coverImageView.addGestureRecognizer(imagetappedGesture)
+    }
+    
+    @objc func imageTapped() {//手打ちだと出ない、とダす
+//        let alert = UIAlertAction(title: "", style: <#T##UIAlertActionStyle#>, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>)
+        
+        if coverImageView.image == UIImage(named: "noimage.png") {
+            coverImageView.image = UIImage(named: "norsk.jpeg")
+        } else {
+            coverImageView.image = UIImage(named: "noimage.png")
+        }
+        //以上は仮
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        titleLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]
+        let title = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]
+        let author = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][1]
         
-        authorLabel.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][1]
+        titleLabel.text = title
+        
+        authorLabel.text = author
         if authorLabel.text == "" {
             authorLabel.text = "NOTE_NONAME".localized
         }
         
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
+        
+        let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][3]
+        let thumbnailURL = URL(string: thumbnailStr)
+        let imageData = try? Data(contentsOf: thumbnailURL!)
+        coverImageView.image = UIImage(data: imageData!)
     }
-    
+
     override func viewDidLayoutSubviews() {
         let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
         let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
