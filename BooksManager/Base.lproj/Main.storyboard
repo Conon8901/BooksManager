@@ -344,12 +344,15 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btG-Q1-BXk">
                                         <rect key="frame" x="335" y="0.0" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="I4f-Ah-obe"/>
+                                        </constraints>
                                         <connections>
                                             <action selector="searchTapped" destination="5ba-8c-W09" eventType="touchUpInside" id="eQl-gD-SD7"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mac-J9-ws4" userLabel="Title Text Field">
-                                        <rect key="frame" x="16" y="0.0" width="319" height="40"/>
+                                        <rect key="frame" x="16" y="0.0" width="279" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -359,7 +362,6 @@
                                         <rect key="frame" x="295" y="0.0" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="MaB-9a-uNO"/>
-                                            <constraint firstAttribute="height" constant="40" id="hcq-zb-rYz"/>
                                         </constraints>
                                         <state key="normal" image="clearButton.png"/>
                                         <connections>
@@ -374,11 +376,10 @@
                                     <constraint firstItem="btG-Q1-BXk" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="C34-yF-3hg"/>
                                     <constraint firstItem="oAM-wT-bzq" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="EbB-se-f0F"/>
                                     <constraint firstItem="mac-J9-ws4" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="top" id="KHR-ZE-KMW"/>
-                                    <constraint firstItem="btG-Q1-BXk" firstAttribute="leading" secondItem="mac-J9-ws4" secondAttribute="trailing" id="TSj-fF-Edt"/>
                                     <constraint firstAttribute="bottom" secondItem="oAM-wT-bzq" secondAttribute="bottom" id="Xxt-qM-Irf"/>
                                     <constraint firstItem="btG-Q1-BXk" firstAttribute="leading" secondItem="oAM-wT-bzq" secondAttribute="trailing" id="dNg-tK-s2f"/>
                                     <constraint firstAttribute="bottom" secondItem="btG-Q1-BXk" secondAttribute="bottom" id="hJK-xl-k7f"/>
-                                    <constraint firstAttribute="trailing" secondItem="mac-J9-ws4" secondAttribute="trailing" constant="40" id="l1f-UN-tNK"/>
+                                    <constraint firstItem="oAM-wT-bzq" firstAttribute="leading" secondItem="mac-J9-ws4" secondAttribute="trailing" id="lMA-wn-8Zo"/>
                                     <constraint firstAttribute="trailing" secondItem="btG-Q1-BXk" secondAttribute="trailing" id="pvR-Mc-8oo"/>
                                     <constraint firstAttribute="bottom" secondItem="mac-J9-ws4" secondAttribute="bottom" id="uVS-cK-VXH"/>
                                 </constraints>

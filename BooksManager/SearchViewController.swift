@@ -11,6 +11,8 @@ import UIKit
 //本の検索をするVC
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: - 宣言
+    
     @IBOutlet var table: UITableView!
     @IBOutlet var cancelButton: UIBarButtonItem!
     
@@ -20,7 +22,9 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var totalItems = 0
     var nThTime = 0
-
+    
+    //MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,9 +36,9 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cancelButton.title = "CANCEL".localized
         
         //TODO: タイトルのAND検索
-//        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
-//        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
-//        searchText = replaced_encoded
+        //        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
+        //        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
+        //        searchText = replaced_encoded
         
         searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
@@ -42,6 +46,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         table.reloadData()
     }
+    
+    //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return booksList.count
@@ -67,13 +73,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if nThTime < 24 { //1000件で止める
+        //1000件で止める
+        if nThTime < 24 {
             //下についたら
             let reachedBottom = table.contentOffset.y >= table.contentSize.height - table.bounds.size.height
-            //TODO: 少し前に読み込むパターン
-            //let thisqu = scrollView.contentSize.height - scrollView.frame.height - scrollView.contentOffset.y < 500 //下まで500
             
-            //TODO: isDraggingは必要、滑らかにするために一部のみ更新できるとなお良し
+            //isDraggingは必要
             if reachedBottom && table.isDragging {
                 if booksList.count < totalItems {
                     let new = fetchNewList(nTh: nThTime)
@@ -86,9 +91,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    @IBAction func cancelTapped() {
-        self.dismiss(animated: true, completion: nil)
-    }
+    //MARK: - Method
     
     func fetchNewList(nTh: Int) -> [[String]] {
         let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
@@ -145,5 +148,9 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         nThTime += 1
         
         return booksArray
+    }
+    
+    @IBAction func cancelTapped() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

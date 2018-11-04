@@ -96,7 +96,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         //本が追加されたか
         let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
         if currentNumber > numberBeforeGoingToAddVC {
-            checkTableState()
+            booksEmptyView.isHidden = true
+            editButtonItem.isEnabled = true
+            
+            table.reloadData()
         }
         
         //カテゴリの追加編集削除並び替え
@@ -225,7 +228,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             booksEmptyView.alpha = 0.0
             
-            setParts(isTableEmpty: true)
+            booksEmptyView.isHidden = false
+            editButtonItem.isEnabled = false
             
             UIView.animate(withDuration: 1, animations: { () -> Void in
                 self.booksEmptyView.alpha = 1.0
@@ -271,16 +275,13 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         historyButton.isEnabled = true
     }
     
-    func setParts(isTableEmpty: Bool) {
-        booksEmptyView.isHidden = !isTableEmpty
-        editButtonItem.isEnabled = !isTableEmpty
-    }
-    
     func checkTableState() {
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
-            setParts(isTableEmpty: true)
+            booksEmptyView.isHidden = false
+            editButtonItem.isEnabled = false
         } else {
-            setParts(isTableEmpty: false)
+            booksEmptyView.isHidden = true
+            editButtonItem.isEnabled = true
             
             table.reloadData()
         }

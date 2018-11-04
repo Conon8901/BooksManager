@@ -11,6 +11,8 @@ import UIKit
 //カテゴリの追加編集をするVC
 class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: - 宣言
+    
     @IBOutlet var newLabel: UILabel!
     @IBOutlet var listLabel: UILabel!
     @IBOutlet var newTF: UITextField!
@@ -39,6 +41,8 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             addButton.tintColor = .white
         }
     }
+    
+    //MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,13 +75,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         viewSet()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    @IBAction func backTapped() {
-        self.dismiss(animated: true, completion: nil)
-    }
+    //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Variables.shared.categories.count
@@ -135,7 +133,6 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
-
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let alert = UIAlertController(
@@ -197,6 +194,12 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //MARK: - Method
+    
+    @IBAction func backTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func addTapped() {
         if newTF.text!.characterExists() {
             if Variables.shared.categories.index(of: newTF.text!) == nil {
@@ -204,7 +207,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
                 Variables.shared.booksData[newTF.text!] = []
                 
                 saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
-
+                
                 saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                 
                 categoryTable.reloadData()

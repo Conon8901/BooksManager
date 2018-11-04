@@ -135,11 +135,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
                         
                         Variables.shared.gottenThumbnailStr = nil
-                    } else {
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
-                    }
-                    
-                    if let thumbnail = thumbnailByBarcode {
+                    } else if let thumbnail = thumbnailByBarcode {
                         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
                         
                         thumbnailByBarcode = nil
@@ -156,16 +152,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                         message: nil,
                         preferredStyle: .alert)
                     
-                    let okAction = UIAlertAction(title: "ADD_OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
+                    let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                         if let thumbnail = Variables.shared.gottenThumbnailStr {
                             Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, thumbnail])
                             
                             Variables.shared.gottenThumbnailStr = nil
-                        } else {
-                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, ""])
-                        }
-                        
-                        if let thumbnail = self.thumbnailByBarcode {
+                        } else if let thumbnail = self.thumbnailByBarcode {
                             Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
                             
                             self.thumbnailByBarcode = nil
@@ -218,6 +210,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             titleTF.text = ""
             authorTF.text = ""
             noteTV.text = ""
+            
+            titleTF.isEnabled = true
+            authorTF.isEnabled = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.addButton.setTitle("ADD".localized, for: .normal)

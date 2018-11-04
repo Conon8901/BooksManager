@@ -14,6 +14,7 @@
 "ADDSUCCESSED" = "Aldonitas";
 "EDIT" = "Edit";
 "BACK" = "Reiri";
+"OK" = "Bone";
 "LIST_VCTITLE" = "Listo";
 "LIST_SETTING" = "Agordo";
 "LIST_NOBOOKS1" = "Ne estas libroj.";
@@ -28,11 +29,12 @@
 "ADD_NOTE" = "Noto";
 "ADD_FILLIN" = "Enigu la Titolo.";
 "ADD_EMPTY" = "Ĉu Vi Vere Volas sen Aŭtora Nomo?";
-"ADD_OK" = "Bone";
 "ADD_CONTINUE" = "Fari Kontinue";
 "ADD_ALREADY" = "\"%@\" jam estis aldonita";
 "NOTE_VCTITLE" = "Detalo";
 "NOTE_NONAME" = "Neniu Nomo";
+"NOTE_MAYNO" = "Eble ne estas kovrila bildo";
+"NOTE_MAYNO_MESSAGE" = "Bildoj estas vidiganta nur kiam aldonis per serĉo.";
 "HISTORY_NO" = "Ne estas forviŝa libroj.";
 "BARCODE_FRAME" = "Vidigu la strekkodo en ĉi tiu kadro";
 "BARCODE_SUCCESS" = "Lego Sukcesis";

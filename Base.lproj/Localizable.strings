@@ -13,6 +13,7 @@
 "EDIT" = "Edit";
 "ADDSUCCESSED" = "Added";
 "BACK" = "Back";
+"OK" = "OK";
 "LIST_VCTITLE" = "List";
 "LIST_SETTING" = "Setting";
 "LIST_NOBOOKS1" = "There are no books.";
@@ -27,11 +28,12 @@
 "ADD_NOTE" = "Note";
 "ADD_FILLIN" = "Fill in the Title";
 "ADD_EMPTY" = "Are You Sure to Add Without Author Name?";
-"ADD_OK" = "OK";
 "ADD_CONTINUE" = "Do Continuously";
 "ADD_ALREADY" = "\"%@\" has already been added";
 "NOTE_VCTITLE" = "Details";
 "NOTE_NONAME" = "No Name";
+"NOTE_MAYNO" = "There may be no cover image";
+"NOTE_MAYNO_MESSAGE" = "Images are displayed only when added using search.";
 "HISTORY_NO" = "There are no deleted books.";
 "BARCODE_FRAME" = "Display the barcode in this frame";
 "BARCODE_SUCCESS" = "Reading Successed";

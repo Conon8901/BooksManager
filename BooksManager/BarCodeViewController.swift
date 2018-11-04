@@ -12,6 +12,8 @@ import AVFoundation
 //バーコードを読み取るVC
 class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
+    //MARK: - 宣言
+    
     @IBOutlet var previewView: UIView!
     @IBOutlet var cancelButton: UIButton!
     
@@ -20,6 +22,8 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     var isDetected = false
     
     var addVC: AddViewController?
+    
+    //MARK: - CameraProcessing
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -187,6 +191,8 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             }
         }
     }
+    
+    //MARK: - Method
     
     func convertToISBNTen(_ value: String) -> String? {
         let picked = String(value[value.index(value.startIndex, offsetBy: 3)...value.index(value.startIndex, offsetBy: 11)])

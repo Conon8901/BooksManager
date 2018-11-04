@@ -12,8 +12,9 @@ import UIKit
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: - 宣言
-    @IBOutlet var cancelButton: UIBarButtonItem!//長押しで戻すセルを
-    @IBOutlet var table: UITableView!
+    
+    @IBOutlet var cancelButton: UIBarButtonItem!
+    @IBOutlet var table: UITableView!//TODO: 長押しで戻す？
     @IBOutlet var NoHistoryView: UIView!
     @IBOutlet var noSavedBooksLabel: UILabel!
     

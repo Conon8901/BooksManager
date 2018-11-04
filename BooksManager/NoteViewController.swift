@@ -35,24 +35,17 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         noteTV.delegate = self
         
         doneButton.hide()
-        
-        coverImageView.image = UIImage(named: "noimage.png")
-        
-        //以下は仮
-        coverImageView.isUserInteractionEnabled = true
-        let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
-        coverImageView.addGestureRecognizer(imagetappedGesture)
     }
     
-    @objc func imageTapped() {//手打ちだと出ない、とダす
-//        let alert = UIAlertAction(title: "", style: <#T##UIAlertActionStyle#>, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>)
+    @objc func imageTapped() {
+        let alert = UIAlertController(
+            title: "NOTE_MAYNO".localized,
+            message: "NOTE_MAYNO_MESSAGE".localized, //TODO: 翻訳が怪しい
+            preferredStyle: .alert)
         
-        if coverImageView.image == UIImage(named: "noimage.png") {
-            coverImageView.image = UIImage(named: "norsk.jpeg")
-        } else {
-            coverImageView.image = UIImage(named: "noimage.png")
-        }
-        //以上は仮
+        alert.addAction(UIAlertAction(title: "OK".localized, style: .default))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,11 +62,19 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
         
         let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][3]
-        let thumbnailURL = URL(string: thumbnailStr)
-        let imageData = try? Data(contentsOf: thumbnailURL!)
-        coverImageView.image = UIImage(data: imageData!)
+        if thumbnailStr == "" {
+            coverImageView.image = UIImage(named: "noimage.png")
+            
+            coverImageView.isUserInteractionEnabled = true
+            let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+            coverImageView.addGestureRecognizer(imagetappedGesture)
+        } else {
+            let thumbnailURL = URL(string: thumbnailStr)
+            let imageData = try? Data(contentsOf: thumbnailURL!)
+            coverImageView.image = UIImage(data: imageData!)
+        }
     }
-
+    
     override func viewDidLayoutSubviews() {
         let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
         let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
