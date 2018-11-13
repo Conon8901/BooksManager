@@ -37,15 +37,17 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         doneButton.hide()
     }
     
-    @objc func imageTapped() {
-        let alert = UIAlertController(
-            title: "NOTE_MAYNO".localized,
-            message: "NOTE_MAYNO_MESSAGE".localized, //TODO: 翻訳が怪しい
-            preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "OK".localized, style: .default))
-        
-        self.present(alert, animated: true, completion: nil)
+    @objc func imageTapped(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            let alert = UIAlertController(
+                title: "NOTE_MAYNO".localized,
+                message: "NOTE_MAYNO_MESSAGE".localized, //TODO: 翻訳が怪しい
+                preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK".localized, style: .default))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

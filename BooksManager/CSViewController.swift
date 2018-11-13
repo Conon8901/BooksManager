@@ -260,8 +260,10 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         viewHeight.constant = height <= wholeHeight ? wholeHeight : height
     }
     
-    @objc func closeKeyboard() {
-        newTF.resignFirstResponder()
+    @objc func closeKeyboard(sender: UITapGestureRecognizer) {
+        if sender.state == .began {
+            newTF.resignFirstResponder()
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -226,6 +226,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
             setNotEditing()
             
+            for cell in tabs.visibleCells {
+                cell.isUserInteractionEnabled = true
+            }
+            
             booksEmptyView.alpha = 0.0
             
             booksEmptyView.isHidden = false
@@ -287,13 +291,15 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
-    @objc func openCSVC() {
-        setNotEditing()
-        
-        categoriesBeforeGoingToCSVC = Variables.shared.categories
-        
-        let next = storyboard!.instantiateViewController(withIdentifier: "CSNavView")
-        self.present(next, animated: true, completion: nil)
+    @objc func openCSVC(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            setNotEditing()
+            
+            categoriesBeforeGoingToCSVC = Variables.shared.categories
+            
+            let next = storyboard!.instantiateViewController(withIdentifier: "CSNavView")
+            self.present(next, animated: true, completion: nil)
+        }
     }
     
     @IBAction func composeTapped() {
