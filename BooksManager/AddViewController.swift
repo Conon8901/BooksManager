@@ -271,6 +271,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         authorTF.text = ""
         
         clearButton.isHidden = true
+        searchButton.isEnabled = false
         
         titleTF.isEnabled = true
         authorTF.isEnabled = true

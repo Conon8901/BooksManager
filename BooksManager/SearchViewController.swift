@@ -9,11 +9,11 @@
 import UIKit
 
 //本の検索をするVC
-class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     //MARK: - 宣言
     
-    @IBOutlet var table: UITableView!
+    @IBOutlet var collection: UICollectionView!
     @IBOutlet var cancelButton: UIBarButtonItem!
     
     var searchText = ""
@@ -28,8 +28,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        table.delegate = self
-        table.dataSource = self
+        collection.delegate = self
+        collection.dataSource = self
         
         navigationItem.title = "SEARCH_VCTITLE".localized
         
@@ -44,25 +44,32 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         booksList = fetchNewList(nTh: nThTime)
         
-        table.reloadData()
+        collection.reloadData()
     }
     
-    //MARK: - TableView
+    override func viewDidAppear(_ animated: Bool) {
+        print(booksList[0][2])
+        printImages()
+    }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    //MARK: - CollectionView
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return booksList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell")!
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collection.dequeueReusableCell(withReuseIdentifier: "BookCell", for: indexPath)
+        let titleLabel = cell.contentView.viewWithTag(1) as! UILabel
+        let authorLabel = cell.contentView.viewWithTag(2) as! UILabel
         
-        cell.textLabel?.text = booksList[indexPath.row][0]
-        cell.detailTextLabel?.text = booksList[indexPath.row][1]
+        titleLabel.text = booksList[indexPath.row][0]
+        authorLabel.text = booksList[indexPath.row][1]
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         Variables.shared.gottenTitle = booksList[indexPath.row][0]
         Variables.shared.gottenAuthor = booksList[indexPath.row][1]
         Variables.shared.gottenThumbnailStr = booksList[indexPath.row][2]
@@ -76,16 +83,16 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //1000件で止める
         if nThTime < 24 {
             //下についたら
-            let reachedBottom = table.contentOffset.y >= table.contentSize.height - table.bounds.size.height
+            let reachedBottom = collection.contentOffset.y >= collection.contentSize.height - collection.bounds.size.height
             
             //isDraggingは必要
-            if reachedBottom && table.isDragging {
+            if reachedBottom && collection.isDragging {
                 if booksList.count < totalItems {
                     let new = fetchNewList(nTh: nThTime)
                     
                     booksList = booksList + new
                     
-                    table.reloadData()
+                    collection.reloadData()
                 }
             }
         }
@@ -148,6 +155,16 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         nThTime += 1
         
         return booksArray
+    }
+    
+    func printImages() {
+//        for index in 0...booksList.count-1 {
+            let index = 0
+        
+            let thumbnailURL = URL(string: booksList[index][2])
+            let imageData = try? Data(contentsOf: thumbnailURL!)
+            (collection.dequeueReusableCell(withReuseIdentifier: "BookCell", for: IndexPath(row: index, section: 0)).contentView.viewWithTag(3) as! UIImageView).image = UIImage(data: imageData!)
+//        }
     }
     
     @IBAction func cancelTapped() {

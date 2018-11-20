@@ -20,7 +20,6 @@
 "LIST_NOBOOKS2" = "右上のボタンから追加してください";
 "LIST_SAVE" = "保存";
 "LIST_SAVECHECK" = "『%@』を保存しますか？";
-"LIST_ALREADY" = "『%@』は既に保存されています";
 "LIST_SETTING" = "カテゴリ設定";
 "ADD_VCTITLE" = "本を追加";
 "ADD_TITLE" = "題名";
@@ -32,7 +31,7 @@
 "ADD_ALREADY" = "『%@』は既に追加されています";
 "NOTE_VCTITLE" = "詳細";
 "NOTE_NONAME" = "No Name";
-"NOTE_MAYNO" = "表紙画像が表示されない場合があります";
+"NOTE_MAYNO" = "画像は表示されない場合があります";
 "NOTE_MAYNO_MESSAGE" = "検索によって追加された場合のみ表紙画像が表示されます。";
 "HISTORY_NO" = "削除された本がありません";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";

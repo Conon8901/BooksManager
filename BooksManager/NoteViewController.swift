@@ -41,7 +41,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         if sender.state == .ended {
             let alert = UIAlertController(
                 title: "NOTE_MAYNO".localized,
-                message: "NOTE_MAYNO_MESSAGE".localized, //TODO: 翻訳が怪しい
+                message: "NOTE_MAYNO_MESSAGE".localized,
                 preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK".localized, style: .default))

@@ -20,7 +20,6 @@
 "LIST_NOBOOKS2" = "Add books from the top right button.";
 "LIST_SAVE" = "Save";
 "LIST_SAVECHECK" = "Save \"%@\"?";
-"LIST_ALREADY" = "This Book Has Already Been Saved";
 "LIST_SETTING" = "Category\nSetting";
 "ADD_VCTITLE" = "Add a Book";
 "ADD_TITLE" = "Title";
@@ -32,9 +31,9 @@
 "ADD_ALREADY" = "\"%@\" has already been added";
 "NOTE_VCTITLE" = "Details";
 "NOTE_NONAME" = "No Name";
-"NOTE_MAYNO" = "There may be no cover image";
-"NOTE_MAYNO_MESSAGE" = "Images are displayed only when added using search.";
-"HISTORY_NO" = "There are no deleted books.";
+"NOTE_MAYNO" = "Images may not be Displayed.";
+"NOTE_MAYNO_MESSAGE" = "Images are displayed only when it added using search.";
+"HISTORY_NO" = "No books has been deleted.";
 "BARCODE_FRAME" = "Display the barcode in this frame";
 "BARCODE_SUCCESS" = "Reading Successed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
