@@ -21,6 +21,7 @@
 "LIST_SAVE" = "Konservi";
 "LIST_SAVECHECK" = "Konservas \"%@\"?";
 "LIST_SETTING" = "Agordo de\nKategorioj";
+"LIST_NEW" = "NOVA";
 "ADD_VCTITLE" = "Aldono Libron";
 "ADD_TITLE" = "Titolo";
 "ADD_AUTHOR" = "Aŭtoro";

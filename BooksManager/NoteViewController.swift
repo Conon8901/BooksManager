@@ -64,16 +64,24 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
         
         let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][3]
+        
+        coverImageView.image = UIImage(named: "noimage.png")
+        
         if thumbnailStr == "" {
-            coverImageView.image = UIImage(named: "noimage.png")
-            
             coverImageView.isUserInteractionEnabled = true
             let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
             coverImageView.addGestureRecognizer(imagetappedGesture)
         } else {
             let thumbnailURL = URL(string: thumbnailStr)
-            let imageData = try? Data(contentsOf: thumbnailURL!)
-            coverImageView.image = UIImage(data: imageData!)
+            
+            DispatchQueue(label: "Download").async {
+                let imageData = try? Data(contentsOf: thumbnailURL!)
+                DispatchQueue.main.sync {
+                    if imageData != nil {
+                        self.coverImageView.image = UIImage(data: imageData!)
+                    }
+                }
+            }
         }
     }
     

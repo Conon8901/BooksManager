@@ -19,6 +19,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     var searchText = ""
     
     var booksList = [[String]]()
+    var imageList = [Int: UIImage]()
     
     var totalItems = 0
     var nThTime = 0
@@ -47,11 +48,6 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         collection.reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        print(booksList[0][2])
-        printImages()
-    }
-    
     //MARK: - CollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -62,9 +58,66 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         let cell = collection.dequeueReusableCell(withReuseIdentifier: "BookCell", for: indexPath)
         let titleLabel = cell.contentView.viewWithTag(1) as! UILabel
         let authorLabel = cell.contentView.viewWithTag(2) as! UILabel
+        let coverimageView = cell.contentView.viewWithTag(3) as! UIImageView
         
         titleLabel.text = booksList[indexPath.row][0]
         authorLabel.text = booksList[indexPath.row][1]
+        
+        //非同期処理単一スレッド: 動作が重いが確実に表示される
+//        let queue = DispatchQueue(label: "imagesDownload", qos: .utility, target: .main)
+//        queue.async {
+//            if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
+//                let imageData = try? Data(contentsOf: thumbnailURL)
+//                coverimageView.image = UIImage(data: imageData!)
+//            } else {
+//                coverimageView.image = UIImage(named: "noimage.png")
+//            }
+//        }
+        
+        //非同期処理複数スレッド: 動作は軽いが表示が入れ替わる
+//        let dispatchGroup = DispatchGroup()
+//        let dispatchQueue = DispatchQueue(label: "imagesDownload")
+//
+//        var image = UIImage(named: "NEEKZISTAS")
+//        coverimageView.image = image
+//
+//        dispatchGroup.enter()
+//        dispatchQueue.async(group: dispatchGroup) {
+//            if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
+//                let imageData = try? Data(contentsOf: thumbnailURL)
+//                image = UIImage(data: imageData!)
+//            } else {
+//                image = UIImage(named: "noimage.png")
+//            }
+//        }
+//        dispatchGroup.leave()
+//
+//        dispatchGroup.notify(queue: .main) {
+//            coverimageView.image = image
+//        }
+        
+        //非同期処理別スレッドで順にダウンロード //TODO: 通信が重いときの対応
+        if let image = imageList[indexPath.row] {
+            coverimageView.image = image
+        } else {
+            var image: UIImage!
+            image = UIImage(named: "noimage.png")
+            coverimageView.image = image
+            
+            DispatchQueue(label: "imagesDownload").async {
+                if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
+                    let imageData = try? Data(contentsOf: thumbnailURL)
+                    image = UIImage(data: imageData!)
+                } else {
+                    image = UIImage(named: "noimage.png")
+                }
+                
+                DispatchQueue.main.async {
+                    self.imageList.updateValue(image, forKey: indexPath.row)
+                    coverimageView.image = image//mainに戻って代入
+                }
+            }
+        }
         
         return cell
     }
@@ -109,7 +162,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         //情報の抽出
         do {
-            //データ取得
+            //データ取得 //TODO: 通信が重いときの対応
             let jsonData = try Data(contentsOf: url)
             
             //JSONに変換
@@ -117,7 +170,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             //該当件数取得
             if let number = json["totalItems"] as? Int {
-                totalItems = number //FIXME: 取得の時々で値が変わる
+                totalItems = number //TODO: 取得の時々で値が変わることへの対応（仕様？）
             }
             
             //題名・著者の取得
@@ -140,7 +193,10 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                         }
                         
                         if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
-                            let thumbnailStr = imageLinks["thumbnail"]!
+                            var thumbnailStr = imageLinks["thumbnail"]!
+                            if let range = thumbnailStr.range(of: "&edge=curl") {
+                                thumbnailStr.replaceSubrange(range, with: "")
+                            }
                             booksArray.append([booktitle, author, thumbnailStr])
                         } else {
                             booksArray.append([booktitle, author, ""])
@@ -155,16 +211,6 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         nThTime += 1
         
         return booksArray
-    }
-    
-    func printImages() {
-//        for index in 0...booksList.count-1 {
-            let index = 0
-        
-            let thumbnailURL = URL(string: booksList[index][2])
-            let imageData = try? Data(contentsOf: thumbnailURL!)
-            (collection.dequeueReusableCell(withReuseIdentifier: "BookCell", for: IndexPath(row: index, section: 0)).contentView.viewWithTag(3) as! UIImageView).image = UIImage(data: imageData!)
-//        }
     }
     
     @IBAction func cancelTapped() {

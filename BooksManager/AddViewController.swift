@@ -282,7 +282,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         Variables.shared.gottenThumbnailStr = nil
     }
     
-    @IBAction func searchTapped() {//TODO: お探しの本が検索結果に表示されないことがあります。
+    @IBAction func searchTapped() {
+        /* TODO:
+         お探しの本が表示されないことがあります。
+         Books which you are searching may not be printed.
+         Libroj, kiuj vi serĉas, eble ne estas vidigata.
+         */
         Variables.shared.searchText = titleTF.text!
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")

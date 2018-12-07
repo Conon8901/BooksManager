@@ -21,6 +21,7 @@
 "LIST_SAVE" = "保存";
 "LIST_SAVECHECK" = "『%@』を保存しますか？";
 "LIST_SETTING" = "カテゴリ設定";
+"LIST_NEW" = "新規";
 "ADD_VCTITLE" = "本を追加";
 "ADD_TITLE" = "題名";
 "ADD_AUTHOR" = "著者";

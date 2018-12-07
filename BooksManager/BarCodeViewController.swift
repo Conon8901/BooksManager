@@ -116,6 +116,19 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         //情報の抽出
                         do {
+                            DispatchQueue(label: "Download").async {
+                                //ダウンロードする
+                                DispatchQueue.main.sync {
+                                    //データ取得
+                                    //アクションシート表示
+                                }
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                //if データがない
+                                    //アクションシート表示
+                            }
+                            
                             //データ取得
                             let jsonData = try Data(contentsOf: url)
                             

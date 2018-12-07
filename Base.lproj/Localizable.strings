@@ -21,6 +21,7 @@
 "LIST_SAVE" = "Save";
 "LIST_SAVECHECK" = "Save \"%@\"?";
 "LIST_SETTING" = "Category\nSetting";
+"LIST_NEW" = "NEW";
 "ADD_VCTITLE" = "Add a Book";
 "ADD_TITLE" = "Title";
 "ADD_AUTHOR" = "Author";

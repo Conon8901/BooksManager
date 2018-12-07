@@ -48,16 +48,18 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         Variables.shared.currentCategory = 0
         
+        let initialCategory = "LIST_NEW".localized
+        
         if let dic = saveData.object(forKey: Variables.shared.alKey) as? [String: [[String]]] {
             Variables.shared.booksData = dic
         } else {
-            Variables.shared.booksData["NEW"] = []
+            Variables.shared.booksData[initialCategory] = []
         }
         
         if let arr = saveData.object(forKey: Variables.shared.categoryKey) as? [String] {
             Variables.shared.categories = arr
         } else {
-            Variables.shared.categories.append("NEW")
+            Variables.shared.categories.append(initialCategory)
         }
         
         if let arr = saveData.object(forKey: Variables.shared.deletedKey) as? [[String]] {
@@ -170,6 +172,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 tabs.reloadData()
                 
                 checkTableState()
+                
+                table.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 
                 DispatchQueue.main.async {
                     self.tabs.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
