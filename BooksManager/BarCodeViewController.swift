@@ -102,8 +102,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
                         
-                        var reflectAction = UIAlertAction()
-                        
                         //GoogleBooksAPIに該当する本が登録されているか確認
                         let URLString = String(format: "https://www.googleapis.com/books/v1/volumes?q=isbn:%@", readed)
                         let url = URL(string: URLString)!
@@ -114,91 +112,114 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         var canReflect = true
                         
+                        var json = [String: AnyObject]()
+                        
                         //情報の抽出
-                        do {
-                            DispatchQueue(label: "Download").async {
-                                //ダウンロードする
-                                DispatchQueue.main.sync {
-                                    //データ取得
-                                    //アクションシート表示
-                                }
-                            }
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                //if データがない
-                                    //アクションシート表示
-                            }
-                            
-                            //データ取得
-                            let jsonData = try Data(contentsOf: url)
-                            
-                            //JSONに変換
-                            let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
-                            
-                            //題名・著者の取得
-                            if let items = json["items"] as? [[String: AnyObject]] {
-                                if let item = items.first {
-                                    if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
-                                        if let titleString = volumeInfo["title"] as? String {
-                                            title = titleString
-                                        }
-                                        
-                                        if let authorsArray = volumeInfo["authors"] as? [String] {
-                                            author = authorsArray.joined(separator: ", ")
-                                        }
-                                        
-                                        if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
-                                            thumbnail = imageLinks["thumbnail"]
-                                        }
-                                    }
-                                }
-                            } else {
+                        DispatchQueue(label: "Download").async {
+                            //ダウンロードする
+                            do {
+                                //データ取得
+                                let jsonData = try Data(contentsOf: url)
+                                
+                                //JSONに変換
+                                json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
+                            } catch {
                                 canReflect = false
                             }
-                        } catch {
-                            print(error)
-                            canReflect = false
+                            
+                            DispatchQueue.main.sync {
+                                //題名・著者の取得
+                                if let items = json["items"] as? [[String: AnyObject]] {
+                                    if let item = items.first {
+                                        if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
+                                            if let titleString = volumeInfo["title"] as? String {
+                                                title = titleString
+                                            }
+                                            
+                                            if let authorsArray = volumeInfo["authors"] as? [String] {
+                                                author = authorsArray.joined(separator: ", ")
+                                            }
+                                            
+                                            if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
+                                                thumbnail = imageLinks["thumbnail"]
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    canReflect = false
+                                }
+                                
+                                var actionSheet = UIAlertController()
+                                
+                                if canReflect {
+                                    actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
+                                                                    message: "ISBN: \(readed)",
+                                        preferredStyle: .actionSheet)
+                                    
+                                    let reflectAction = UIAlertAction(title: "BARCODE_REFLECT".localized, style: .default, handler:{
+                                        (action: UIAlertAction!) -> Void in
+                                        self.isDetected = false
+                                        
+                                        self.addVC?.titleByBarcode = title
+                                        self.addVC?.authorByBarcode = author
+                                        self.addVC?.thumbnailByBarcode = thumbnail
+                                        
+                                        self.dismiss(animated: true, completion: nil)
+                                    })
+                                    
+                                    actionSheet.addAction(reflectAction)
+                                    
+                                    let amazonAction: UIAlertAction = UIAlertAction(title: "BARCODE_AMAZON".localized, style: .default, handler:{
+                                        (action: UIAlertAction!) -> Void in
+                                        self.isDetected = false
+                                        
+                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.convertToISBNTen(readed)!)//amazonはISBN-10しか取らない
+                                        UIApplication.shared.openURL(URL(string: URLString)!)
+                                    })
+                                    
+                                    actionSheet.addAction(amazonAction)
+                                } else {
+                                    actionSheet = UIAlertController(title: "BARCODE_UNABLE".localized,
+                                                                    message: nil,
+                                        preferredStyle: .actionSheet)
+                                    
+                                    let reflectAction = UIAlertAction(title: "BARCODE_INTERNET".localized, style: .default, handler: nil)
+                                    
+                                    reflectAction.isEnabled = false
+                                    
+                                    actionSheet.addAction(reflectAction)
+                                }
+                                
+                                let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{
+                                    (action: UIAlertAction!) -> Void in
+                                    self.isDetected = false
+                                })
+                                actionSheet.addAction(cancelAction)
+                                
+                                self.present(actionSheet, animated: true, completion: nil)
+                            }
                         }
                         
-                        let actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
-                                                            message: "ISBN: \(readed)",
-                            preferredStyle: .actionSheet)
-                        
-                        if canReflect {
-                            reflectAction = UIAlertAction(title: "BARCODE_REFLECT".localized, style: .default, handler:{
-                                (action: UIAlertAction!) -> Void in
-                                self.isDetected = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                            if json.isEmpty {
+                                let actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
+                                                                    message: "ISBN: \(readed)",
+                                    preferredStyle: .actionSheet)
                                 
-                                self.addVC?.titleByBarcode = title
-                                self.addVC?.authorByBarcode = author
-                                self.addVC?.thumbnailByBarcode = thumbnail
+                                let reflectAction = UIAlertAction(title: "BARCODE_INTERNET".localized, style: .default, handler: nil)
+                                reflectAction.isEnabled = false
                                 
-                                self.dismiss(animated: true, completion: nil)
-                            })
-                        } else {
-                            reflectAction = UIAlertAction(title: "BARCODE_UNABLE".localized, style: .default, handler: nil)
-                            
-                            reflectAction.isEnabled = false
+                                let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{
+                                    (action: UIAlertAction!) -> Void in
+                                    self.isDetected = false
+                                })
+                                
+                                actionSheet.addAction(reflectAction)
+                                actionSheet.addAction(cancelAction)
+                                
+                                self.present(actionSheet, animated: true, completion: nil)
+                            }
                         }
-                        
-                        let amazonAction: UIAlertAction = UIAlertAction(title: "BARCODE_AMAZON".localized, style: .default, handler:{
-                            (action: UIAlertAction!) -> Void in
-                            self.isDetected = false
-                            
-                            let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.convertToISBNTen(readed)!)//amazonはISBN-10しか取らない
-                            UIApplication.shared.openURL(URL(string: URLString)!)
-                        })
-                        
-                        let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{
-                            (action: UIAlertAction!) -> Void in
-                            self.isDetected = false
-                        })
-                        
-                        actionSheet.addAction(reflectAction)
-                        actionSheet.addAction(amazonAction)
-                        actionSheet.addAction(cancelAction)
-                        
-                        self.present(actionSheet, animated: true, completion: nil)
                     }
                 }
             }

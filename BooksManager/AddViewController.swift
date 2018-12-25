@@ -285,8 +285,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBAction func searchTapped() {
         /* TODO:
          お探しの本が表示されないことがあります。
-         Books which you are searching may not be printed.
-         Libroj, kiuj vi serĉas, eble ne estas vidigata.
+         The book which you are searching may not be printed.
+         Via serĉata libro eble ne estas vidigata.
          */
         Variables.shared.searchText = titleTF.text!
         

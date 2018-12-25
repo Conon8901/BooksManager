@@ -36,10 +36,12 @@
 "NOTE_MAYNO_MESSAGE" = "検索によって追加された場合のみ表紙画像が表示されます。";
 "HISTORY_NO" = "削除された本がありません";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";
-"BARCODE_SUCCESS" = "読み取りに成功";
+"BARCODE_SUCCESS" = "読み取りました";
+"BARCODE_FAILED" = "読み取れませんでした";
 "BARCODE_REFLECT" = "追加画面に反映する";
-"BARCODE_UNABLE" = "情報を取得できませんでした";
 "BARCODE_AMAZON" = "Amazonの商品ページを開く";
+"BARCODE_UNABLE" = "インターネットに接続できません";
+"BARCODE_INTERNET" = "通信環境を確認してください";
 "SEARCH_VCTITLE" = "本を検索";
 "CS_VCTITLE" = "カテゴリ設定";
 "CS_NEW" = "新規カテゴリ";

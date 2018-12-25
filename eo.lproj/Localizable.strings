@@ -17,7 +17,7 @@
 "LIST_VCTITLE" = "Listo";
 "LIST_SETTING" = "Agordo";
 "LIST_NOBOOKS1" = "Ne estas libroj.";
-"LIST_NOBOOKS2" = "Aldonu librojn de la supra dekstra butono.";
+"LIST_NOBOOKS2" = "Aldonu librojn per la supra dekstra butono.";
 "LIST_SAVE" = "Konservi";
 "LIST_SAVECHECK" = "Konservas \"%@\"?";
 "LIST_SETTING" = "Agordo de\nKategorioj";
@@ -33,13 +33,14 @@
 "NOTE_VCTITLE" = "Detalo";
 "NOTE_NONAME" = "Neniu Nomo";
 "NOTE_MAYNO" = "Eble Ne Ekzistas Bildo";
-"NOTE_MAYNO_MESSAGE" = "Bildoj estas vidigata nur kiam ĝi aldonis per serĉo.";
+"NOTE_MAYNO_MESSAGE" = "La bildo estas vidigata nur kiam la libro estas aldonita per serĉo.";
 "HISTORY_NO" = "Neniu libroj estis forviŝata.";
 "BARCODE_FRAME" = "Vidigu la strekkodo en ĉi tiu kadro";
 "BARCODE_SUCCESS" = "Lego Sukcesis";
 "BARCODE_REFLECT" = "Reflekti detalojn en la Aldona Ekrano";
-"BARCODE_UNABLE" = "Neakireblis la Informon";
 "BARCODE_AMAZON" = "Malfermi la Artikla Paĝo de Amazon";
+"BARCODE_UNABLE" = "Interreto ne funkcias";
+"BARCODE_INTERNET" = "Kontrolu vian interretan konekton";
 "SEARCH_VCTITLE" = "Serĉo";
 "CS_VCTITLE" = "Agordo de Kategorioj";
 "CS_NEW" = "Nova Kategorio";

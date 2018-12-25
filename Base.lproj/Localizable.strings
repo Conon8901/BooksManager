@@ -38,8 +38,9 @@
 "BARCODE_FRAME" = "Display the barcode in this frame";
 "BARCODE_SUCCESS" = "Reading Successed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
-"BARCODE_UNABLE" = "Unable to Get the Information";
 "BARCODE_AMAZON" = "Open the Product Page of Amazon";
+"BARCODE_UNABLE" = "Internet isn't working";
+"BARCODE_INTERNET" = "Check your internet connection";
 "SEARCH_VCTITLE" = "Search";
 "CS_VCTITLE" = "Categories Setting";
 "CS_NEW" = "New Category";
