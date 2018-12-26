@@ -81,12 +81,12 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         instructLabel.textAlignment = .center
         instructLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(instructLabel)
-        previewView.bringSubview(toFront: instructLabel)
+        previewView.bringSubviewToFront(instructLabel)
         
         //キャンセルボタンの生成
         cancelButton.setTitle("CANCEL".localized, for: .normal)
         cancelButton.titleLabel?.font = .boldSystemFont(ofSize: 18)
-        previewView.bringSubview(toFront: cancelButton)
+        previewView.bringSubviewToFront(cancelButton)
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {

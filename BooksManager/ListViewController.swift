@@ -83,7 +83,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         tabsBorder.frame = CGRect(x: 0, y: viewY, width: view.frame.size.width, height: viewHeight)
         tabsBorder.backgroundColor = UIColor(white: 200/255, alpha: 1)
         view.addSubview(tabsBorder)
-        view.bringSubview(toFront: tabsBorder)
+        view.bringSubviewToFront(tabsBorder)
         
         tabs.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         
@@ -209,11 +209,11 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         //履歴に追加
         let book = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row]
         Variables.shared.deletedBooks.insert(book, at: 0)

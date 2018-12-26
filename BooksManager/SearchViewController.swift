@@ -9,7 +9,7 @@
 import UIKit
 
 //本の検索をするVC
-class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewFlowLayout {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     //MARK: - 宣言
     
@@ -26,6 +26,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     var totalItems = 0
     var nThTime = 0
     
+    var windowWidth: CGFloat = 0
+    var space: CGFloat = 0
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -33,6 +36,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         collection.delegate = self
         collection.dataSource = self
+        
+        windowWidth = UIApplication.shared.keyWindow!.bounds.width
+        space = round(windowWidth / 34)
         
         navigationItem.title = "SEARCH_VCTITLE".localized
         
@@ -125,6 +131,25 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //画面サイズに応じて
+        let cellWidth = (windowWidth - (space * 3)) / 2
+        let cellHeight = cellWidth * 1.3
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return space
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return space
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: space, left: space, bottom: space, right: space)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
