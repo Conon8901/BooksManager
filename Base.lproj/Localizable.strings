@@ -42,6 +42,8 @@
 "BARCODE_UNABLE" = "Internet isn't working";
 "BARCODE_INTERNET" = "Check your internet connection";
 "SEARCH_VCTITLE" = "Search";
+"SEARCH_ATTENTION1" = "There are no books concerned.";
+"SEARCH_ATTENTION2" = "When you are looking for a new book, it might not be printed.";
 "CS_VCTITLE" = "Categories Setting";
 "CS_NEW" = "New Category";
 "CS_LIST" = "List of Categories";

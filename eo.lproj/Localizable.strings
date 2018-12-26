@@ -42,6 +42,8 @@
 "BARCODE_UNABLE" = "Interreto ne funkcias";
 "BARCODE_INTERNET" = "Kontrolu vian interretan konekton";
 "SEARCH_VCTITLE" = "Serĉo";
+"SEARCH_ATTENTION1" = "Ne estas libroj koncernaj.";
+"SEARCH_ATTENTION2" = "Kiam vi serĉas novan libron, ĝi eble ne estas vidigata.";
 "CS_VCTITLE" = "Agordo de Kategorioj";
 "CS_NEW" = "Nova Kategorio";
 "CS_LIST" = "Listo de Kategorioj";

@@ -13,7 +13,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     //MARK: - 宣言
     
-    @IBOutlet var composeButton: UIBarButtonItem!
+    @IBOutlet var composeButton: UIBarButtonItem! //TODO: カテゴリまたいで同一ボタンってのはどうだろうか
     @IBOutlet var historyButton: UIBarButtonItem!
     @IBOutlet var tabs: UICollectionView!
     @IBOutlet var table: UITableView!

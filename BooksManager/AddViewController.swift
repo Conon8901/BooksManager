@@ -8,7 +8,7 @@
 
 import UIKit
 
-//本の追加をするVC
+//本の追加をするVC //TODO: 複数巻あるもの(kiel 漫画, シリーズ)の場合は巻数設定をできるようにする
 class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - 宣言
@@ -283,11 +283,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func searchTapped() {
-        /* TODO:
-         お探しの本が表示されないことがあります。
-         The book which you are searching may not be printed.
-         Via serĉata libro eble ne estas vidigata.
-         */
         Variables.shared.searchText = titleTF.text!
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")

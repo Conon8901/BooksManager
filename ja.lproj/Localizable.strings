@@ -43,6 +43,8 @@
 "BARCODE_UNABLE" = "インターネットに接続できません";
 "BARCODE_INTERNET" = "通信環境を確認してください";
 "SEARCH_VCTITLE" = "本を検索";
+"SEARCH_ATTENTION1" = "該当する本がありませんでした。";
+"SEARCH_ATTENTION2" = "お探しの本が新刊である場合には表示されないことがあります。";
 "CS_VCTITLE" = "カテゴリ設定";
 "CS_NEW" = "新規カテゴリ";
 "CS_LIST" = "カテゴリ一覧";

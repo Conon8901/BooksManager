@@ -9,12 +9,14 @@
 import UIKit
 
 //本の検索をするVC
-class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewFlowLayout {
     
     //MARK: - 宣言
     
     @IBOutlet var collection: UICollectionView!
     @IBOutlet var cancelButton: UIBarButtonItem!
+    @IBOutlet var attentionLabel1: UILabel!
+    @IBOutlet var attentionLabel2: UILabel!
     
     var searchText = ""
     
@@ -36,16 +38,19 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         cancelButton.title = "CANCEL".localized
         
-        //TODO: タイトルのAND検索
-        //        let replaced = variables.shared.searchText.components(separatedBy: .whitespaces).joined(separator: "+")
-        //        let replaced_encoded = replaced.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
-        //        searchText = replaced_encoded
-        
         searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         booksList = fetchNewList(nTh: nThTime)
         
-        collection.reloadData()
+        if booksList.count != 0 {
+            attentionLabel1.isHidden = true
+            attentionLabel2.isHidden = true
+            
+            collection.reloadData()
+        } else {
+            attentionLabel1.text = "SEARCH_ATTENTION1".localized
+            attentionLabel2.text = "SEARCH_ATTENTION2".localized
+        }
     }
     
     //MARK: - CollectionView
@@ -96,7 +101,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
 //            coverimageView.image = image
 //        }
         
-        //非同期処理別スレッドで順にダウンロード //TODO: 通信が重いときの対応
+        //非同期処理別スレッドで順にダウンロード
         if let image = imageList[indexPath.row] {
             coverimageView.image = image
         } else {
@@ -162,7 +167,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         //情報の抽出
         do {
-            //データ取得 //TODO: 通信が重いときの対応
+            //データ取得
             let jsonData = try Data(contentsOf: url)
             
             //JSONに変換
@@ -170,7 +175,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             //該当件数取得
             if let number = json["totalItems"] as? Int {
-                totalItems = number //TODO: 取得の時々で値が変わることへの対応（仕様？）
+                totalItems = number //TODO: 取得の時々で値が変わることへの対応（仕様の模様）
             }
             
             //題名・著者の取得
