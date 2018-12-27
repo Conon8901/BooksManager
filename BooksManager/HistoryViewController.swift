@@ -14,7 +14,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     //MARK: - 宣言
     
     @IBOutlet var cancelButton: UIBarButtonItem!
-    @IBOutlet var table: UITableView!//TODO: 長押しとか右にボタンを置いとくとかで戻す
+    @IBOutlet var table: UITableView!
     @IBOutlet var NoHistoryView: UIView!
     @IBOutlet var noSavedBooksLabel: UILabel!
     

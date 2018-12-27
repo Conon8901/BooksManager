@@ -8,14 +8,20 @@
 
 import UIKit
 
-//本の追加をするVC //TODO: 複数巻あるもの(kiel 漫画, シリーズ)の場合は巻数設定をできるようにする
+//本の追加をするVC
 class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - 宣言
     
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var titleTF: UITextField!
+    @IBOutlet var titleTF: UITextField! {
+        didSet {
+            let notificationCenter = NotificationCenter.default
+            
+            notificationCenter.addObserver(self, selector: #selector(self.checkIfEmpty), name: UITextField.textDidChangeNotification, object: nil)
+        }
+    }
     @IBOutlet var authorLabel: UILabel!
     @IBOutlet var authorTF: UITextField!
     @IBOutlet var noteLabel: UILabel!
@@ -27,13 +33,15 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var addButton: UIButton! {
         didSet {
-            addButton.setTitle("ADD".localized, for: .normal)
             addButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
+            addButton.titleLabel?.adjustsFontSizeToFitWidth = true
+            addButton.titleLabel?.minimumScaleFactor = 0.75
             addButton.layer.cornerRadius = 5.0
             addButton.layer.borderColor = Variables.shared.themeColor.cgColor
             addButton.layer.borderWidth = 1.0
             addButton.backgroundColor = Variables.shared.themeColor
             addButton.tintColor = .white
+            addButton.isEnabled = false
         }
     }
     
@@ -45,10 +53,23 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     var searchText = ""
     
+    @objc func checkIfEmpty(sender: Notification) {
+        let textField = sender.object as! UITextField
+        let text = textField.text!
+        
+        if text.characterExists() {
+            addButton.isEnabled = true
+        } else {
+            addButton.isEnabled = false
+        }
+    }
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        addButton.setTitle(String(format: "ADD_ADD".localized, Variables.shared.categories[Variables.shared.currentCategory]), for: .normal)
         
         navigationItem.title = "ADD_VCTITLE".localized
         cancelButton.title = "CANCEL".localized
@@ -108,6 +129,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBAction func cancelTapped() {
         self.view.endEditing(true)
         
+        Variables.shared.isFromAddVC = true
+        
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -118,86 +141,75 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         let author = authorTF.text!
         let note = noteTV.text!
         
-        if title.characterExists() {
-            var exists = false
-            for categoryName in Variables.shared.categories {
-                for book in Variables.shared.booksData[categoryName]! {
-                    if Array(book[0...1]) == [title, author] {
-                        exists = true
-                        break
-                    }
+        var exists = false
+        for categoryName in Variables.shared.categories {
+            for book in Variables.shared.booksData[categoryName]! {
+                if Array(book[0...1]) == [title, author] {
+                    exists = true
+                    break
                 }
             }
-            
-            if !exists {
-                if author.characterExists() {
+        }
+        
+        if !exists {
+            if author.characterExists() {
+                if let thumbnail = Variables.shared.gottenThumbnailStr {
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                    
+                    Variables.shared.gottenThumbnailStr = nil
+                } else if let thumbnail = thumbnailByBarcode {
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                    
+                    thumbnailByBarcode = nil
+                } else {
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                }
+                
+                saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                
+                self.continuouslyCheck()
+            } else {
+                let alert = UIAlertController(
+                    title: "ADD_EMPTY".localized,
+                    message: nil,
+                    preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                     if let thumbnail = Variables.shared.gottenThumbnailStr {
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, thumbnail])
                         
                         Variables.shared.gottenThumbnailStr = nil
-                    } else if let thumbnail = thumbnailByBarcode {
+                    } else if let thumbnail = self.thumbnailByBarcode {
                         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
                         
-                        thumbnailByBarcode = nil
+                        self.thumbnailByBarcode = nil
                     } else {
                         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
                     }
                     
-                    saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                    self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                     
                     self.continuouslyCheck()
-                } else {
-                    let alert = UIAlertController(
-                        title: "ADD_EMPTY".localized,
-                        message: nil,
-                        preferredStyle: .alert)
-                    
-                    let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                        if let thumbnail = Variables.shared.gottenThumbnailStr {
-                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, thumbnail])
-                            
-                            Variables.shared.gottenThumbnailStr = nil
-                        } else if let thumbnail = self.thumbnailByBarcode {
-                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
-                            
-                            self.thumbnailByBarcode = nil
-                        } else {
-                            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
-                        }
-                        
-                        self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
-                        
-                        self.continuouslyCheck()
-                    }
-                    
-                    let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
-                    
-                    alert.addAction(cancelAction)
-                    alert.addAction(okAction)
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
-            } else {
-                let alert = UIAlertController(
-                    title: String(format: "ADD_ALREADY".localized, titleTF.text!),
-                    message: nil,
-                    preferredStyle: .alert)
-                
-                let closeAction = UIAlertAction(title: "CLOSE".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                    self.clearText()
                 }
                 
-                alert.addAction(closeAction)
+                let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
+                
+                alert.addAction(cancelAction)
+                alert.addAction(okAction)
                 
                 self.present(alert, animated: true, completion: nil)
             }
         } else {
             let alert = UIAlertController(
-                title: "ADD_FILLIN".localized,
+                title: String(format: "ADD_ALREADY".localized, titleTF.text!),
                 message: nil,
                 preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
+            let closeAction = UIAlertAction(title: "CLOSE".localized, style: .default) { (action: UIAlertAction!) -> Void in
+                self.clearText()
+            }
+            
+            alert.addAction(closeAction)
             
             self.present(alert, animated: true, completion: nil)
         }
@@ -215,7 +227,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             authorTF.isEnabled = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.addButton.setTitle("ADD".localized, for: .normal)
+                self.addButton.setTitle(String(format: "ADD_ADD".localized, Variables.shared.categories[Variables.shared.currentCategory]), for: .normal)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     self.titleTF.becomeFirstResponder()
@@ -231,7 +243,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     //MARK: - TextField
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         if textField === titleTF {
             if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
                 searchButton.isEnabled = false

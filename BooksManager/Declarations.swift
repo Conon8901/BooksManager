@@ -66,4 +66,6 @@ class Variables {
     var gottenTitle: String? //search -> add
     var gottenAuthor: String? //search -> add
     var gottenThumbnailStr: String? //search -> add
+    
+    var isFromAddVC = false
 }

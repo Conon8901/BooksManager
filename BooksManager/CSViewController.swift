@@ -15,7 +15,13 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     
     @IBOutlet var newLabel: UILabel!
     @IBOutlet var listLabel: UILabel!
-    @IBOutlet var newTF: UITextField!
+    @IBOutlet var newTF: UITextField! {
+        didSet {
+            let notificationCenter = NotificationCenter.default
+            
+            notificationCenter.addObserver(self, selector: #selector(self.checkIfEmpty), name: UITextField.textDidChangeNotification, object: nil)
+        }
+    }
     @IBOutlet var categoryTable: UITableView!
     @IBOutlet var backButton: UIBarButtonItem!
     @IBOutlet var backgroundView: UIView!
@@ -24,21 +30,35 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     @IBOutlet var viewHeight: NSLayoutConstraint!
     @IBOutlet var viewWidth: NSLayoutConstraint!
     
+    @objc func checkIfEmpty(sender: Notification) {
+        let textField = sender.object as! UITextField
+        let text = textField.text!
+        
+        if text.characterExists() {
+            addButton.isEnabled = true
+        } else {
+            addButton.isEnabled = false
+        }
+    }
+    
     var outsideTappedRecognizer = UITapGestureRecognizer()
     
     let cellHeight: CGFloat = 44
     
     let saveData = UserDefaults.standard
     
+    var selectedIndex = 0
+    
     @IBOutlet var addButton: UIButton! {
         didSet {
-            addButton.setTitle("ADD".localized, for: .normal)
+            addButton.setTitle("CS_ADD".localized, for: .normal)
             addButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
             addButton.layer.cornerRadius = 5.0
             addButton.layer.borderColor = Variables.shared.themeColor.cgColor
             addButton.layer.borderWidth = 1.0
             addButton.backgroundColor = Variables.shared.themeColor
             addButton.tintColor = .white
+            addButton.isEnabled = false
         }
     }
     
@@ -144,85 +164,19 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             let textField = alert.textFields![0] as UITextField
             let newName = textField.text!
             
-            if newName.characterExists() {
-                if Variables.shared.categories.index(of: newName) == nil {
-                    let contents = Variables.shared.booksData[Variables.shared.categories[indexPath.row]]
-                    
-                    Variables.shared.booksData[newName] = contents
-                    
-                    Variables.shared.booksData.removeValue(forKey: Variables.shared.categories[indexPath.row])
-                    
-                    Variables.shared.categories[indexPath.row] = newName
-                    
-                    self.saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
-                    self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
-                    
-                    self.categoryTable.reloadData()
-                } else {
-                    let alert = UIAlertController(
-                        title: "CS_ALREADY".localized,
-                        message: nil,
-                        preferredStyle: .alert)
-                    
-                    alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                }
-            } else {
-                let alert = UIAlertController(
-                    title: "CS_FILLIN".localized,
-                    message: nil,
-                    preferredStyle: .alert)
+            if Variables.shared.categories.index(of: newName) == nil {
+                let contents = Variables.shared.booksData[Variables.shared.categories[indexPath.row]]
                 
-                alert.addAction(UIAlertAction(title: "CLOSE".localized, style: .default))
+                Variables.shared.booksData[newName] = contents
                 
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-        
-        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
-        
-        alert.addTextField { (textField: UITextField!) -> Void in
-            textField.text = Variables.shared.categories[indexPath.row]
-        }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(changeAction)
-        
-        self.present(alert, animated: true, completion: nil)
-        
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    //MARK: - Method
-    
-    @IBAction func backTapped() {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func addTapped() {
-        if newTF.text!.characterExists() {
-            if Variables.shared.categories.index(of: newTF.text!) == nil {
-                Variables.shared.categories.append(newTF.text!)
-                Variables.shared.booksData[newTF.text!] = []
+                Variables.shared.booksData.removeValue(forKey: Variables.shared.categories[indexPath.row])
                 
-                saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+                Variables.shared.categories[indexPath.row] = newName
                 
-                saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                self.saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+                self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
                 
-                categoryTable.reloadData()
-                
-                viewSet()
-                
-                newTF.text = ""
-                
-                newTF.resignFirstResponder()
-                
-                addButton.setTitle("ADDSUCCESSED".localized, for: .normal)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.addButton.setTitle("ADD".localized, for: .normal)
-                }
+                self.categoryTable.reloadData()
             } else {
                 let alert = UIAlertController(
                     title: "CS_ALREADY".localized,
@@ -233,9 +187,75 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
                 
                 self.present(alert, animated: true, completion: nil)
             }
+        }
+        
+        changeAction.isEnabled = false
+        
+        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
+        
+        alert.addTextField { (textField: UITextField!) -> Void in
+            textField.text = Variables.shared.categories[indexPath.row]
+            
+            self.selectedIndex = indexPath.row
+            
+            let notificationCenter = NotificationCenter.default
+            
+            notificationCenter.addObserver(self, selector: #selector(self.checkIfTheSame), name: UITextField.textDidChangeNotification, object: nil)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(changeAction)
+        
+        self.present(alert, animated: true, completion: nil)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    @objc func checkIfTheSame(sender: Notification) {
+        let alert = presentedViewController as? UIAlertController
+        let action = alert?.actions.last
+        
+        let textField = sender.object as! UITextField
+        let text = textField.text!
+        
+        if text == Variables.shared.categories[selectedIndex] || !text.characterExists() {
+            action?.isEnabled = false
+        } else {
+            action?.isEnabled = true
+        }
+    }
+    
+    //MARK: - Method
+    
+    @IBAction func backTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func addTapped() {
+        if Variables.shared.categories.index(of: newTF.text!) == nil {
+            Variables.shared.categories.append(newTF.text!)
+            Variables.shared.booksData[newTF.text!] = []
+            
+            saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+            
+            saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+            
+            categoryTable.reloadData()
+            
+            viewSet()
+            
+            newTF.text = ""
+            
+            newTF.resignFirstResponder()
+            
+            addButton.setTitle("ADDSUCCESSED".localized, for: .normal)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.addButton.setTitle("CS_ADD".localized, for: .normal)
+            }
         } else {
             let alert = UIAlertController(
-                title: "CS_FILLIN".localized,
+                title: "CS_ALREADY".localized,
                 message: nil,
                 preferredStyle: .alert)
             
@@ -243,7 +263,6 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             
             self.present(alert, animated: true, completion: nil)
         }
-        
     }
     
     func viewSet() {

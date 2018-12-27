@@ -9,7 +9,6 @@
 "CANCEL" = "Nuligo";
 "CLOSE" = "Fermi";
 "HISTORY" = "Vivresumo";
-"ADD" = "Aldoni";
 "EDIT" = "Redakti";
 "ADDSUCCESSED" = "Aldonis";
 "BACK" = "Reiri";
@@ -30,6 +29,7 @@
 "ADD_EMPTY" = "Ĉu Vi Vere Volas sen Aŭtora Nomo?";
 "ADD_CONTINUE" = "Fari Kontinue";
 "ADD_ALREADY" = "\"%@\" jam estis aldonita";
+"ADD_ADD" = "Aldonas al %@";
 "NOTE_VCTITLE" = "Detalo";
 "NOTE_NONAME" = "Neniu Nomo";
 "NOTE_MAYNO" = "Eble Ne Ekzistas Bildo";
@@ -51,3 +51,4 @@
 "CS_FILLIN" = "Enigu";
 "CS_CHANGE" = "Modifo de la Nomo";
 "CS_RENAME" = "Renomi";
+"CS_ADD" = "Aldoni";

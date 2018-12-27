@@ -9,7 +9,6 @@
 "CANCEL" = "Cancel";
 "CLOSE" = "Close";
 "HISTORY" = "History";
-"ADD" = "Add";
 "EDIT" = "Edit";
 "ADDSUCCESSED" = "Added";
 "BACK" = "Back";
@@ -30,6 +29,7 @@
 "ADD_EMPTY" = "Are You Sure to Add Without Author Name?";
 "ADD_CONTINUE" = "Do Continuously";
 "ADD_ALREADY" = "\"%@\" has already been added";
+"ADD_ADD" = "Add to %@";
 "NOTE_VCTITLE" = "Details";
 "NOTE_NONAME" = "No Name";
 "NOTE_MAYNO" = "Images may not be Displayed.";
@@ -51,3 +51,4 @@
 "CS_FILLIN" = "Fill in";
 "CS_CHANGE" = "Change of the Name";
 "CS_RENAME" = "Rename";
+"CS_ADD" = "Add";

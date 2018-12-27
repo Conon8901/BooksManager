@@ -492,9 +492,11 @@
                             <constraint firstItem="8mL-JI-ACs" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="Zne-9O-FuJ"/>
                             <constraint firstItem="4qJ-IU-3f2" firstAttribute="bottom" secondItem="Aoh-Hm-Ucy" secondAttribute="bottom" id="aQU-Q0-UoX"/>
                             <constraint firstItem="hkv-CV-YaA" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="biT-Ck-yMJ"/>
+                            <constraint firstItem="cVU-sf-ae5" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="brV-Jp-SFI"/>
                             <constraint firstItem="tiN-i7-43d" firstAttribute="centerX" secondItem="qic-Qy-xo0" secondAttribute="centerX" id="cbp-Ne-JFi"/>
                             <constraint firstItem="YXj-9c-sMy" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" constant="16" id="dG2-e6-ZBa"/>
                             <constraint firstItem="Aoh-Hm-Ucy" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" id="gdG-Hz-KLy"/>
+                            <constraint firstItem="Hb4-cs-o8Z" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cVU-sf-ae5" secondAttribute="trailing" constant="16" id="gtz-Gx-J2v"/>
                             <constraint firstItem="a59-Tq-kr0" firstAttribute="leading" secondItem="Hb4-cs-o8Z" secondAttribute="leading" id="k8j-eg-pr9"/>
                             <constraint firstItem="Hb4-cs-o8Z" firstAttribute="bottom" secondItem="hkv-CV-YaA" secondAttribute="bottom" constant="40" id="kwa-As-Dnl"/>
                             <constraint firstItem="YXj-9c-sMy" firstAttribute="top" secondItem="a59-Tq-kr0" secondAttribute="bottom" constant="8" id="orJ-5A-5Ps"/>

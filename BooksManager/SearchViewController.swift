@@ -200,7 +200,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             //該当件数取得
             if let number = json["totalItems"] as? Int {
-                totalItems = number //TODO: 取得の時々で値が変わることへの対応（仕様の模様）
+                totalItems = number
             }
             
             //題名・著者の取得

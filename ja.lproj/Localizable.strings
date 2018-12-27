@@ -9,7 +9,6 @@
 "CANCEL" = "キャンセル";
 "CLOSE" = "閉じる";
 "HISTORY" = "履歴";
-"ADD" = "追加";
 "EDIT" = "編集";
 "ADDSUCCESSED" = "追加されました";
 "BACK" = "戻る";
@@ -30,6 +29,7 @@
 "ADD_EMPTY" = "著者名なしでよろしいですか？";
 "ADD_CONTINUE" = "連続で行う";
 "ADD_ALREADY" = "『%@』は既に追加されています";
+"ADD_ADD" = "%@ に追加";
 "NOTE_VCTITLE" = "詳細";
 "NOTE_NONAME" = "No Name";
 "NOTE_MAYNO" = "画像は表示されない場合があります";
@@ -52,3 +52,4 @@
 "CS_FILLIN" = "入力してください";
 "CS_CHANGE" = "カテゴリ名変更";
 "CS_RENAME" = "変更";
+"CS_ADD" = "追加";

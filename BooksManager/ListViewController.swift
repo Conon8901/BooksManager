@@ -13,7 +13,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     //MARK: - 宣言
     
-    @IBOutlet var composeButton: UIBarButtonItem! //TODO: カテゴリまたいで同一ボタンってのはどうだろうか
+    @IBOutlet var composeButton: UIBarButtonItem!
     @IBOutlet var historyButton: UIBarButtonItem!
     @IBOutlet var tabs: UICollectionView!
     @IBOutlet var table: UITableView!
@@ -91,17 +91,50 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        /* 修正
+         if fromCS {
+             if !カテゴリ配列が飛ぶ前と同一 {
+                 if 飛ぶ前にいたフォルダがある {
+                    [CollectionView再読み込み]
+                    [該当フォルダにスクロール]
+                    [TableView再読み込み]
+                 } else {
+                    [CollectionView再読み込み]
+                    [[0,0]にスクロール]
+                    [TableView再読み込み]
+                    [ボタン等調整]
+                 }
+             }
+         } else {
+             if fromADD {
+                 if 項目数が0以上 {
+                     [EmptyView非表示]
+                     [編集ボタン使用可]
+                     [TableView再読み込み]
+                 }
+             } else {
+                 table.deselectRow (fromNOTE)
+                 //現状fromHISTORYへの対応の必要なし
+             }
+         }
+         */
+        
+        //NOTEから来た場合
         if let index = table.indexPathForSelectedRow {
             table.deselectRow(at: index, animated: true)
         }
         
-        //本が追加されたか
-        let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
-        if currentNumber > numberBeforeGoingToAddVC {
-            booksEmptyView.isHidden = true
-            editButtonItem.isEnabled = true
+        //ADDから来た場合
+        if Variables.shared.isFromAddVC {
+            Variables.shared.isFromAddVC = false
             
-            table.reloadData()
+            let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
+            if currentNumber > numberBeforeGoingToAddVC {
+                booksEmptyView.isHidden = true
+                editButtonItem.isEnabled = true
+                
+                table.reloadData()
+            }
         }
         
         //カテゴリの追加編集削除並び替え
