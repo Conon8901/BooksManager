@@ -121,16 +121,24 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yx9-PI-Tyx">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.39621682363013699" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="CHk-bW-C5F" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="4iz-hu-6h8"/>
+                            <constraint firstItem="Yx9-PI-Tyx" firstAttribute="trailing" secondItem="zon-qw-ury" secondAttribute="trailing" id="6a5-iy-OM9"/>
+                            <constraint firstItem="zon-qw-ury" firstAttribute="bottom" secondItem="Yx9-PI-Tyx" secondAttribute="bottom" id="AYd-gz-2sZ"/>
+                            <constraint firstItem="Yx9-PI-Tyx" firstAttribute="leading" secondItem="zon-qw-ury" secondAttribute="leading" id="I32-g0-HyA"/>
                             <constraint firstItem="usg-6g-51s" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Kt3-Ep-RnI"/>
                             <constraint firstItem="usg-6g-51s" firstAttribute="top" secondItem="zon-qw-ury" secondAttribute="bottom" id="QFC-n2-bPQ"/>
                             <constraint firstItem="zon-qw-ury" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Rk2-ZI-D5K"/>
                             <constraint firstItem="zon-qw-ury" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="bom-Bf-Cuz"/>
                             <constraint firstItem="CHk-bW-C5F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dsO-4y-SdJ"/>
                             <constraint firstItem="CHk-bW-C5F" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="eg4-4b-MIh"/>
+                            <constraint firstItem="Yx9-PI-Tyx" firstAttribute="top" secondItem="zon-qw-ury" secondAttribute="top" id="h60-YQ-ic0"/>
                             <constraint firstItem="zon-qw-ury" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="mEL-Cw-6OU"/>
                             <constraint firstItem="usg-6g-51s" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nsP-0t-5Wx"/>
                             <constraint firstItem="CHk-bW-C5F" firstAttribute="top" secondItem="zon-qw-ury" secondAttribute="bottom" id="uXw-1I-BUk"/>
@@ -158,6 +166,7 @@
                         <outlet property="nobooksLabel2" destination="tgh-zy-5DD" id="XEt-gg-vMy"/>
                         <outlet property="table" destination="usg-6g-51s" id="Ftz-bp-1dl"/>
                         <outlet property="tabs" destination="zon-qw-ury" id="RIs-6u-j5D"/>
+                        <outlet property="tabsCover" destination="Yx9-PI-Tyx" id="UVy-cZ-dBl"/>
                         <segue destination="Ggr-FS-s7M" kind="show" identifier="LtoN" id="dZC-i0-IYM"/>
                     </connections>
                 </viewController>
@@ -318,10 +327,16 @@
                                 <action selector="cancelTapped" destination="7N2-MO-OPV" id="NtR-df-fLy"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="JRJ-rW-6F7">
+                            <color key="tintColor" red="0.83675652742385864" green="0.098595758577631212" blue="0.10153342746753129" alpha="0.84705882352941175" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="deleteTapped" destination="7N2-MO-OPV" id="MeS-ZB-D61"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="NoHistoryView" destination="Lph-gc-wTy" id="3ug-G9-vaO"/>
                         <outlet property="cancelButton" destination="4Gi-QW-YCs" id="nCY-Vh-hKV"/>
+                        <outlet property="noHistoryView" destination="Lph-gc-wTy" id="3ug-G9-vaO"/>
                         <outlet property="noSavedBooksLabel" destination="poD-Ij-ZGU" id="jYF-X4-wZu"/>
                         <outlet property="table" destination="tqG-XP-MMB" id="hlb-uk-c8t"/>
                     </connections>

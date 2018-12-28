@@ -118,7 +118,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             DispatchQueue(label: "imagesDownload").async {
                 if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
                     let imageData = try? Data(contentsOf: thumbnailURL)
-                    image = UIImage(data: imageData!)
+                    image = UIImage(data: imageData!) //TODO: 画像が表示されないまま出たらunexpected nilで落ちた → 出る時に非同期処理終了？
                 } else {
                     image = UIImage(named: "noimage.png")
                 }

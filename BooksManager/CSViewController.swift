@@ -34,11 +34,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         let textField = sender.object as! UITextField
         let text = textField.text!
         
-        if text.characterExists() {
-            addButton.isEnabled = true
-        } else {
-            addButton.isEnabled = false
-        }
+        addButton.isEnabled = text.characterExists()
     }
     
     var outsideTappedRecognizer = UITapGestureRecognizer()
@@ -191,7 +187,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         
         changeAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
+        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil)
         
         alert.addTextField { (textField: UITextField!) -> Void in
             textField.text = Variables.shared.categories[indexPath.row]

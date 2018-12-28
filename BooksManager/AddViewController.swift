@@ -57,11 +57,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         let textField = sender.object as! UITextField
         let text = textField.text!
         
-        if text.characterExists() {
-            addButton.isEnabled = true
-        } else {
-            addButton.isEnabled = false
-        }
+        addButton.isEnabled = text.characterExists()
     }
     
     //MARK: - LifeCycle
@@ -192,7 +188,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     self.continuouslyCheck()
                 }
                 
-                let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel) { (action: UIAlertAction!) -> Void in }
+                let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil)
                 
                 alert.addAction(cancelAction)
                 alert.addAction(okAction)
@@ -283,6 +279,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         clearButton.isHidden = true
         searchButton.isEnabled = false
+        
+        addButton.isEnabled = false
         
         titleTF.isEnabled = true
         authorTF.isEnabled = true

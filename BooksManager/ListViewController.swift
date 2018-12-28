@@ -20,6 +20,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet var booksEmptyView: UIView!
     @IBOutlet var nobooksLabel1: UILabel!
     @IBOutlet var nobooksLabel2: UILabel!
+    @IBOutlet var tabsCover: UIView!
     
     let saveData = UserDefaults.standard
     
@@ -43,6 +44,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         nobooksLabel1.textColor = Variables.shared.empryLabelColor
         nobooksLabel2.text = "LIST_NOBOOKS2".localized
         nobooksLabel2.textColor = Variables.shared.empryLabelColor
+        
+        tabsCover.isHidden = true
         
         openCSVCRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
         
@@ -91,7 +94,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        /* 修正
+        /* TODO: 修正
          if fromCS {
              if !カテゴリ配列が飛ぶ前と同一 {
                  if 飛ぶ前にいたフォルダがある {
@@ -155,8 +158,6 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let cell = tabs.dequeueReusableCell(withReuseIdentifier: "LCategoryCell", for: indexPath)
         let label = cell.contentView.viewWithTag(1) as! UILabel
         let selectingCellBottomBar = cell.contentView.viewWithTag(2)!
-        
-        cell.isUserInteractionEnabled = !table.isEditing
         
         selectingCellBottomBar.backgroundColor = Variables.shared.themeColor
         selectingCellBottomBar.alpha = 0
@@ -301,6 +302,26 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         composeButton.isEnabled = !editing
         historyButton.isEnabled = !editing
+        
+        tabs.isScrollEnabled = !editing
+        for cell in tabs.visibleCells {
+            cell.isUserInteractionEnabled = !editing
+        }
+        
+        if editing {
+            tabsCover.alpha = 0.0
+            tabsCover.isHidden = false
+            
+            UIView.animate(withDuration: 0.1, animations: { () -> Void in
+                self.tabsCover.alpha = 1.0
+            })
+        } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tabsCover.alpha = 0.0
+            }, completion: { finished in
+                self.tabsCover.isHidden = finished
+            })
+        }
         
         tabs.reloadData()
     }

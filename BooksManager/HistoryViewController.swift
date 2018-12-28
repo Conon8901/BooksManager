@@ -15,10 +15,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var table: UITableView!
-    @IBOutlet var NoHistoryView: UIView!
+    @IBOutlet var noHistoryView: UIView!
     @IBOutlet var noSavedBooksLabel: UILabel!
     
     let saveData = UserDefaults.standard
+    
+    var returnRecognizer = UILongPressGestureRecognizer()
     
     //MARK: - Life Cycle
     
@@ -37,10 +39,21 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         table.dataSource = self
         table.tableFooterView = UIView()
         
+        returnRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(returnTo))
+        
+        table.addGestureRecognizer(returnRecognizer)
+        
         if Variables.shared.deletedBooks.count != 0 {
-            NoHistoryView.isHidden = true
+            noHistoryView.isHidden = true
         } else {
-            NoHistoryView.isHidden = false
+            noHistoryView.isHidden = false
+        }
+    }
+    
+    @objc func returnTo(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            print("longpressed")
+            //TODO: 削除時に元のカテゴリを保存するようにしてそれを読み込んで戻す
         }
     }
     
@@ -71,11 +84,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
             
             if Variables.shared.deletedBooks.count == 0 {
-                NoHistoryView.isHidden = false
+                noHistoryView.isHidden = false
                 
-                NoHistoryView.alpha = 0.0
+                noHistoryView.alpha = 0.0
                 UIView.animate(withDuration: 1, animations: { () -> Void in
-                    self.NoHistoryView.alpha = 1.0
+                    self.noHistoryView.alpha = 1.0
                 })
             }
         }
@@ -85,6 +98,32 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBAction func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func deleteTapped() {
+        let alert = UIAlertController(title: "全削除", message: "履歴を全て削除します。", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
+            Variables.shared.deletedBooks.removeAll()
+            
+            self.saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
+            
+            self.table.reloadData()
+            
+            self.noHistoryView.isHidden = false
+            
+            self.noHistoryView.alpha = 0.0
+            UIView.animate(withDuration: 1, animations: { () -> Void in
+                self.noHistoryView.alpha = 1.0
+            })
+        }
+        
+        let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil)
+        
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
