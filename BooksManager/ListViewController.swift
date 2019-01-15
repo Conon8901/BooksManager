@@ -145,6 +145,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             tabs.scrollToItem(at: IndexPath(row: Variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
             
             tabs.reloadData()
+            
+            checkTableState()
         }
     }
     
@@ -232,11 +234,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if tableView.isEditing {
-            return true
-        } else {
-            return false
-        }
+        return tableView.isEditing
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -273,8 +271,14 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             booksEmptyView.isHidden = false
             editButtonItem.isEnabled = false
             
-            UIView.animate(withDuration: 1, animations: { () -> Void in
+            UIView.animate(withDuration: 0.75, animations: { () -> Void in
                 self.booksEmptyView.alpha = 1.0
+            })
+            
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tabsCover.alpha = 0.0
+            }, completion: { finished in
+                self.tabsCover.isHidden = finished
             })
         }
     }

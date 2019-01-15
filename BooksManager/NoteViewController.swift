@@ -65,12 +65,26 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         
         let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][3]
         
+        let frame = coverImageView.frame
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = .white
+        self.view.addSubview(bgView)
+        
+        let indicator = UIActivityIndicatorView(style: .gray)
+        let x = bgView.bounds.width / 2
+        let y = bgView.bounds.height / 2
+        indicator.center = CGPoint(x: x, y: y)
+        bgView.addSubview(indicator)
+        indicator.startAnimating()
+        
         coverImageView.image = UIImage(named: "noimage.png")
         
         if thumbnailStr == "" {
             coverImageView.isUserInteractionEnabled = true
             let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
             coverImageView.addGestureRecognizer(imagetappedGesture)
+            
+            bgView.removeFromSuperview()
         } else {
             let thumbnailURL = URL(string: thumbnailStr)
             
@@ -80,6 +94,8 @@ class NoteViewController: UIViewController, UITextViewDelegate {
                     if imageData != nil {
                         self.coverImageView.image = UIImage(data: imageData!)
                     }
+                    
+                    bgView.removeFromSuperview()
                 }
             }
         }

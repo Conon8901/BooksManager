@@ -106,11 +106,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if Variables.shared.categories.count == 1 {
-            return false
-        }
-        
-        return true
+        return Variables.shared.categories.count != 1
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

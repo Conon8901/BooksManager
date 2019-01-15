@@ -141,7 +141,13 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                             }
                                             
                                             if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
-                                                thumbnail = imageLinks["thumbnail"]
+                                                var url = imageLinks["thumbnail"]!
+                                                
+                                                if let range = url.range(of: "&edge=curl") {
+                                                    url.replaceSubrange(range, with: "")
+                                                }
+                                                
+                                                thumbnail = url
                                             }
                                         }
                                     }

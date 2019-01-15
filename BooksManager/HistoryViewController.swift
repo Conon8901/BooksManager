@@ -43,11 +43,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         table.addGestureRecognizer(returnRecognizer)
         
-        if Variables.shared.deletedBooks.count != 0 {
-            noHistoryView.isHidden = true
-        } else {
-            noHistoryView.isHidden = false
-        }
+        let isEmpty = Variables.shared.deletedBooks.count != 0
+        noHistoryView.isHidden = isEmpty
     }
     
     @objc func returnTo(sender: UILongPressGestureRecognizer) {
@@ -87,7 +84,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 noHistoryView.isHidden = false
                 
                 noHistoryView.alpha = 0.0
-                UIView.animate(withDuration: 1, animations: { () -> Void in
+                UIView.animate(withDuration: 0.75, animations: { () -> Void in
                     self.noHistoryView.alpha = 1.0
                 })
             }
@@ -113,7 +110,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.noHistoryView.isHidden = false
             
             self.noHistoryView.alpha = 0.0
-            UIView.animate(withDuration: 1, animations: { () -> Void in
+            UIView.animate(withDuration: 0.75, animations: { () -> Void in
                 self.noHistoryView.alpha = 1.0
             })
         }

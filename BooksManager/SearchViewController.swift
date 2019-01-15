@@ -74,57 +74,34 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         titleLabel.text = booksList[indexPath.row][0]
         authorLabel.text = booksList[indexPath.row][1]
         
-        //非同期処理単一スレッド: 動作が重いが確実に表示される
-//        let queue = DispatchQueue(label: "imagesDownload", qos: .utility, target: .main)
-//        queue.async {
-//            if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
-//                let imageData = try? Data(contentsOf: thumbnailURL)
-//                coverimageView.image = UIImage(data: imageData!)
-//            } else {
-//                coverimageView.image = UIImage(named: "noimage.png")
-//            }
-//        }
-        
-        //非同期処理複数スレッド: 動作は軽いが表示が入れ替わる
-//        let dispatchGroup = DispatchGroup()
-//        let dispatchQueue = DispatchQueue(label: "imagesDownload")
-//
-//        var image = UIImage(named: "NEEKZISTAS")
-//        coverimageView.image = image
-//
-//        dispatchGroup.enter()
-//        dispatchQueue.async(group: dispatchGroup) {
-//            if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
-//                let imageData = try? Data(contentsOf: thumbnailURL)
-//                image = UIImage(data: imageData!)
-//            } else {
-//                image = UIImage(named: "noimage.png")
-//            }
-//        }
-//        dispatchGroup.leave()
-//
-//        dispatchGroup.notify(queue: .main) {
-//            coverimageView.image = image
-//        }
-        
         //非同期処理別スレッドで順にダウンロード
         if let image = imageList[indexPath.row] {
             coverimageView.image = image
         } else {
             var image: UIImage!
-            image = UIImage(named: "noimage.png")
+            image = UIImage(named: "indicatorBG.png")
             coverimageView.image = image
+            
+            let indicator = UIActivityIndicatorView(style: .gray)
+            let imageViewCenterX = coverimageView.bounds.width / 2
+            let imageViewCenterY = coverimageView.bounds.height / 2
+            indicator.center = CGPoint(x: imageViewCenterX, y: imageViewCenterY)
+            coverimageView.addSubview(indicator)
+            indicator.startAnimating()
             
             DispatchQueue(label: "imagesDownload").async {
                 if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
                     let imageData = try? Data(contentsOf: thumbnailURL)
-                    image = UIImage(data: imageData!) //TODO: 画像が表示されないまま出たらunexpected nilで落ちた → 出る時に非同期処理終了？
+                    image = UIImage(data: imageData!)
                 } else {
                     image = UIImage(named: "noimage.png")
                 }
                 
                 DispatchQueue.main.async {
                     self.imageList.updateValue(image, forKey: indexPath.row)
+                    
+                    indicator.stopAnimating()
+                    
                     coverimageView.image = image//mainに戻って代入
                 }
             }

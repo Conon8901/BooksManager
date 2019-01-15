@@ -55,9 +55,14 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @objc func checkIfEmpty(sender: Notification) {
         let textField = sender.object as! UITextField
-        let text = textField.text!
         
-        addButton.isEnabled = text.characterExists()
+        if textField === titleTF {
+            let text = textField.text!
+            
+            addButton.isEnabled = text.characterExists()
+            searchButton.isEnabled = text.characterExists()
+            clearButton.isHidden = text.count == 0
+        }
     }
     
     //MARK: - LifeCycle
@@ -230,27 +235,15 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                Variables.shared.isFromAddVC = true
+                
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
     
     //MARK: - TextField
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField === titleTF {
-            if (titleTF.text! as NSString).replacingCharacters(in: range, with: string).count == 0 {
-                searchButton.isEnabled = false
-                clearButton.isHidden = true
-            } else {
-                searchButton.isEnabled = true
-                clearButton.isHidden = false
-            }
-        }
-        
-        return true
-    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
