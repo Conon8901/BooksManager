@@ -146,7 +146,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         var exists = false
         for categoryName in Variables.shared.categories {
             for book in Variables.shared.booksData[categoryName]! {
-                if Array(book[0...1]) == [title, author] {
+                if (book.title, book.author) == (title, author) {
                     exists = true
                     break
                 }
@@ -155,19 +155,32 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         if !exists {
             if author.characterExists() {
+                var book = Book()
+                book.title = title
+                book.author = author
+                book.note = note
+                
                 if let thumbnail = Variables.shared.gottenThumbnailStr {
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                    book.image = thumbnail
+                    
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                     
                     Variables.shared.gottenThumbnailStr = nil
                 } else if let thumbnail = thumbnailByBarcode {
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                    book.image = thumbnail
+                    
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                     
                     thumbnailByBarcode = nil
                 } else {
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                    book.image = ""
+                    
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                 }
                 
-                saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+                
+                saveData.set(encoded_all, forKey: Variables.shared.alKey)
                 
                 self.continuouslyCheck()
             } else {
@@ -177,19 +190,32 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                     preferredStyle: .alert)
                 
                 let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
+                    var book = Book()
+                    book.title = title
+                    book.author = ""
+                    book.note = note
+                    
                     if let thumbnail = Variables.shared.gottenThumbnailStr {
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, "", note, thumbnail])
+                        book.image = thumbnail
+                        
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                         
                         Variables.shared.gottenThumbnailStr = nil
                     } else if let thumbnail = self.thumbnailByBarcode {
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, thumbnail])
+                        book.image = thumbnail
+                        
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                         
                         self.thumbnailByBarcode = nil
                     } else {
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append([title, author, note, ""])
+                        book.image = ""
+                        
+                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                     }
                     
-                    self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                    let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+                    
+                    self.saveData.set(encoded_all, forKey: Variables.shared.alKey)
                     
                     self.continuouslyCheck()
                 }

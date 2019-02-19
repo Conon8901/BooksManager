@@ -42,6 +42,8 @@ extension UIColor {
     }
 }
 
+typealias Bookshelf = [String: [Book]]
+
 class Variables {
     static let shared = Variables()
     
@@ -54,11 +56,11 @@ class Variables {
     
     let resultsNumber = 40
     
-    var booksData = [String: [[String]]]() //[String: [Book]]()
+    var booksData = Bookshelf()
     
-    var categories = [String]() //
+    var categories = [String]()
     
-    var deletedBooks = [[String]]() //[Book]()
+    var deletedBooks = [Book]()
     
     var currentCategory = 0
     
@@ -68,4 +70,14 @@ class Variables {
     var gottenThumbnailStr: String? //search -> add
     
     var isFromAddVC = false
+}
+
+struct Book: Codable {
+    var title = ""
+    var author = ""
+    var series = ""
+    var publisher = ""
+    var price = ""
+    var image = ""
+    var note = ""
 }

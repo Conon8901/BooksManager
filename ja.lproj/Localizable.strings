@@ -17,15 +17,15 @@
 "LIST_SETTING" = "設定";
 "LIST_NOBOOKS1" = "本がありません";
 "LIST_NOBOOKS2" = "右上のボタンから追加してください";
-"LIST_SAVE" = "保存";
-"LIST_SAVECHECK" = "『%@』を保存しますか？";
+"LIST_SAVE" = "保存";//削除予定
+"LIST_SAVECHECK" = "『%@』を保存しますか？";//削除予定
 "LIST_SETTING" = "カテゴリ設定";
 "LIST_NEW" = "新規";
 "ADD_VCTITLE" = "本を追加";
 "ADD_TITLE" = "題名";
 "ADD_AUTHOR" = "著者";
 "ADD_NOTE" = "メモ";
-"ADD_FILLIN" = "題名を入力してください";
+"ADD_FILLIN" = "題名を入力してください";//削除予定
 "ADD_EMPTY" = "著者名なしでよろしいですか？";
 "ADD_CONTINUE" = "連続で行う";
 "ADD_ALREADY" = "『%@』は既に追加されています";
@@ -37,7 +37,7 @@
 "HISTORY_NO" = "削除された本がありません";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";
 "BARCODE_SUCCESS" = "読み取りました";
-"BARCODE_FAILED" = "読み取れませんでした";
+"BARCODE_FAILED" = "読み取れませんでした";//削除予定
 "BARCODE_REFLECT" = "追加画面に反映する";
 "BARCODE_AMAZON" = "Amazonの商品ページを開く";
 "BARCODE_UNABLE" = "インターネットに接続できません";
@@ -49,7 +49,7 @@
 "CS_NEW" = "新規カテゴリ";
 "CS_LIST" = "カテゴリ一覧";
 "CS_ALREADY" = "同名のカテゴリがあります";
-"CS_FILLIN" = "入力してください";
+"CS_FILLIN" = "入力してください";//削除予定
 "CS_CHANGE" = "カテゴリ名変更";
 "CS_RENAME" = "変更";
 "CS_ADD" = "追加";

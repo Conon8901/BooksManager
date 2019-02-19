@@ -134,7 +134,10 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             tableView.deleteRows(at: [indexPath], with: .top)
             
             saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
-            saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+            
+            let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+            
+            saveData.set(encoded_all, forKey: Variables.shared.alKey)
             
             DispatchQueue.main.async {
                 self.viewSet()
@@ -166,7 +169,10 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
                 Variables.shared.categories[indexPath.row] = newName
                 
                 self.saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
-                self.saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+                
+                let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+                
+                self.saveData.set(encoded_all, forKey: Variables.shared.alKey)
                 
                 self.categoryTable.reloadData()
             } else {
@@ -230,7 +236,9 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             
             saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
             
-            saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+            let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+            
+            saveData.set(encoded_all, forKey: Variables.shared.alKey)
             
             categoryTable.reloadData()
             

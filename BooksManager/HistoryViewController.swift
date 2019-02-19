@@ -63,8 +63,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DeletedCell")
         
-        cell?.textLabel?.text = Variables.shared.deletedBooks[indexPath.row][0]
-        cell?.detailTextLabel?.text = Variables.shared.deletedBooks[indexPath.row][1]
+        cell?.textLabel?.text = Variables.shared.deletedBooks[indexPath.row].title
+        cell?.detailTextLabel?.text = Variables.shared.deletedBooks[indexPath.row].author
         
         return cell!
     }
@@ -78,7 +78,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             Variables.shared.deletedBooks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .top)
             
-            saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
+            let encoded_deleted = try! JSONEncoder().encode(Variables.shared.deletedBooks)
+            
+            saveData.set(encoded_deleted, forKey: Variables.shared.deletedKey)
             
             if Variables.shared.deletedBooks.count == 0 {
                 noHistoryView.isHidden = false
@@ -103,7 +105,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         let deleteAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
             Variables.shared.deletedBooks.removeAll()
             
-            self.saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
+            let encoded_deleted = try! JSONEncoder().encode(Variables.shared.deletedBooks)
+            
+            self.saveData.set(encoded_deleted, forKey: Variables.shared.deletedKey)
             
             self.table.reloadData()
             

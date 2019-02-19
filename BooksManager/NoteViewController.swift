@@ -51,8 +51,8 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let title = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][0]
-        let author = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][1]
+        let title = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].title
+        let author = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].author
         
         titleLabel.text = title
         
@@ -61,9 +61,10 @@ class NoteViewController: UIViewController, UITextViewDelegate {
             authorLabel.text = "NOTE_NONAME".localized
         }
         
-        noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2]
+        noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note
         
-        let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][3]
+        
+        let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].image
         
         let frame = coverImageView.frame
         let bgView = UIView(frame: frame)
@@ -101,28 +102,34 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
-        let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
-        
-        let constraintA = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.authorLabel, attribute: .bottom, multiplier: 1, constant: 20)
-        
-        let constraintC = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.coverImageView, attribute: .bottom, multiplier: 1, constant: 20)
-        
-        constraintA.isActive = authorLBottom > coverIVBottom
-        constraintC.isActive = !constraintA.isActive
-    }
+//    override func viewDidLayoutSubviews() {
+//        let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
+//        let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
+//
+//        let constraintA = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.authorLabel, attribute: .bottom, multiplier: 1, constant: 20)
+//
+//        let constraintC = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.coverImageView, attribute: .bottom, multiplier: 1, constant: 20)
+//
+//        constraintA.isActive = authorLBottom > coverIVBottom
+//        constraintC.isActive = !constraintA.isActive
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
-        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2] = noteTV.text
-        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note = noteTV.text
+        
+        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+        
+        saveData.set(encoded_all, forKey: Variables.shared.alKey)
     }
     
     //MARK: - Navi
     
     @IBAction func doneTapped() {
-        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!][2] = noteTV.text
-        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note = noteTV.text
+        
+        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+        
+        saveData.set(encoded_all, forKey: Variables.shared.alKey)
         
         noteTV.resignFirstResponder()
     }

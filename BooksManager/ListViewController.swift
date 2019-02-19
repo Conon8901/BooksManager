@@ -53,8 +53,9 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let initialCategory = "LIST_NEW".localized
         
-        if let dic = saveData.object(forKey: Variables.shared.alKey) as? [String: [[String]]] {
-            Variables.shared.booksData = dic
+        if let dic = saveData.object(forKey: Variables.shared.alKey) as? Data {
+            let decoded = try! JSONDecoder().decode(Bookshelf.self, from: dic)
+            Variables.shared.booksData = decoded
         } else {
             Variables.shared.booksData[initialCategory] = []
         }
@@ -65,7 +66,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             Variables.shared.categories.append(initialCategory)
         }
         
-        if let arr = saveData.object(forKey: Variables.shared.deletedKey) as? [[String]] {
+        if let arr = saveData.object(forKey: Variables.shared.deletedKey) as? [Book] {
             Variables.shared.deletedBooks = arr
         }
         
@@ -90,7 +91,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         tabs.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         
-        checkTableState()
+        checkTableStateAndReload()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +147,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             tabs.reloadData()
             
-            checkTableState()
+            checkTableStateAndReload()
         }
     }
     
@@ -159,10 +160,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = tabs.dequeueReusableCell(withReuseIdentifier: "LCategoryCell", for: indexPath)
         let label = cell.contentView.viewWithTag(1) as! UILabel
-        let selectingCellBottomBar = cell.contentView.viewWithTag(2)!
+        let selectedCellBottomBar = cell.contentView.viewWithTag(2)!
         
-        selectingCellBottomBar.backgroundColor = Variables.shared.themeColor
-        selectingCellBottomBar.alpha = 0
+        selectedCellBottomBar.backgroundColor = Variables.shared.themeColor
+        selectedCellBottomBar.alpha = 0
         
         if indexPath.row == Variables.shared.categories.count {
             label.text = "LIST_SETTING".localized
@@ -175,7 +176,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             cell.backgroundColor = .white
             
             if indexPath == IndexPath(row: Variables.shared.currentCategory, section: 0) {
-                selectingCellBottomBar.alpha = 1
+                selectedCellBottomBar.alpha = 1
             }
         }
         
@@ -207,7 +208,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 tabs.reloadData()
                 
-                checkTableState()
+                checkTableStateAndReload()
                 
                 table.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 
@@ -227,8 +228,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell")!
         
-        cell.textLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][0]
-        cell.detailTextLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row][1]
+        cell.textLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row].title
+        cell.detailTextLabel?.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row].author
         
         return cell
     }
@@ -246,7 +247,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        //履歴に追加
+        //削除 → 履歴に追加
         let book = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![indexPath.row]
         Variables.shared.deletedBooks.insert(book, at: 0)
         if Variables.shared.deletedBooks.count >= 100 {
@@ -256,8 +257,13 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .top)
         
-        saveData.set(Variables.shared.deletedBooks, forKey: Variables.shared.deletedKey)
-        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+        let encoded_deleted = try! JSONEncoder().encode(Variables.shared.deletedBooks)
+        
+        saveData.set(encoded_deleted, forKey: Variables.shared.deletedKey)
+        
+        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+        
+        saveData.set(encoded_all, forKey: Variables.shared.alKey)
         
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
             setNotEditing()
@@ -290,7 +296,9 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.insert(movingItem, at: destinationIndexPath.row)
         
-        saveData.set(Variables.shared.booksData, forKey: Variables.shared.alKey)
+        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+        
+        saveData.set(encoded_all, forKey: Variables.shared.alKey)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -341,7 +349,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         historyButton.isEnabled = true
     }
     
-    func checkTableState() {
+    func checkTableStateAndReload() {
         if Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count == 0 {
             booksEmptyView.isHidden = false
             editButtonItem.isEnabled = false
