@@ -51,7 +51,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         Variables.shared.currentCategory = 0
         
-        let initialCategory = "LIST_NEW".localized
+        let initialCategory = "LIST_INITCATEGORY".localized
         
         if let dic = saveData.object(forKey: Variables.shared.alKey) as? Data {
             let decoded = try! JSONDecoder().decode(Bookshelf.self, from: dic)

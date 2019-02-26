@@ -189,7 +189,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                                                     message: nil,
                                         preferredStyle: .actionSheet)
                                     
-                                    let reflectAction = UIAlertAction(title: "BARCODE_INTERNET".localized, style: .default, handler: nil)
+                                    let reflectAction = UIAlertAction(title: "BARCODE_BADCONNECTION".localized, style: .default, handler: nil)
                                     
                                     reflectAction.isEnabled = false
                                     
@@ -212,7 +212,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                                                     message: "ISBN: \(readed)",
                                     preferredStyle: .actionSheet)
                                 
-                                let reflectAction = UIAlertAction(title: "BARCODE_INTERNET".localized, style: .default, handler: nil)
+                                let reflectAction = UIAlertAction(title: "BARCODE_BADCONNECTION".localized, style: .default, handler: nil)
                                 reflectAction.isEnabled = false
                                 
                                 let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{

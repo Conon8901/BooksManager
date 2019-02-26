@@ -40,8 +40,8 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     @objc func imageTapped(sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             let alert = UIAlertController(
-                title: "NOTE_MAYNO".localized,
-                message: "NOTE_MAYNO_MESSAGE".localized,
+                title: "NOTE_NOIMAGE".localized,
+                message: "NOTE_NOIMAGE_MESSAGE".localized,
                 preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK".localized, style: .default))
@@ -101,18 +101,6 @@ class NoteViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        let coverIVBottom = coverImageView.frame.origin.y + coverImageView.frame.size.height
-//        let authorLBottom = authorLabel.frame.origin.y + authorLabel.frame.size.height
-//
-//        let constraintA = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.authorLabel, attribute: .bottom, multiplier: 1, constant: 20)
-//
-//        let constraintC = NSLayoutConstraint(item: self.noteTV, attribute: .top, relatedBy: .equal, toItem: self.coverImageView, attribute: .bottom, multiplier: 1, constant: 20)
-//
-//        constraintA.isActive = authorLBottom > coverIVBottom
-//        constraintC.isActive = !constraintA.isActive
-//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note = noteTV.text

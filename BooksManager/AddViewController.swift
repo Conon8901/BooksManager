@@ -185,7 +185,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 self.continuouslyCheck()
             } else {
                 let alert = UIAlertController(
-                    title: "ADD_EMPTY".localized,
+                    title: "ADD_AUTHOREMPTY".localized,
                     message: nil,
                     preferredStyle: .alert)
                 
