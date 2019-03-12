@@ -17,6 +17,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var titleTF: UITextField! {
         didSet {
+            titleTF.placeholder = "ADD_SEARCH".localized
+
             let notificationCenter = NotificationCenter.default
             
             notificationCenter.addObserver(self, selector: #selector(self.checkIfEmpty), name: UITextField.textDidChangeNotification, object: nil)

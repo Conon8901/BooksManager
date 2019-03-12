@@ -63,40 +63,41 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note
         
-        
-        let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].image
-        
-        let frame = coverImageView.frame
-        let bgView = UIView(frame: frame)
-        bgView.backgroundColor = .white
-        self.view.addSubview(bgView)
-        
-        let indicator = UIActivityIndicatorView(style: .gray)
-        let x = bgView.bounds.width / 2
-        let y = bgView.bounds.height / 2
-        indicator.center = CGPoint(x: x, y: y)
-        bgView.addSubview(indicator)
-        indicator.startAnimating()
-        
-        coverImageView.image = UIImage(named: "noimage.png")
-        
-        if thumbnailStr == "" {
-            coverImageView.isUserInteractionEnabled = true
-            let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
-            coverImageView.addGestureRecognizer(imagetappedGesture)
+        if coverImageView.image == nil {
+            let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].image
             
-            bgView.removeFromSuperview()
-        } else {
-            let thumbnailURL = URL(string: thumbnailStr)
+            let frame = coverImageView.frame
+            let bgView = UIView(frame: frame)
+            bgView.backgroundColor = .white
+            self.view.addSubview(bgView)
             
-            DispatchQueue(label: "Download").async {
-                let imageData = try? Data(contentsOf: thumbnailURL!)
-                DispatchQueue.main.sync {
-                    if imageData != nil {
-                        self.coverImageView.image = UIImage(data: imageData!)
+            let indicator = UIActivityIndicatorView(style: .gray)
+            let x = bgView.bounds.width / 2
+            let y = bgView.bounds.height / 2
+            indicator.center = CGPoint(x: x, y: y)
+            bgView.addSubview(indicator)
+            indicator.startAnimating()
+            
+            coverImageView.image = UIImage(named: "noimage.png")
+            
+            if thumbnailStr == "" {
+                coverImageView.isUserInteractionEnabled = true
+                let imagetappedGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+                coverImageView.addGestureRecognizer(imagetappedGesture)
+                
+                bgView.removeFromSuperview()
+            } else {
+                let thumbnailURL = URL(string: thumbnailStr)
+                
+                DispatchQueue(label: "Download").async {
+                    let imageData = try? Data(contentsOf: thumbnailURL!)
+                    DispatchQueue.main.sync {
+                        if imageData != nil {
+                            self.coverImageView.image = UIImage(data: imageData!)
+                        }
+                        
+                        bgView.removeFromSuperview()
                     }
-                    
-                    bgView.removeFromSuperview()
                 }
             }
         }

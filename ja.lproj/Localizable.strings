@@ -27,6 +27,7 @@
 "ADD_CONTINUE" = "連続で行う";
 "ADD_ALREADY" = "『%@』は既に追加されています";
 "ADD_ADD" = "%@ に追加";
+"ADD_SEARCH" = "本を検索できます";
 "NOTE_VCTITLE" = "詳細";
 "NOTE_NONAME" = "No Name";
 "NOTE_NOIMAGE" = "画像は表示されない場合があります";

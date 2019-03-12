@@ -75,7 +75,6 @@ class Variables {
 struct Book: Codable {
     var title = ""
     var author = ""
-    var series = ""
     var publisher = ""
     var price = ""
     var image = ""

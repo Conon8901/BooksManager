@@ -27,6 +27,7 @@
 "ADD_CONTINUE" = "Do Continuously";
 "ADD_ALREADY" = "\"%@\" has already been added";
 "ADD_ADD" = "Add to %@";
+"ADD_SEARCH" = "Search a book";
 "NOTE_VCTITLE" = "Details";
 "NOTE_NONAME" = "No Name";
 "NOTE_NOIMAGE" = "Images may not be Displayed.";

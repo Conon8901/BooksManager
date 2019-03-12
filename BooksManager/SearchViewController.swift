@@ -9,7 +9,7 @@
 import UIKit
 
 //本の検索をするVC
-class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, XMLParserDelegate {
     
     //MARK: - 宣言
     
@@ -159,6 +159,48 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     //MARK: - Method
+    
+//    func loadXML() {
+//        let input = ""
+//        
+//        let urlStr = "http://iss.ndl.go.jp/api/opensearch?title=\(input)&idx=1&cnt=10&mediatype=1"
+//        
+//        let url = URL(string: urlStr)
+//        
+//        if let parser = XMLParser(contentsOf: url!) {
+//            parser.delegate = self
+//            parser.parse()
+//        }
+//    }
+//    
+//    var startTag = ""
+//    
+//    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+//        startTag = elementName
+//        
+//        if elementName == "item"{
+//            
+//        }
+//    }
+//    
+//    func parser(_ parser: XMLParser, foundCharacters string: String) {
+//        switch startTag {
+//        case "title":
+//            <#code#>
+//        case "author":
+//            <#code#>
+//        case "dc:publisher":
+//            <#code#>
+//        case "dcndl:price":
+//            <#code#>
+//        default:
+//            <#code#>
+//        }
+//    }
+//    
+//    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+//        print("終了タグ:" + elementName)
+//    }
     
     func fetchNewList(nTh: Int) -> [[String]] {
         let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
