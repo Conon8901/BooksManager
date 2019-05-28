@@ -24,10 +24,10 @@
 "ADD_AUTHOR" = "Aŭtoro";
 "ADD_NOTE" = "Noto";
 "ADD_AUTHOREMPTY" = "Ĉu Vi Vere Volas sen Aŭtora Nomo?";
-"ADD_CONTINUE" = "Fari Kontinue";
+"ADD_CONTINUE" = "Aldono Kontinue";
 "ADD_ALREADY" = "\"%@\" jam estis aldonita";
 "ADD_ADD" = "Aldonas al %@";
-"ADD_SEARCH" = "Serĉi libron";
+"ADD_SEARCH" = "Enigu, kaj serĉu";
 "NOTE_VCTITLE" = "Detalo";
 "NOTE_NONAME" = "Neniu Nomo";
 "NOTE_NOIMAGE" = "Eble Ne Ekzistas Bildo";
@@ -37,6 +37,7 @@
 "BARCODE_SUCCESS" = "Lego Sukcesis";
 "BARCODE_REFLECT" = "Reflekti detalojn en la Aldona Ekrano";
 "BARCODE_AMAZON" = "Malfermi la Artikla Paĝo de Amazon";
+"BARCODE_NOTFOUND" = "La Libro Ne Estas Trovita";
 "BARCODE_UNABLE" = "Interreto ne funkcias";
 "BARCODE_BADCONNECTION" = "Kontrolu vian interretan konekton";
 "SEARCH_VCTITLE" = "Serĉo";

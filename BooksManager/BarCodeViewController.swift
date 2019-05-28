@@ -179,21 +179,35 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                         (action: UIAlertAction!) -> Void in
                                         self.isDetected = false
                                         
-                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.convertToISBNTen(readed)!)//amazonはISBN-10しか取らない
+                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.isbnToTen(readed)!)//amazonはISBN-10しか取らない
+                                        
+                                        self.dismiss(animated: true, completion: nil)
                                         UIApplication.shared.openURL(URL(string: URLString)!)
                                     })
                                     
                                     actionSheet.addAction(amazonAction)
                                 } else {
-                                    actionSheet = UIAlertController(title: "BARCODE_UNABLE".localized,
+                                    actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
                                                                     message: nil,
                                         preferredStyle: .actionSheet)
                                     
-                                    let reflectAction = UIAlertAction(title: "BARCODE_BADCONNECTION".localized, style: .default, handler: nil)
+                                    let reflectAction = UIAlertAction(title: "BARCODE_NOTFOUND".localized, style: .default, handler: nil)
                                     
                                     reflectAction.isEnabled = false
                                     
                                     actionSheet.addAction(reflectAction)
+                                    
+                                    let amazonAction: UIAlertAction = UIAlertAction(title: "BARCODE_AMAZON".localized, style: .default, handler:{
+                                        (action: UIAlertAction!) -> Void in
+                                        self.isDetected = false
+                                        
+                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.isbnToTen(readed)!)//amazonはISBN-10しか取らない
+                                        
+                                        self.dismiss(animated: true, completion: nil)
+                                        UIApplication.shared.openURL(URL(string: URLString)!)
+                                    })
+                                    
+                                    actionSheet.addAction(amazonAction)
                                 }
                                 
                                 let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{
@@ -208,7 +222,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                             if json.isEmpty {
-                                let actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
+                                let actionSheet = UIAlertController(title: "BARCODE_UNABLE".localized,
                                                                     message: "ISBN: \(readed)",
                                     preferredStyle: .actionSheet)
                                 
@@ -234,7 +248,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     //MARK: - Method
     
-    func convertToISBNTen(_ value: String) -> String? {
+    func isbnToTen(_ value: String) -> String? {
         let picked = String(value[value.index(value.startIndex, offsetBy: 3)...value.index(value.startIndex, offsetBy: 11)])
         
         var sum = 0

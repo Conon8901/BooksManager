@@ -24,10 +24,10 @@
 "ADD_AUTHOR" = "Author";
 "ADD_NOTE" = "Note";
 "ADD_AUTHOREMPTY" = "Are You Sure to Add Without Author Name?";
-"ADD_CONTINUE" = "Do Continuously";
+"ADD_CONTINUE" = "Add Continuously";
 "ADD_ALREADY" = "\"%@\" has already been added";
 "ADD_ADD" = "Add to %@";
-"ADD_SEARCH" = "Search a book";
+"ADD_SEARCH" = "Fill in, and search";
 "NOTE_VCTITLE" = "Details";
 "NOTE_NONAME" = "No Name";
 "NOTE_NOIMAGE" = "Images may not be Displayed.";
@@ -37,6 +37,7 @@
 "BARCODE_SUCCESS" = "Reading Successed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
 "BARCODE_AMAZON" = "Open the Product Page of Amazon";
+"BARCODE_NOTFOUND" = "The Book Is Not Found";
 "BARCODE_UNABLE" = "Internet isn't working";
 "BARCODE_BADCONNECTION" = "Check your internet connection";
 "SEARCH_VCTITLE" = "Search";

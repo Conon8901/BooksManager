@@ -16,6 +16,51 @@ extension String {
     func characterExists() -> Bool {
         return !self.components(separatedBy: .whitespaces).joined().isEmpty
     }
+    
+    var isbnTenized: String {
+        let picked = String(self[self.index(self.startIndex, offsetBy: 3)...self.index(self.startIndex, offsetBy: 11)])
+        
+        var sum = 0
+        var index = 0
+        var times = 10
+        while index <= 8 {
+            let i = String(picked[picked.index(picked.startIndex, offsetBy: index)])
+            sum += Int(i)! * times
+            
+            index += 1
+            times -= 1
+        }
+        
+        let checkDigit = 11 - (sum % 11)
+        let str = checkDigit == 10 ? "X" : String(checkDigit)
+        return picked + str
+    }
+    
+    var isbnThirteenized: String {
+        var str = "978" + self
+        
+        str = String(str.prefix(str.count - 1))
+        
+        var sum = 0
+        var index = 0
+        var hoge = true
+        
+        while index <= 11 {
+            let i = String(str[str.index(str.startIndex, offsetBy: index)])
+            
+            if hoge {
+                sum += Int(i)! * 1
+            } else {
+                sum += Int(i)! * 3
+            }
+            
+            hoge = !hoge
+            index += 1
+        }
+        
+        let checkDigit = (10 - (sum % 10)) % 10
+        return str + String(checkDigit)
+    }
 }
 
 extension UIBarButtonItem {
@@ -75,6 +120,8 @@ class Variables {
 struct Book: Codable {
     var title = ""
     var author = ""
+    var isbn_10 = ""
+    var isbn_13 = ""
     var publisher = ""
     var price = ""
     var image = ""

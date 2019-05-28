@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         cancelButton.title = "CANCEL".localized
         
         searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        
+        loadXML() //廃止
         booksList = fetchNewList(nTh: nThTime)
         
         if booksList.count != 0 {
@@ -160,47 +160,81 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     //MARK: - Method
     
-//    func loadXML() {
-//        let input = ""
-//        
-//        let urlStr = "http://iss.ndl.go.jp/api/opensearch?title=\(input)&idx=1&cnt=10&mediatype=1"
-//        
-//        let url = URL(string: urlStr)
-//        
-//        if let parser = XMLParser(contentsOf: url!) {
-//            parser.delegate = self
-//            parser.parse()
-//        }
-//    }
-//    
-//    var startTag = ""
-//    
-//    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-//        startTag = elementName
-//        
-//        if elementName == "item"{
-//            
-//        }
-//    }
-//    
-//    func parser(_ parser: XMLParser, foundCharacters string: String) {
-//        switch startTag {
-//        case "title":
-//            <#code#>
-//        case "author":
-//            <#code#>
-//        case "dc:publisher":
-//            <#code#>
-//        case "dcndl:price":
-//            <#code#>
-//        default:
-//            <#code#>
-//        }
-//    }
-//    
-//    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-//        print("終了タグ:" + elementName)
-//    }
+    //ココカラNDLのAPIを使おうとして作られた残骸
+    var allList = [[String]]()
+    var loadedBook = Book()
+    
+    func loadXML() {
+        let urlStr = "http://iss.ndl.go.jp/api/opensearch?title=\(searchText)&idx=1&cnt=10&mediatype=1"
+        
+        let url = URL(string: urlStr)
+        
+        if let parser = XMLParser(contentsOf: url!) {
+            parser.delegate = self
+            parser.parse()
+        }
+    }
+    
+    var isItem = false
+    var content = ""
+    var booksArr = [Book]()
+    var attribute = [String : String]()
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        content = ""
+        
+        attribute = attributeDict
+        
+        if elementName == "item" {
+            isItem = true
+        }
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        if isItem {
+            content += string
+        }
+    }
+    
+    var isbnRegistered = false
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        switch elementName {
+        case "title":
+            loadedBook.title = content
+        case "author":
+            loadedBook.author = content
+        case "dc:identifier":
+            if attribute["xsi:type"] == "dcndl:ISBN" {
+                if content.count == 10 {
+                    loadedBook.isbn_10 = content
+                    loadedBook.isbn_13 = content.isbnThirteenized
+                } else {
+                    loadedBook.isbn_10 = content.isbnTenized
+                    loadedBook.isbn_13 = content
+                }
+                
+                isbnRegistered = true
+            } else {
+                if isbnRegistered == false { //これをなくすとそれ以降のISBNが同じになる
+                    loadedBook.isbn_10 = ""
+                    loadedBook.isbn_13 = ""
+                }
+            }
+        case "dc:publisher":
+            loadedBook.publisher = content
+        case "dcndl:price":
+            loadedBook.price = content
+        case "item":
+            isbnRegistered = false
+            booksArr.append(loadedBook)
+        case "channel":
+            print(booksArr)
+        default:
+            break
+        }
+    }
+    //ココマデ
     
     func fetchNewList(nTh: Int) -> [[String]] {
         let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
