@@ -20,7 +20,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     var searchText = ""
     
-    var booksList = [[String]]()
+    var booksList = [[String: String]]()
     var imageList = [Int: UIImage]()
     
     var totalItems = 0
@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         cancelButton.title = "CANCEL".localized
         
         searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        loadXML() //廃止
+        
         booksList = fetchNewList(nTh: nThTime)
         
         if booksList.count != 0 {
@@ -71,9 +71,10 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         let authorLabel = cell.contentView.viewWithTag(2) as! UILabel
         let coverimageView = cell.contentView.viewWithTag(3) as! UIImageView
         
-        titleLabel.text = booksList[indexPath.row][0]
-        authorLabel.text = booksList[indexPath.row][1]
+        titleLabel.text = booksList[indexPath.row]["title"]
+        authorLabel.text = booksList[indexPath.row]["author"]
         
+        coverimageView.image = UIImage(named: "noimage.png")
         //非同期処理別スレッドで順にダウンロード
         if let image = imageList[indexPath.row] {
             coverimageView.image = image
@@ -81,27 +82,27 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             var image: UIImage!
             image = UIImage(named: "indicatorBG.png")
             coverimageView.image = image
-            
+
             let indicator = UIActivityIndicatorView(style: .gray)
             let imageViewCenterX = coverimageView.bounds.width / 2
             let imageViewCenterY = coverimageView.bounds.height / 2
             indicator.center = CGPoint(x: imageViewCenterX, y: imageViewCenterY)
             coverimageView.addSubview(indicator)
             indicator.startAnimating()
-            
+
             DispatchQueue(label: "imagesDownload").async {
-                if let thumbnailURL = URL(string: self.booksList[indexPath.row][2]) {
-                    let imageData = try? Data(contentsOf: thumbnailURL)
+                if let coverURL = URL(string: self.booksList[indexPath.row]["cover"]!) {
+                    let imageData = try? Data(contentsOf: coverURL)
                     image = UIImage(data: imageData!)
                 } else {
                     image = UIImage(named: "noimage.png")
                 }
-                
+
                 DispatchQueue.main.async {
                     self.imageList.updateValue(image, forKey: indexPath.row)
-                    
+
                     indicator.stopAnimating()
-                    
+
                     coverimageView.image = image//mainに戻って代入
                 }
             }
@@ -130,9 +131,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        Variables.shared.gottenTitle = booksList[indexPath.row][0]
-        Variables.shared.gottenAuthor = booksList[indexPath.row][1]
-        Variables.shared.gottenThumbnailStr = booksList[indexPath.row][2]
+        Variables.shared.gottenTitle = booksList[indexPath.row]["title"]
+        Variables.shared.gottenAuthor = booksList[indexPath.row]["author"]
+        Variables.shared.gottenThumbnailStr = booksList[indexPath.row]["cover"]
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.dismiss(animated: true, completion: nil)
@@ -147,7 +148,12 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             
             //isDraggingは必要
             if reachedBottom && collection.isDragging {
+                
+                print(nThTime, booksList)
+                
                 if booksList.count < totalItems {
+                    print("yea")
+                    
                     let new = fetchNewList(nTh: nThTime)
                     
                     booksList = booksList + new
@@ -160,93 +166,18 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     //MARK: - Method
     
-    //ココカラNDLのAPIを使おうとして作られた残骸
-    var allList = [[String]]()
-    var loadedBook = Book()
-    
-    func loadXML() {
-        let urlStr = "http://iss.ndl.go.jp/api/opensearch?title=\(searchText)&idx=1&cnt=10&mediatype=1"
+    func fetchNewList(nTh: Int) -> [[String: String]] {
+        let googleURLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
         
-        let url = URL(string: urlStr)
-        
-        if let parser = XMLParser(contentsOf: url!) {
-            parser.delegate = self
-            parser.parse()
-        }
-    }
-    
-    var isItem = false
-    var content = ""
-    var booksArr = [Book]()
-    var attribute = [String : String]()
-    
-    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        content = ""
-        
-        attribute = attributeDict
-        
-        if elementName == "item" {
-            isItem = true
-        }
-    }
-    
-    func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if isItem {
-            content += string
-        }
-    }
-    
-    var isbnRegistered = false
-    
-    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        switch elementName {
-        case "title":
-            loadedBook.title = content
-        case "author":
-            loadedBook.author = content
-        case "dc:identifier":
-            if attribute["xsi:type"] == "dcndl:ISBN" {
-                if content.count == 10 {
-                    loadedBook.isbn_10 = content
-                    loadedBook.isbn_13 = content.isbnThirteenized
-                } else {
-                    loadedBook.isbn_10 = content.isbnTenized
-                    loadedBook.isbn_13 = content
-                }
-                
-                isbnRegistered = true
-            } else {
-                if isbnRegistered == false { //これをなくすとそれ以降のISBNが同じになる
-                    loadedBook.isbn_10 = ""
-                    loadedBook.isbn_13 = ""
-                }
-            }
-        case "dc:publisher":
-            loadedBook.publisher = content
-        case "dcndl:price":
-            loadedBook.price = content
-        case "item":
-            isbnRegistered = false
-            booksArr.append(loadedBook)
-        case "channel":
-            print(booksArr)
-        default:
-            break
-        }
-    }
-    //ココマデ
-    
-    func fetchNewList(nTh: Int) -> [[String]] {
-        let URLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
-        
-        let url = URL(string: URLString)!
+        let googleUrl = URL(string: googleURLString)!
         
         var booksArray = [[String]]()
+        var booksArray_NOVA = [[String: String]]()
         
         //情報の抽出
         do {
             //データ取得
-            let jsonData = try Data(contentsOf: url)
+            let jsonData = try Data(contentsOf: googleUrl)
             
             //JSONに変換
             let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
@@ -259,20 +190,22 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             //題名・著者の取得
             if let items = json["items"] as? [[String: AnyObject]] {
                 for item in items {
+                    var tempArray = ["title": "", "author": "", "isbn_10": "", "isbn_13": "", "publisher": "", "cover": ""]
+                    
                     if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
+                        
                         var booktitle = ""
                         var author = ""
+                        var url = ""
                         
                         if let titleString = volumeInfo["title"] as? String {
                             booktitle = titleString
-                        } else {
-                            booktitle = ""
+                            tempArray["title"] = titleString
                         }
                         
                         if let authorsArray = volumeInfo["authors"] as? [String] {
                             author = authorsArray.joined(separator: ", ")
-                        } else {
-                            author = ""
+                            tempArray["author"] = author
                         }
                         
                         if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
@@ -280,20 +213,62 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                             if let range = thumbnailStr.range(of: "&edge=curl") {
                                 thumbnailStr.replaceSubrange(range, with: "")
                             }
-                            booksArray.append([booktitle, author, thumbnailStr])
-                        } else {
-                            booksArray.append([booktitle, author, ""])
+                            url = thumbnailStr
+                            tempArray["cover"] = thumbnailStr
                         }
+                        
+                        if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
+                            for gr in isbns {
+                                if gr["type"] == "ISBN_10" {
+                                    tempArray["isbn_10"] = gr["identifier"]!
+                                }
+                                
+                                if gr["type"] == "ISBN_13" {
+                                    let isbn13 = gr["identifier"]!
+                                    
+                                    tempArray["isbn_13"] = isbn13
+                                    
+                                    let openBDURLString = "https://api.openbd.jp/v1/get?isbn=\(isbn13)"
+                                    let openBDUrl = URL(string: openBDURLString)!
+                                    
+                                    //情報の抽出
+                                    do {
+                                        //データ取得
+                                        let jsonData = try Data(contentsOf: openBDUrl)
+                                        
+                                        //JSONに変換
+                                        if let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [[String: AnyObject]] {
+                                            //情報取得
+                                            if let items = json[0]["summary"] as? [String: String] {
+                                                tempArray["title"] = items["title"]!
+                                                tempArray["publisher"] = items["publisher"]!
+                                                print(tempArray["title"]!, tempArray["cover"]!, items["cover"]!)
+                                                if items["cover"]! != "" {
+                                                    tempArray["cover"] = items["cover"]!
+                                                }
+                                            }
+                                        }
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        booksArray.append([booktitle, author, url])
                     }
+                    
+                    booksArray_NOVA.append(tempArray)
                 }
             }
         } catch {
             print(error)
         }
         
+        print(booksArray_NOVA)
         nThTime += 1
         
-        return booksArray
+        return booksArray_NOVA
     }
     
     @IBAction func cancelTapped() {
