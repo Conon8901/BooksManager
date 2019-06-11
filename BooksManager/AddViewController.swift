@@ -49,6 +49,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     let saveData = UserDefaults.standard
     
+    var indicatorBGView = UIView()
+    var indicatorForSearch = UIActivityIndicatorView()
+    
     var titleByBarcode: String?
     var authorByBarcode: String?
     var thumbnailByBarcode: String?
@@ -93,6 +96,18 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         titleTF.becomeFirstResponder()
         
         clearButton.isHidden = true
+        
+        indicatorBGView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        indicatorBGView.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
+        navigationController?.view.addSubview(indicatorBGView)
+        
+        indicatorBGView.isHidden = true
+        
+        indicatorForSearch.center = indicatorBGView.center
+        indicatorForSearch.style = .whiteLarge
+        indicatorForSearch.color = .black
+        
+        indicatorBGView.addSubview(indicatorForSearch)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,6 +141,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             
             clearButton.isHidden = false
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        indicatorForSearch.stopAnimating()
+        
+        indicatorBGView.isHidden = true
     }
     
     //MARK: - NavigationBar
@@ -315,6 +336,9 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func searchTapped() {
         Variables.shared.searchText = titleTF.text!
+        
+        indicatorBGView.isHidden = false
+        indicatorForSearch.startAnimating()
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")
         self.present(next, animated: true, completion: nil)
