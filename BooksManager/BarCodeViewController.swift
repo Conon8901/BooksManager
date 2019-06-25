@@ -21,8 +21,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     let detectionArea = UIView()
     var isDetected = false
     
-    var addVC: AddViewController?
-    
     //MARK: - CameraProcessing
     
     override func viewDidLoad() {
@@ -102,59 +100,108 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
                         
-                        //GoogleBooksAPIに該当する本が登録されているか確認
-                        let URLString = String(format: "https://www.googleapis.com/books/v1/volumes?q=isbn:%@", readed)
-                        let url = URL(string: URLString)!
                         
-                        var title: String?
-                        var author: String?
-                        var thumbnail: String?
+                        //しあ
+                        
+                        let googleURLString = String(format: "https://www.googleapis.com/books/v1/volumes?q=isbn:%@", readed)
+
+                        let googleUrl = URL(string: googleURLString)!
                         
                         var canReflect = true
                         
-                        var json = [String: AnyObject]()
-                        
-                        //情報の抽出
-                        DispatchQueue(label: "Download").async {
-                            //ダウンロードする
+                        var bookInfo = ["title": "", "author": "", "publisher": "", "cover": ""]
+
+                        DispatchQueue(label: "fetch").async {
+                            //情報の抽出
                             do {
                                 //データ取得
-                                let jsonData = try Data(contentsOf: url)
-                                
+                                let jsonData = try Data(contentsOf: googleUrl)
+
                                 //JSONに変換
-                                json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
-                            } catch {
-                                canReflect = false
-                            }
-                            
-                            DispatchQueue.main.sync {
-                                //題名・著者の取得
-                                if let items = json["items"] as? [[String: AnyObject]] {
-                                    if let item = items.first {
-                                        if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
-                                            if let titleString = volumeInfo["title"] as? String {
-                                                title = titleString
-                                            }
+                                let googleJson = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
+                                
+                                if googleJson["totalItems"] as? Int == 1 {
+                                    //題名・著者の取得
+                                    if let items = googleJson["items"] as? [[String: AnyObject]] {
+                                        for item in items {
                                             
-                                            if let authorsArray = volumeInfo["authors"] as? [String] {
-                                                author = authorsArray.joined(separator: ", ")
-                                            }
-                                            
-                                            if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
-                                                var url = imageLinks["thumbnail"]!
-                                                
-                                                if let range = url.range(of: "&edge=curl") {
-                                                    url.replaceSubrange(range, with: "")
+                                            if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
+                                                if let title = volumeInfo["title"] as? String {
+                                                    Variables.shared.gottenTitle = title
                                                 }
                                                 
-                                                thumbnail = url
+                                                if let authorsArray = volumeInfo["authors"] as? [String] {
+                                                    Variables.shared.gottenAuthor = authorsArray.joined(separator: ", ")
+                                                }
+                                                
+                                                if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
+                                                    var thumbnailStr = imageLinks["thumbnail"]!
+                                                    if let range = thumbnailStr.range(of: "&edge=curl") {
+                                                        thumbnailStr.replaceSubrange(range, with: "")
+                                                    }
+                                                    Variables.shared.gottenCover = thumbnailStr
+                                                }
+                                                
+                                                if let saleInfo = item["saleInfo"] as? [String: AnyObject] {
+                                                    if let priceDic = saleInfo["listPrice"] as? [String: AnyObject] {
+                                                        let amount = priceDic["amount"] as! Double
+                                                        let currency = priceDic["currencyCode"] as! String
+                                                        var price = String(amount) + currency
+                                                        if currency == "JPY" {
+                                                            price = String(round(amount)) + "円"
+                                                        }
+                                                        Variables.shared.gottenTitle = price
+                                                    }
+                                                }
+                                                
+                                                if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
+                                                    for one in isbns {
+//                                                        if one["type"] == "ISBN_10" {
+//                                                            tempArray["isbn_10"] = one["identifier"]!
+//                                                        }
+                                                        
+                                                        if one["type"] == "ISBN_13" {
+//                                                            tempArray["isbn_13"] = one["identifier"]!
+                                                            
+                                                            let openBDURLString = "https://api.openbd.jp/v1/get?isbn=\(one["identifier"]!)"
+                                                            let openBDUrl = URL(string: openBDURLString)!
+                                                            
+                                                            //情報の抽出
+                                                            do {
+                                                                //データ取得
+                                                                let jsonData = try Data(contentsOf: openBDUrl)
+                                                                
+                                                                //JSONに変換
+                                                                if let googleJson = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [[String: AnyObject]] {
+                                                                    //情報取得
+                                                                    if let items = googleJson[0]["summary"] as? [String: String] {
+                                                                        Variables.shared.gottenTitle = items["title"]!
+                                                                        Variables.shared.gottenPublisher = items["publisher"]!
+                                                                        if items["cover"]! != "" {
+                                                                            Variables.shared.gottenCover = items["cover"]!
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } catch {
+                                                                print(error)
+                                                                canReflect = false
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 } else {
+                                    print("null")
                                     canReflect = false
                                 }
-                                
+                            } catch {
+                                print(error)
+                                canReflect = false
+                            }
+                            
+                            DispatchQueue.main.sync {
                                 var actionSheet = UIAlertController()
                                 
                                 if canReflect {
@@ -166,10 +213,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                         (action: UIAlertAction!) -> Void in
                                         self.isDetected = false
                                         
-                                        self.addVC?.titleByBarcode = title
-                                        self.addVC?.authorByBarcode = author
-                                        self.addVC?.thumbnailByBarcode = thumbnail
-                                        
                                         self.dismiss(animated: true, completion: nil)
                                     })
                                     
@@ -179,7 +222,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                         (action: UIAlertAction!) -> Void in
                                         self.isDetected = false
                                         
-                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.isbnToTen(readed)!)//amazonはISBN-10しか取らない
+                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", readed.isbnTenized)//amazonはISBN-10しか取らない
                                         
                                         self.dismiss(animated: true, completion: nil)
                                         UIApplication.shared.openURL(URL(string: URLString)!)
@@ -187,9 +230,9 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                     
                                     actionSheet.addAction(amazonAction)
                                 } else {
-                                    actionSheet = UIAlertController(title: "BARCODE_SUCCESS".localized,
+                                    actionSheet = UIAlertController(title: "BARCODE_FAILURE".localized,
                                                                     message: nil,
-                                        preferredStyle: .actionSheet)
+                                                                    preferredStyle: .actionSheet)
                                     
                                     let reflectAction = UIAlertAction(title: "BARCODE_NOTFOUND".localized, style: .default, handler: nil)
                                     
@@ -201,7 +244,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                         (action: UIAlertAction!) -> Void in
                                         self.isDetected = false
                                         
-                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", self.isbnToTen(readed)!)//amazonはISBN-10しか取らない
+                                        let URLString = String(format: "https://www.amazon.co.jp/dp/%@", readed.isbnTenized)//amazonはISBN-10しか取らない
                                         
                                         self.dismiss(animated: true, completion: nil)
                                         UIApplication.shared.openURL(URL(string: URLString)!)
@@ -219,53 +262,12 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                 self.present(actionSheet, animated: true, completion: nil)
                             }
                         }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                            if json.isEmpty {
-                                let actionSheet = UIAlertController(title: "BARCODE_UNABLE".localized,
-                                                                    message: "ISBN: \(readed)",
-                                    preferredStyle: .actionSheet)
-                                
-                                let reflectAction = UIAlertAction(title: "BARCODE_BADCONNECTION".localized, style: .default, handler: nil)
-                                reflectAction.isEnabled = false
-                                
-                                let cancelAction: UIAlertAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler:{
-                                    (action: UIAlertAction!) -> Void in
-                                    self.isDetected = false
-                                })
-                                
-                                actionSheet.addAction(reflectAction)
-                                actionSheet.addAction(cancelAction)
-                                
-                                self.present(actionSheet, animated: true, completion: nil)
-                            }
-                        }
                     }
                 }
             }
         }
     }
-    
     //MARK: - Method
-    
-    func isbnToTen(_ value: String) -> String? {
-        let picked = String(value[value.index(value.startIndex, offsetBy: 3)...value.index(value.startIndex, offsetBy: 11)])
-        
-        var sum = 0
-        var index = 0
-        var times = 10
-        while index <= 8 {
-            let i = String(picked[picked.index(picked.startIndex, offsetBy: index)])
-            sum += Int(i)! * times
-            
-            index += 1
-            times -= 1
-        }
-        
-        let checkDigit = 11 - (sum % 11)
-        let str = checkDigit == 10 ? "X" : String(checkDigit)
-        return picked + str
-    }
     
     @IBAction func cancelTapped() {
         self.dismiss(animated: true, completion: nil)

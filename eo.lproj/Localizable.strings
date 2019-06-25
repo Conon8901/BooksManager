@@ -35,6 +35,7 @@
 "HISTORY_NO" = "Neniu libroj estis forviŝata.";
 "BARCODE_FRAME" = "Vidigu la strekkodo en ĉi tiu kadro";
 "BARCODE_SUCCESS" = "Lego Sukcesis";
+"BARCODE_FAILURE" = "Lego Malsukcesis";
 "BARCODE_REFLECT" = "Reflekti detalojn en la Aldona Ekrano";
 "BARCODE_AMAZON" = "Malfermi la Artikla Paĝo de Amazon";
 "BARCODE_NOTFOUND" = "La Libro Ne Estas Trovita";

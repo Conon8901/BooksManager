@@ -34,7 +34,8 @@
 "NOTE_NOIMAGE_MESSAGE" = "Images are displayed only when it added using search.";
 "HISTORY_NO" = "No books has been deleted.";
 "BARCODE_FRAME" = "Display the barcode in this frame";
-"BARCODE_SUCCESS" = "Reading Successed";
+"BARCODE_SUCCESS" = "Reading Succeeded";
+"BARCODE_FAILURE" = "Reading Failed";
 "BARCODE_REFLECT" = "Reflect in the Addition Screen";
 "BARCODE_AMAZON" = "Open the Product Page of Amazon";
 "BARCODE_NOTFOUND" = "The Book Is Not Found";

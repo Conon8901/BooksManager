@@ -28,6 +28,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     var windowWidth: CGFloat = 0
     var space: CGFloat = 0
+    var cellSize: CGSize = CGSize(width: 0, height: 0)
     
     //MARK: - LifeCycle
     
@@ -37,16 +38,25 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         collection.delegate = self
         collection.dataSource = self
         
+        collection.decelerationRate = .init(rawValue: 0.2)
+        
         windowWidth = UIApplication.shared.keyWindow!.bounds.width
         space = round(windowWidth / 34)
         
         navigationItem.title = "SEARCH_VCTITLE".localized
-        
         cancelButton.title = "CANCEL".localized
+        
+        attentionLabel1.isHidden = true
+        attentionLabel2.isHidden = true
         
         searchText = Variables.shared.searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
-        booksList = fetchNewList(nTh: nThTime)
+        //画面サイズに応じて
+        let cellWidth = (windowWidth - (space * 3)) / 2
+        let cellHeight = cellWidth * 1.3
+        cellSize = CGSize(width: cellWidth, height: cellHeight)
+        
+        fetchNewList(nTh: nThTime)
         
         if booksList.count != 0 {
             attentionLabel1.isHidden = true
@@ -112,10 +122,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //画面サイズに応じて
-        let cellWidth = (windowWidth - (space * 3)) / 2
-        let cellHeight = cellWidth * 1.3
-        return CGSize(width: cellWidth, height: cellHeight)
+        return cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -133,32 +140,37 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         Variables.shared.gottenTitle = booksList[indexPath.row]["title"]
         Variables.shared.gottenAuthor = booksList[indexPath.row]["author"]
-        Variables.shared.gottenThumbnailStr = booksList[indexPath.row]["cover"]
+        Variables.shared.gottenPublisher = booksList[indexPath.row]["publisher"]
+        Variables.shared.gottenPrice = booksList[indexPath.row]["price"]
+        Variables.shared.gottenCover = booksList[indexPath.row]["cover"]
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.dismiss(animated: true, completion: nil)
         }
     }
     
+    var didLoad = false
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //1000件で止める
-        if nThTime < 24 {
+        //400件で止める
+        if Variables.shared.resultsNumberPerLoading * nThTime < Variables.shared.maxResultsNumber {
             //下についたら
-            let reachedBottom = collection.contentOffset.y >= collection.contentSize.height - collection.bounds.size.height
+            let currentOffsetY = collection.contentOffset.y
+            let allViewHeight = collection.contentSize.height
+            let visibleHeight = collection.frame.height
+            let maxHeight = allViewHeight - visibleHeight
+            let distance = maxHeight - currentOffsetY
+            let bottomIsNear = distance < 1500
+            
+//            print("now:", currentOffsetY, " all:", allViewHeight, " visible:", visibleHeight, " max:", maxHeight, " near?:", bottomIsNear, " distance:", distance)
             
             //isDraggingは必要
-            if reachedBottom && collection.isDragging {
+            if distance < 1500 && collection.isDragging && !didLoad {
                 
-                print(nThTime, booksList)
+                didLoad = true
                 
                 if booksList.count < totalItems {
-                    print("yea")
-                    
-                    let new = fetchNewList(nTh: nThTime)
-                    
-                    booksList = booksList + new
-                    
-                    collection.reloadData()
+                    fetchNewList(nTh: nThTime)
                 }
             }
         }
@@ -166,109 +178,124 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     //MARK: - Method
     
-    func fetchNewList(nTh: Int) -> [[String: String]] {
-        let googleURLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumber*nTh)&maxResults=\(Variables.shared.resultsNumber)"
+    func fetchNewList(nTh: Int) {
+        let googleURLString = "https://www.googleapis.com/books/v1/volumes?q=intitle:\(searchText)&startIndex=\(Variables.shared.resultsNumberPerLoading*nTh)&maxResults=\(Variables.shared.resultsNumberPerLoading)"
         
         let googleUrl = URL(string: googleURLString)!
         
-        var booksArray = [[String]]()
         var booksArray_NOVA = [[String: String]]()
         
-        //情報の抽出
-        do {
-            //データ取得
-            let jsonData = try Data(contentsOf: googleUrl)
-            
-            //JSONに変換
-            let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
-            
-            //該当件数取得
-            if let number = json["totalItems"] as? Int {
-                totalItems = number
-            }
-            
-            //題名・著者の取得
-            if let items = json["items"] as? [[String: AnyObject]] {
-                for item in items {
-                    var tempArray = ["title": "", "author": "", "isbn_10": "", "isbn_13": "", "publisher": "", "cover": ""]
-                    
-                    if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
+        DispatchQueue(label: "fetchData").async {
+            //情報の抽出
+            do {
+                //データ取得
+                let jsonData = try Data(contentsOf: googleUrl)
+                
+                //JSONに変換
+                let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String: AnyObject]
+                
+                //該当件数取得
+                if let number = json["totalItems"] as? Int {
+                    self.totalItems = number
+                }
+                
+                //題名・著者の取得
+                if let items = json["items"] as? [[String: AnyObject]] {
+                    for item in items {
+                        var tempArray = ["title": "", "author": "", "publisher": "", "price": "", "cover": ""]
                         
-                        var booktitle = ""
-                        var author = ""
-                        var url = ""
-                        
-                        if let titleString = volumeInfo["title"] as? String {
-                            booktitle = titleString
-                            tempArray["title"] = titleString
-                        }
-                        
-                        if let authorsArray = volumeInfo["authors"] as? [String] {
-                            author = authorsArray.joined(separator: ", ")
-                            tempArray["author"] = author
-                        }
-                        
-                        if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
-                            var thumbnailStr = imageLinks["thumbnail"]!
-                            if let range = thumbnailStr.range(of: "&edge=curl") {
-                                thumbnailStr.replaceSubrange(range, with: "")
+                        if let volumeInfo = item["volumeInfo"] as? [String: AnyObject] {
+                            
+                            if let titleString = volumeInfo["title"] as? String {
+                                tempArray["title"] = titleString
                             }
-                            url = thumbnailStr
-                            tempArray["cover"] = thumbnailStr
-                        }
-                        
-                        if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
-                            for gr in isbns {
-                                if gr["type"] == "ISBN_10" {
-                                    tempArray["isbn_10"] = gr["identifier"]!
+                            
+                            if let authorsArray = volumeInfo["authors"] as? [String] {
+                                tempArray["author"] = authorsArray.joined(separator: ", ")
+                            }
+                            
+                            if let imageLinks = volumeInfo["imageLinks"] as? [String: String] {
+                                var thumbnailStr = imageLinks["thumbnail"]!
+                                if let range = thumbnailStr.range(of: "&edge=curl") {
+                                    thumbnailStr.replaceSubrange(range, with: "")
                                 }
-                                
-                                if gr["type"] == "ISBN_13" {
-                                    let isbn13 = gr["identifier"]!
-                                    
-                                    tempArray["isbn_13"] = isbn13
-                                    
-                                    let openBDURLString = "https://api.openbd.jp/v1/get?isbn=\(isbn13)"
-                                    let openBDUrl = URL(string: openBDURLString)!
-                                    
-                                    //情報の抽出
-                                    do {
-                                        //データ取得
-                                        let jsonData = try Data(contentsOf: openBDUrl)
+                                tempArray["cover"] = thumbnailStr
+                            }
+                            
+                            if let saleInfo = item["saleInfo"] as? [String: AnyObject] {
+                                if let priceDic = saleInfo["listPrice"] as? [String: AnyObject] {
+                                    let amount = priceDic["amount"] as! Double
+                                    let currency = priceDic["currencyCode"] as! String
+                                    var price = String(amount) + currency
+                                    if currency == "JPY" {
+                                        price = String(round(amount)) + "円"
+                                    }
+                                    tempArray["price"] = price
+                                }
+                            }
+                            
+                            if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
+                                for one in isbns {
+//                                    if one["type"] == "ISBN_10" {
+//                                        tempArray["isbn_10"] = one["identifier"]!
+//                                    }
+//
+                                    if one["type"] == "ISBN_13" {
+//                                        let isbn13 = one["identifier"]!
                                         
-                                        //JSONに変換
-                                        if let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [[String: AnyObject]] {
-                                            //情報取得
-                                            if let items = json[0]["summary"] as? [String: String] {
-                                                tempArray["title"] = items["title"]!
-                                                tempArray["publisher"] = items["publisher"]!
-                                                print(tempArray["title"]!, tempArray["cover"]!, items["cover"]!)
-                                                if items["cover"]! != "" {
-                                                    tempArray["cover"] = items["cover"]!
+//                                        tempArray["isbn_13"] = isbn13
+                                        
+                                        let openBDURLString = "https://api.openbd.jp/v1/get?isbn=\(one["identifier"]!)"
+                                        let openBDUrl = URL(string: openBDURLString)!
+                                        
+                                        //情報の抽出
+                                        do {
+                                            //データ取得
+                                            let jsonData = try Data(contentsOf: openBDUrl)
+                                            
+                                            //JSONに変換
+                                            if let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [[String: AnyObject]] {
+                                                //情報取得
+                                                if let items = json[0]["summary"] as? [String: String] {
+                                                    tempArray["title"] = items["title"]!
+                                                    tempArray["publisher"] = items["publisher"]!
+                                                    
+                                                    if items["cover"]! != "" {
+                                                        tempArray["cover"] = items["cover"]!
+                                                    }
                                                 }
                                             }
+                                        } catch {
+                                            print(error)
                                         }
-                                    } catch {
-                                        print(error)
                                     }
                                 }
                             }
                         }
                         
-                        booksArray.append([booktitle, author, url])
+                        booksArray_NOVA.append(tempArray)
                     }
-                    
-                    booksArray_NOVA.append(tempArray)
+                }
+            } catch {
+                print(error)
+            }
+            
+//            print(booksArray_NOVA)
+            
+            self.nThTime += 1
+            
+            self.booksList = self.booksList + booksArray_NOVA
+            
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+                self.didLoad = false
+                
+                if self.booksList.isEmpty {
+                    self.attentionLabel1.isHidden = false
+                    self.attentionLabel2.isHidden = false
                 }
             }
-        } catch {
-            print(error)
         }
-        
-        print(booksArray_NOVA)
-        nThTime += 1
-        
-        return booksArray_NOVA
     }
     
     @IBAction func cancelTapped() {

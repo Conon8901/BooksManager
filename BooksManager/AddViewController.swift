@@ -52,10 +52,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     var indicatorBGView = UIView()
     var indicatorForSearch = UIActivityIndicatorView()
     
-    var titleByBarcode: String?
-    var authorByBarcode: String?
-    var thumbnailByBarcode: String?
-    
     var searchText = ""
     
     @objc func checkIfEmpty(sender: Notification) {
@@ -111,35 +107,22 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if let title = titleByBarcode {
+        if let title = Variables.shared.gottenTitle {
             titleTF.text = title
-            titleByBarcode = nil
-            
-            if let author = authorByBarcode {
-                authorTF.text = author
-                authorByBarcode = nil
-            }
             
             titleTF.isEnabled = false
-            authorTF.isEnabled = false
+            
+            if Variables.shared.gottenAuthor != nil {
+                authorTF.isEnabled = false
+            }
+            
             addButton.isEnabled = true
             
             clearButton.isHidden = false
         }
         
-        if let title = Variables.shared.gottenTitle {
-            titleTF.text = title
-            Variables.shared.gottenTitle = nil
-            
-            if let author = Variables.shared.gottenAuthor {
-                authorTF.text = author
-                Variables.shared.gottenAuthor = nil
-            }
-            
-            titleTF.isEnabled = false
-            authorTF.isEnabled = false
-            
-            clearButton.isHidden = false
+        if let author = Variables.shared.gottenAuthor {
+            authorTF.text = author
         }
     }
     
@@ -167,6 +150,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         let note = noteTV.text!
         
         var exists = false
+        /* //TODO: おそらく今や要らない。要検討
         for categoryName in Variables.shared.categories {
             for book in Variables.shared.booksData[categoryName]! {
                 if (book.title, book.author) == (title, author) {
@@ -175,6 +159,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
+         */
         
         if !exists {
             if author.characterExists() {
@@ -183,23 +168,25 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 book.author = author
                 book.note = note
                 
-                if let thumbnail = Variables.shared.gottenThumbnailStr {
-                    book.image = thumbnail
-                    
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
-                    
-                    Variables.shared.gottenThumbnailStr = nil
-                } else if let thumbnail = thumbnailByBarcode {
-                    book.image = thumbnail
-                    
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
-                    
-                    thumbnailByBarcode = nil
-                } else {
-                    book.image = ""
-                    
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
+                if let publisher = Variables.shared.gottenPublisher {
+                    book.publisher = publisher
                 }
+                
+                if let price = Variables.shared.gottenPrice {
+                    book.price = price
+                }
+                
+                if let cover = Variables.shared.gottenCover {
+                    book.cover = cover
+                }
+                
+                Variables.shared.gottenTitle = nil
+                Variables.shared.gottenAuthor = nil
+                Variables.shared.gottenPublisher = nil
+                Variables.shared.gottenPrice = nil
+                Variables.shared.gottenCover = nil
+                
+                Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                 
                 let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
                 
@@ -215,26 +202,28 @@ class AddViewController: UIViewController, UITextFieldDelegate {
                 let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                     var book = Book()
                     book.title = title
-                    book.author = ""
+                    book.author = author
                     book.note = note
                     
-                    if let thumbnail = Variables.shared.gottenThumbnailStr {
-                        book.image = thumbnail
-                        
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
-                        
-                        Variables.shared.gottenThumbnailStr = nil
-                    } else if let thumbnail = self.thumbnailByBarcode {
-                        book.image = thumbnail
-                        
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
-                        
-                        self.thumbnailByBarcode = nil
-                    } else {
-                        book.image = ""
-                        
-                        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
+                    if let publisher = Variables.shared.gottenPublisher {
+                        book.publisher = publisher
                     }
+                    
+                    if let price = Variables.shared.gottenPrice {
+                        book.price = price
+                    }
+                    
+                    if let cover = Variables.shared.gottenCover {
+                        book.cover = cover
+                    }
+                    
+                    Variables.shared.gottenTitle = nil
+                    Variables.shared.gottenAuthor = nil
+                    Variables.shared.gottenPublisher = nil
+                    Variables.shared.gottenPrice = nil
+                    Variables.shared.gottenCover = nil
+                    
+                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
                     
                     let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
                     
@@ -328,10 +317,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         titleTF.isEnabled = true
         authorTF.isEnabled = true
         
-        titleTF.becomeFirstResponder()
+        Variables.shared.gottenTitle = nil
+        Variables.shared.gottenAuthor = nil
+        Variables.shared.gottenPublisher = nil
+        Variables.shared.gottenPrice = nil
+        Variables.shared.gottenCover = nil
         
-        thumbnailByBarcode = nil
-        Variables.shared.gottenThumbnailStr = nil
+        titleTF.becomeFirstResponder()
     }
     
     @IBAction func searchTapped() {

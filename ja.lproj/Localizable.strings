@@ -35,6 +35,7 @@
 "HISTORY_NO" = "削除された本がありません";
 "BARCODE_FRAME" = "この枠内にバーコードを表示させてください";
 "BARCODE_SUCCESS" = "読み取りました";
+"BARCODE_FAILURE" = "読み取れませんでした";
 "BARCODE_REFLECT" = "追加画面に反映する";
 "BARCODE_AMAZON" = "Amazonの商品ページを開く";
 "BARCODE_NOTFOUND" = "書誌情報が見つかりませんでした";

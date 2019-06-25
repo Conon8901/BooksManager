@@ -99,7 +99,8 @@ class Variables {
     let deletedKey = "deletedBooksData"
     let categoryKey = "categoryData"
     
-    let resultsNumber = 40
+    let resultsNumberPerLoading = 40
+    let maxResultsNumber = 400
     
     var booksData = Bookshelf()
     
@@ -110,9 +111,12 @@ class Variables {
     var currentCategory = 0
     
     var searchText = "" //add -> search
-    var gottenTitle: String? //search -> add
-    var gottenAuthor: String? //search -> add
-    var gottenThumbnailStr: String? //search -> add
+    
+    var gottenTitle: String?
+    var gottenAuthor: String?
+    var gottenPublisher: String?
+    var gottenPrice: String?
+    var gottenCover: String?
     
     var isFromAddVC = false
 }
@@ -120,10 +124,10 @@ class Variables {
 struct Book: Codable {
     var title = ""
     var author = ""
-    var isbn_10 = ""
-    var isbn_13 = ""
+//    var isbn_10 = ""
+//    var isbn_13 = ""
     var publisher = ""
     var price = ""
-    var image = ""
+    var cover = ""
     var note = ""
 }

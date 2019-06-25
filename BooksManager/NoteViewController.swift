@@ -64,7 +64,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note
         
         if coverImageView.image == nil {
-            let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].image
+            let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].cover
             
             let frame = coverImageView.frame
             let bgView = UIView(frame: frame)
