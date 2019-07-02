@@ -160,9 +160,6 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             let visibleHeight = collection.frame.height
             let maxHeight = allViewHeight - visibleHeight
             let distance = maxHeight - currentOffsetY
-            let bottomIsNear = distance < 1500
-            
-//            print("now:", currentOffsetY, " all:", allViewHeight, " visible:", visibleHeight, " max:", maxHeight, " near?:", bottomIsNear, " distance:", distance)
             
             //isDraggingは必要
             if distance < 1500 && collection.isDragging && !didLoad {
@@ -226,9 +223,11 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                                 if let priceDic = saleInfo["listPrice"] as? [String: AnyObject] {
                                     let amount = priceDic["amount"] as! Double
                                     let currency = priceDic["currencyCode"] as! String
-                                    var price = String(amount) + currency
+                                    var price = ""
                                     if currency == "JPY" {
-                                        price = String(round(amount)) + "円"
+                                        price = String(Int(amount)) + "円"
+                                    } else {
+                                        price = String(amount) + currency
                                     }
                                     tempArray["price"] = price
                                 }
@@ -279,8 +278,6 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             } catch {
                 print(error)
             }
-            
-//            print(booksArray_NOVA)
             
             self.nThTime += 1
             

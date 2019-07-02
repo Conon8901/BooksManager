@@ -17,6 +17,8 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var authorLabel: UILabel!
+    @IBOutlet var publisherLabel: UILabel!
+    @IBOutlet var priceLabel: UILabel!
     @IBOutlet var coverImageView: UIImageView!
     
     var saveData = UserDefaults.standard
@@ -53,12 +55,27 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         let title = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].title
         let author = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].author
+        let publisher = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].publisher
+        let price = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].price
         
         titleLabel.text = title
         
-        authorLabel.text = author
-        if authorLabel.text == "" {
-            authorLabel.text = "NOTE_NONAME".localized
+        if author == "" {
+            authorLabel.text = "NOTE_NOAUTHOR".localized
+        } else {
+            authorLabel.text = author
+        }
+        
+        if publisher == "" {
+            publisherLabel.text = "NOTE_NOPUBLISHER".localized
+        } else {
+            publisherLabel.text = publisher
+        }
+        
+        if price == "" {
+            priceLabel.text = "NOTE_NOPRICE".localized
+        } else {
+            priceLabel.text = "NOTE_LISTPRICE".localized + price
         }
         
         noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note

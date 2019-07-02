@@ -108,8 +108,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         let googleUrl = URL(string: googleURLString)!
                         
                         var canReflect = true
-                        
-                        var bookInfo = ["title": "", "author": "", "publisher": "", "cover": ""]
 
                         DispatchQueue(label: "fetch").async {
                             //情報の抽出

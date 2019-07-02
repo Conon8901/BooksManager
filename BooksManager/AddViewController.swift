@@ -9,7 +9,7 @@
 import UIKit
 
 //本の追加をするVC
-class AddViewController: UIViewController, UITextFieldDelegate {
+class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     //MARK: - 宣言
     
@@ -28,6 +28,14 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var authorTF: UITextField!
     @IBOutlet var noteLabel: UILabel!
     @IBOutlet var noteTV: UITextView!
+    @IBOutlet var placeHolder: UILabel! {
+        didSet {
+            placeHolder.font = .systemFont(ofSize: 17)
+            placeHolder.textColor = UIColor(red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
+            placeHolder.text = "ADD_EG".localized
+            placeHolder.isUserInteractionEnabled = false
+        }
+    }
     @IBOutlet var continuouslyLabel: UILabel!
     @IBOutlet var continuouslySwitch: UISwitch!
     @IBOutlet var searchButton: UIButton!
@@ -70,6 +78,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        noteTV.delegate = self
         
         addButton.setTitle(String(format: "ADD_ADD".localized, Variables.shared.categories[Variables.shared.currentCategory]), for: .normal)
         
@@ -298,13 +308,6 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let next = segue.destination
-        if let BarcodeVC = next as? BarCodeViewController {
-            BarcodeVC.addVC = self
-        }
-    }
-    
     @IBAction func clearText() {
         titleTF.text = ""
         authorTF.text = ""
@@ -334,5 +337,13 @@ class AddViewController: UIViewController, UITextFieldDelegate {
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")
         self.present(next, animated: true, completion: nil)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text == "" {
+            placeHolder.isHidden = false
+        } else {
+            placeHolder.isHidden = true
+        }
     }
 }
