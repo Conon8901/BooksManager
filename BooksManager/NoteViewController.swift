@@ -19,6 +19,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var authorLabel: UILabel!
     @IBOutlet var publisherLabel: UILabel!
     @IBOutlet var priceLabel: UILabel!
+    @IBOutlet var noteLabel: UILabel!
     @IBOutlet var coverImageView: UIImageView!
     
     var saveData = UserDefaults.standard
@@ -31,6 +32,8 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         navigationItem.title = "NOTE_VCTITLE".localized
+        
+        noteLabel.text = "NOTE_NOTE".localized
         
         noteTV.font = .systemFont(ofSize: 17)
         
@@ -63,7 +66,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         if author == "" {
             authorLabel.text = "NOTE_NOAUTHOR".localized
         } else {
-            authorLabel.text = author
+            authorLabel.text = String(format: "NOTE_BY".localized, author)
         }
         
         if publisher == "" {

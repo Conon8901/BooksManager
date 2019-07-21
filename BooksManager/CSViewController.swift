@@ -120,6 +120,15 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
         Variables.shared.categories.insert(target, at: destinationIndexPath.row)
         
         saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+        
+        //同じカテゴリを開くようにする
+        if Variables.shared.currentCategory == sourceIndexPath.row {
+            Variables.shared.currentCategory = destinationIndexPath.row
+        } else if Variables.shared.currentCategory < sourceIndexPath.row && Variables.shared.currentCategory >= destinationIndexPath.row {
+            Variables.shared.currentCategory += 1
+        } else if Variables.shared.currentCategory > sourceIndexPath.row && Variables.shared.currentCategory <= destinationIndexPath.row {
+            Variables.shared.currentCategory -= 1
+        }
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -134,6 +143,11 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             tableView.deleteRows(at: [indexPath], with: .top)
             
             saveData.set(Variables.shared.categories, forKey: Variables.shared.categoryKey)
+            
+            //元いたカテゴリがなくなったら先頭へ
+            if indexPath.row == Variables.shared.currentCategory {
+                Variables.shared.currentCategory = 0
+            }
             
             let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
             

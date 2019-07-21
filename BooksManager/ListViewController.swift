@@ -49,8 +49,6 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         openCSVCRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
         
-        Variables.shared.currentCategory = 0
-        
         let initialCategory = "#1"
         
         if let dic = saveData.object(forKey: Variables.shared.alKey) as? Data {
@@ -92,37 +90,11 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         tabs.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         
         checkTableStateAndReload()
+        
+        print(Variables.shared.booksData)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        /* TODO: 修正
-         if fromCS {
-             if !カテゴリ配列が飛ぶ前と同一 {
-                 if 飛ぶ前にいたフォルダがある {
-                    [CollectionView再読み込み]
-                    [該当フォルダにスクロール]
-                    [TableView再読み込み]
-                 } else {
-                    [CollectionView再読み込み]
-                    [[0,0]にスクロール]
-                    [TableView再読み込み]
-                    [ボタン等調整]
-                 }
-             }
-         } else {
-             if fromADD {
-                 if 項目数が0以上 {
-                     [EmptyView非表示]
-                     [編集ボタン使用可]
-                     [TableView再読み込み]
-                 }
-             } else {
-                 table.deselectRow (fromNOTE)
-                 //現状fromHISTORYへの対応の必要なし
-             }
-         }
-         */
-        
         //NOTEから来た場合
         if let index = table.indexPathForSelectedRow {
             table.deselectRow(at: index, animated: true)
@@ -132,8 +104,8 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if Variables.shared.isFromAddVC {
             Variables.shared.isFromAddVC = false
             
-            let currentNumber = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count
-            if currentNumber > numberBeforeGoingToAddVC {
+            let bookExist = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.count > 0
+            if bookExist {
                 booksEmptyView.isHidden = true
                 editButtonItem.isEnabled = true
                 
@@ -141,7 +113,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
             }
         }
         
-        //カテゴリの追加編集削除並び替え
+        //CSでカテゴリを操作した場合
         if categoriesBeforeGoingToCSVC != Variables.shared.categories {
             tabs.scrollToItem(at: IndexPath(row: Variables.shared.currentCategory, section: 0), at: .centeredHorizontally, animated: false)
             
@@ -210,7 +182,9 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 checkTableStateAndReload()
                 
-                table.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                if !Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.isEmpty { //遷移先に本がある場合。ないと時々（？）落ちる
+                    table.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                }
                 
                 DispatchQueue.main.async {
                     self.tabs.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)

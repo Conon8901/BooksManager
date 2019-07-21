@@ -233,12 +233,12 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                                 }
                             }
                             
-                            if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
+                            if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {//ISBNは削除
                                 for one in isbns {
 //                                    if one["type"] == "ISBN_10" {
 //                                        tempArray["isbn_10"] = one["identifier"]!
 //                                    }
-//
+                                    
                                     if one["type"] == "ISBN_13" {
 //                                        let isbn13 = one["identifier"]!
                                         

@@ -159,20 +159,44 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
         let author = authorTF.text!
         let note = noteTV.text!
         
-        var exists = false
-        /* //TODO: おそらく今や要らない。要検討
-        for categoryName in Variables.shared.categories {
-            for book in Variables.shared.booksData[categoryName]! {
-                if (book.title, book.author) == (title, author) {
-                    exists = true
-                    break
-                }
+        if author.characterExists() {
+            var book = Book()
+            book.title = title
+            book.author = author
+            book.note = note
+            
+            if let publisher = Variables.shared.gottenPublisher {
+                book.publisher = publisher
             }
-        }
-         */
-        
-        if !exists {
-            if author.characterExists() {
+            
+            if let price = Variables.shared.gottenPrice {
+                book.price = price
+            }
+            
+            if let cover = Variables.shared.gottenCover {
+                book.cover = cover
+            }
+            
+            Variables.shared.gottenTitle = nil
+            Variables.shared.gottenAuthor = nil
+            Variables.shared.gottenPublisher = nil
+            Variables.shared.gottenPrice = nil
+            Variables.shared.gottenCover = nil
+            
+            Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
+            
+            let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
+            
+            saveData.set(encoded_all, forKey: Variables.shared.alKey)
+            
+            self.continuouslyCheck()
+        } else {
+            let alert = UIAlertController(
+                title: "ADD_AUTHOREMPTY".localized,
+                message: nil,
+                preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                 var book = Book()
                 book.title = title
                 book.author = author
@@ -200,66 +224,15 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
                 
                 let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
                 
-                saveData.set(encoded_all, forKey: Variables.shared.alKey)
+                self.saveData.set(encoded_all, forKey: Variables.shared.alKey)
                 
                 self.continuouslyCheck()
-            } else {
-                let alert = UIAlertController(
-                    title: "ADD_AUTHOREMPTY".localized,
-                    message: nil,
-                    preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                    var book = Book()
-                    book.title = title
-                    book.author = author
-                    book.note = note
-                    
-                    if let publisher = Variables.shared.gottenPublisher {
-                        book.publisher = publisher
-                    }
-                    
-                    if let price = Variables.shared.gottenPrice {
-                        book.price = price
-                    }
-                    
-                    if let cover = Variables.shared.gottenCover {
-                        book.cover = cover
-                    }
-                    
-                    Variables.shared.gottenTitle = nil
-                    Variables.shared.gottenAuthor = nil
-                    Variables.shared.gottenPublisher = nil
-                    Variables.shared.gottenPrice = nil
-                    Variables.shared.gottenCover = nil
-                    
-                    Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.append(book)
-                    
-                    let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
-                    
-                    self.saveData.set(encoded_all, forKey: Variables.shared.alKey)
-                    
-                    self.continuouslyCheck()
-                }
-                
-                let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil)
-                
-                alert.addAction(cancelAction)
-                alert.addAction(okAction)
-                
-                self.present(alert, animated: true, completion: nil)
-            }
-        } else {
-            let alert = UIAlertController(
-                title: String(format: "ADD_ALREADY".localized, titleTF.text!),
-                message: nil,
-                preferredStyle: .alert)
-            
-            let closeAction = UIAlertAction(title: "CLOSE".localized, style: .default) { (action: UIAlertAction!) -> Void in
-                self.clearText()
             }
             
-            alert.addAction(closeAction)
+            let cancelAction = UIAlertAction(title: "CANCEL".localized, style: .cancel, handler: nil)
+            
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
             
             self.present(alert, animated: true, completion: nil)
         }

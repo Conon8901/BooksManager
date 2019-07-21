@@ -17,7 +17,7 @@
 "LIST_SETTING" = "設定";
 "LIST_NOBOOKS1" = "本がありません";
 "LIST_NOBOOKS2" = "右上のボタンから追加してください";
-"LIST_SETTING" = "カテゴリ設定";
+"LIST_SETTING" = "カテゴリ管理";
 "ADD_VCTITLE" = "本を追加";
 "ADD_TITLE" = "題名";
 "ADD_AUTHOR" = "著者";
@@ -32,7 +32,9 @@
 "NOTE_NOAUTHOR" = "著者情報なし";
 "NOTE_NOPUBLISHER" = "出版社情報なし";
 "NOTE_NOPRICE" = "定価情報なし";
-"NOTE_LISTPRICE" = "定価：";
+"NOTE_BY" = "%@ 著";
+"NOTE_LISTPRICE" = "定価";
+"NOTE_NOTE" = "メモ欄";
 "NOTE_NOIMAGE" = "画像は表示されない場合があります";
 "NOTE_NOIMAGE_MESSAGE" = "検索によって追加された場合のみ表紙画像が表示されます。";
 "HISTORY_NO" = "削除された本がありません";

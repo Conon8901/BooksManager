@@ -100,9 +100,6 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                         
                         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
                         
-                        
-                        //しあ
-                        
                         let googleURLString = String(format: "https://www.googleapis.com/books/v1/volumes?q=isbn:%@", readed)
 
                         let googleUrl = URL(string: googleURLString)!
@@ -152,7 +149,7 @@ class BarCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
                                                     }
                                                 }
                                                 
-                                                if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {
+                                                if let isbns = volumeInfo["industryIdentifiers"] as? [[String: String]] {//ISBNは削除
                                                     for one in isbns {
 //                                                        if one["type"] == "ISBN_10" {
 //                                                            tempArray["isbn_10"] = one["identifier"]!

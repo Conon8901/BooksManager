@@ -17,7 +17,7 @@
 "LIST_SETTING" = "Setting";
 "LIST_NOBOOKS1" = "There are no books.";
 "LIST_NOBOOKS2" = "Add books from the top right button.";
-"LIST_SETTING" = "Category\nSetting";
+"LIST_SETTING" = "Category\nManager";
 "ADD_VCTITLE" = "Add a Book";
 "ADD_TITLE" = "Title";
 "ADD_AUTHOR" = "Author";
@@ -29,10 +29,12 @@
 "ADD_SEARCH" = "Fill in, and search";
 "ADD_EG" = "e.g. The name of the used bookstore where you found this book";
 "NOTE_VCTITLE" = "Details";
-"NOTE_NOAUTHOR" = "No Information on the Author";
-"NOTE_NOPUBLISHER" = "No Information on the Publisher";
-"NOTE_NOPRICE" = "No Information on the Price";
+"NOTE_NOAUTHOR" = "No Info about the Author";
+"NOTE_NOPUBLISHER" = "No Info about the Publisher";
+"NOTE_NOPRICE" = "No Info about the Price";
+"NOTE_BY" = "by %@";
 "NOTE_LISTPRICE" = "the list price: ";
+"NOTE_NOTE" = "NOTE: ";
 "NOTE_NOIMAGE" = "Images may not be Displayed.";
 "NOTE_NOIMAGE_MESSAGE" = "Images are displayed only when it added using search.";
 "HISTORY_NO" = "No books has been deleted.";
