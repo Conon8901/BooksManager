@@ -9,17 +9,15 @@
 import UIKit
 
 //本の詳細を見るVC
-class NoteViewController: UIViewController, UITextViewDelegate {
+class NoteViewController: UIViewController {
     
     //MARK: - 宣言
     
-    @IBOutlet var noteTV: UITextView!
-    @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var authorLabel: UILabel!
     @IBOutlet var publisherLabel: UILabel!
     @IBOutlet var priceLabel: UILabel!
-    @IBOutlet var noteLabel: UILabel!
+    @IBOutlet var bookshopLabel: UILabel!
     @IBOutlet var coverImageView: UIImageView!
     
     var saveData = UserDefaults.standard
@@ -32,14 +30,6 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         navigationItem.title = "NOTE_VCTITLE".localized
-        
-        noteLabel.text = "NOTE_NOTE".localized
-        
-        noteTV.font = .systemFont(ofSize: 17)
-        
-        noteTV.delegate = self
-        
-        doneButton.hide()
     }
     
     @objc func imageTapped(sender: UITapGestureRecognizer) {
@@ -60,6 +50,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         let author = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].author
         let publisher = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].publisher
         let price = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].price
+        let bookshop = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].bookshop
         
         titleLabel.text = title
         
@@ -81,7 +72,11 @@ class NoteViewController: UIViewController, UITextViewDelegate {
             priceLabel.text = "NOTE_LISTPRICE".localized + price
         }
         
-        noteTV.text = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note
+        if bookshop == "" {
+            bookshopLabel.text = "NOTE_NOBOOKSHOP".localized
+        } else {
+            bookshopLabel.text = bookshop //TODO: 文言を考える
+        }
         
         if coverImageView.image == nil {
             let thumbnailStr = Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].cover
@@ -122,39 +117,4 @@ class NoteViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note = noteTV.text
-        
-        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
-        
-        saveData.set(encoded_all, forKey: Variables.shared.alKey)
-    }
-    
-    //MARK: - Navi
-    
-    @IBAction func doneTapped() {
-        Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]![currentBookIndex!].note = noteTV.text
-        
-        let encoded_all = try! JSONEncoder().encode(Variables.shared.booksData)
-        
-        saveData.set(encoded_all, forKey: Variables.shared.alKey)
-        
-        noteTV.resignFirstResponder()
-    }
-    
-    //MARK: - TextView
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        doneButton.show()
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        doneButton.hide()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
 }

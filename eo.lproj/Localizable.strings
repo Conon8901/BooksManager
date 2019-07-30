@@ -21,7 +21,7 @@
 "ADD_VCTITLE" = "Aldono Libron";
 "ADD_TITLE" = "Titolo";
 "ADD_AUTHOR" = "Aŭtoro";
-"ADD_NOTE" = "Noto";
+"ADD_BOOKSHOP" = "Librejo";
 "ADD_AUTHOREMPTY" = "Ĉu Vi Vere Volas sen Aŭtora Nomo?";
 "ADD_CONTINUE" = "Aldono Kontinue";
 "ADD_ALREADY" = "\"%@\" jam estis aldonita";

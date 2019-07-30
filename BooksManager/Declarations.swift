@@ -129,5 +129,5 @@ struct Book: Codable {
     var publisher = ""
     var price = ""
     var cover = ""
-    var note = ""
+    var bookshop = ""
 }

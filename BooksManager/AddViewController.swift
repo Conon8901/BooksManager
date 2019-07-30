@@ -9,7 +9,7 @@
 import UIKit
 
 //本の追加をするVC
-class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class AddViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - 宣言
     
@@ -26,16 +26,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
     }
     @IBOutlet var authorLabel: UILabel!
     @IBOutlet var authorTF: UITextField!
-    @IBOutlet var noteLabel: UILabel!
-    @IBOutlet var noteTV: UITextView!
-    @IBOutlet var placeHolder: UILabel! {
-        didSet {
-            placeHolder.font = .systemFont(ofSize: 17)
-            placeHolder.textColor = UIColor(red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
-            placeHolder.text = "ADD_EG".localized
-            placeHolder.isUserInteractionEnabled = false
-        }
-    }
+    @IBOutlet var bookshopLabel: UILabel!
+    @IBOutlet var bookshopTF: UITextField!
     @IBOutlet var continuouslyLabel: UILabel!
     @IBOutlet var continuouslySwitch: UISwitch!
     @IBOutlet var searchButton: UIButton!
@@ -79,25 +71,24 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        noteTV.delegate = self
-        
         addButton.setTitle(String(format: "ADD_ADD".localized, Variables.shared.categories[Variables.shared.currentCategory]), for: .normal)
         
         navigationItem.title = "ADD_VCTITLE".localized
         cancelButton.title = "CANCEL".localized
         titleLabel.text = "ADD_TITLE".localized
         authorLabel.text = "ADD_AUTHOR".localized
-        noteLabel.text = "ADD_NOTE".localized
+        bookshopLabel.text = "ADD_BOOKSHOP".localized
         continuouslyLabel.text = "ADD_CONTINUE".localized
         searchButton.isEnabled = false
         searchButton.setImage(UIImage(named: "search.png"), for: .normal)
         
         titleTF.font = .systemFont(ofSize: 20)
         authorTF.font = .systemFont(ofSize: 20)
-        noteTV.font = .systemFont(ofSize: 17)
+        bookshopTF.font = .systemFont(ofSize: 20)
         
         titleTF.delegate = self
         authorTF.delegate = self
+        bookshopTF.delegate = self
         
         titleTF.becomeFirstResponder()
         
@@ -125,6 +116,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
             if Variables.shared.gottenAuthor != nil {
                 authorTF.isEnabled = false
             }
+            
+            bookshopTF.text = ""
             
             addButton.isEnabled = true
             
@@ -155,17 +148,13 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
     //MARK: - BookAddtion
     
     @IBAction func addTapped() {
-        let title = titleTF.text!
-        let author = authorTF.text!
-        let note = noteTV.text!
-        
-        if author.characterExists() {
+        if authorTF.text!.characterExists() {
             var book = Book()
-            book.title = title
-            book.author = author
-            book.note = note
+            book.title = titleTF.text!
+            book.author = authorTF.text!
+            book.bookshop = bookshopTF.text!
             
-            if let publisher = Variables.shared.gottenPublisher {
+            if let publisher = Variables.shared.gottenPublisher { //TODO: 画面に表示するか？
                 book.publisher = publisher
             }
             
@@ -198,9 +187,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
             
             let okAction = UIAlertAction(title: "OK".localized, style: .default) { (action: UIAlertAction!) -> Void in
                 var book = Book()
-                book.title = title
-                book.author = author
-                book.note = note
+                book.title = self.titleTF.text!
+                book.author = self.authorTF.text!
+                book.bookshop = self.bookshopTF.text!
                 
                 if let publisher = Variables.shared.gottenPublisher {
                     book.publisher = publisher
@@ -244,7 +233,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
         if continuouslySwitch.isOn {
             titleTF.text = ""
             authorTF.text = ""
-            noteTV.text = ""
+            bookshopTF.text = ""
             
             titleTF.isEnabled = true
             authorTF.isEnabled = true
@@ -310,13 +299,5 @@ class AddViewController: UIViewController, UITextFieldDelegate, UITextViewDelega
         
         let next = storyboard!.instantiateViewController(withIdentifier: "SearchNavView")
         self.present(next, animated: true, completion: nil)
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        if textView.text == "" {
-            placeHolder.isHidden = false
-        } else {
-            placeHolder.isHidden = true
-        }
     }
 }

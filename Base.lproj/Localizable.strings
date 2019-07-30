@@ -21,7 +21,7 @@
 "ADD_VCTITLE" = "Add a Book";
 "ADD_TITLE" = "Title";
 "ADD_AUTHOR" = "Author";
-"ADD_NOTE" = "Note";
+"ADD_BOOKSHOP" = "Bookshop";
 "ADD_AUTHOREMPTY" = "Are You Sure to Add Without Author Name?";
 "ADD_CONTINUE" = "Add Continuously";
 "ADD_ALREADY" = "\"%@\" has already been added";
