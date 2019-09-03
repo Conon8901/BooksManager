@@ -44,6 +44,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             addButton.backgroundColor = Variables.shared.themeColor
             addButton.tintColor = .white
             addButton.isEnabled = false
+            addButton.adjustsImageWhenDisabled = false
         }
     }
     
@@ -140,6 +141,12 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     @IBAction func cancelTapped() {
         self.view.endEditing(true)
         
+        Variables.shared.gottenTitle = nil
+        Variables.shared.gottenAuthor = nil
+        Variables.shared.gottenCover = nil
+        Variables.shared.gottenPrice = nil
+        Variables.shared.gottenPublisher = nil
+        
         Variables.shared.isFromAddVC = true
         
         self.dismiss(animated: true, completion: nil)
@@ -149,6 +156,8 @@ class AddViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func addTapped() {
         if authorTF.text!.characterExists() {
+            addButton.isEnabled = false //多重の追加を防ぐため
+            
             var book = Book()
             book.title = titleTF.text!
             book.author = authorTF.text!
@@ -240,10 +249,7 @@ class AddViewController: UIViewController, UITextFieldDelegate {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.addButton.setTitle(String(format: "ADD_ADD".localized, Variables.shared.categories[Variables.shared.currentCategory]), for: .normal)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    self.titleTF.becomeFirstResponder()
-                }
+                self.titleTF.becomeFirstResponder()
             }
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {

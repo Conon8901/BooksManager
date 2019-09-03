@@ -245,6 +245,8 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
     
     @IBAction func addTapped() {
         if Variables.shared.categories.index(of: newTF.text!) == nil {
+            addButton.isEnabled = false
+            
             Variables.shared.categories.append(newTF.text!)
             Variables.shared.booksData[newTF.text!] = []
             
@@ -266,6 +268,7 @@ class CSViewController: UIViewController, UITextFieldDelegate, UITableViewDelega
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.addButton.setTitle("CS_ADD".localized, for: .normal)
+                self.newTF.becomeFirstResponder()
             }
         } else {
             let alert = UIAlertController(

@@ -14,10 +14,9 @@
 "BACK" = "Reiri";
 "OK" = "Bone";
 "LIST_VCTITLE" = "Listo";
-"LIST_SETTING" = "Agordo";
 "LIST_NOBOOKS1" = "Ne estas libroj.";
 "LIST_NOBOOKS2" = "Aldonu librojn per la supra dekstra butono.";
-"LIST_SETTING" = "Administrejo de\nKategorioj";
+"LIST_EDITOR" = "Redaktejo de\nKategorioj";
 "ADD_VCTITLE" = "Aldono Libron";
 "ADD_TITLE" = "Titolo";
 "ADD_AUTHOR" = "Aŭtoro";
@@ -34,7 +33,7 @@
 "NOTE_NOPRICE" = "Neniu informo pri la prezo";
 "NOTE_BY" = "de %@";
 "NOTE_LISTPRICE" = "la fiksa prezo: ";
-"NOTE_NOTE" = "NOTO: ";
+"NOTE_NOBOOKSHOP" = "Neniu enigaĵo pri librejo";
 "NOTE_NOIMAGE" = "Eble Ne Ekzistas Bildo";
 "NOTE_NOIMAGE_MESSAGE" = "La bildo estas vidigata nur kiam la libro estas aldonita per serĉo.";
 "HISTORY_NO" = "Neniu libroj estis forviŝata.";

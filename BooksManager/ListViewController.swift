@@ -24,7 +24,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     let saveData = UserDefaults.standard
     
-    var openCSVCRecognizer = UILongPressGestureRecognizer()
+    var openCSVCRecogniser = UILongPressGestureRecognizer()
     
     var numberBeforeGoingToAddVC = 0
     var categoriesBeforeGoingToCSVC = [String]()
@@ -47,7 +47,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         tabsCover.isHidden = true
         
-        openCSVCRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
+        openCSVCRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(self.openCSVC))
         
         let initialCategory = "#1"
         
@@ -77,11 +77,11 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         table.tableFooterView = UIView()
         table.allowsSelection = true
         
-        tabs.addGestureRecognizer(openCSVCRecognizer)
+        tabs.addGestureRecognizer(openCSVCRecogniser)
         
         let tabsBorder = UIView()
         let viewHeight = CGFloat(1)
-        let viewY = UIApplication.shared.statusBarFrame.size.height + self.navigationController!.navigationBar.frame.size.height + tabs.frame.size.height - viewHeight
+        let viewY = tabs.frame.origin.y + tabs.frame.size.height - viewHeight
         tabsBorder.frame = CGRect(x: 0, y: viewY, width: view.frame.size.width, height: viewHeight)
         tabsBorder.backgroundColor = UIColor(white: 200/255, alpha: 1)
         view.addSubview(tabsBorder)
@@ -138,10 +138,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         selectedCellBottomBar.alpha = 0
         
         if indexPath.row == Variables.shared.categories.count {
-            label.text = "LIST_SETTING".localized
+            label.text = "LIST_EDITOR".localized
             label.textColor = .white
             label.numberOfLines = 2
-            cell.backgroundColor = Variables.shared.themeColor.complementary
+            cell.backgroundColor = Variables.shared.themeColor.inversed
         } else {
             label.text = Variables.shared.categories[indexPath.row]
             label.textColor = .black
@@ -182,7 +182,7 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 
                 checkTableStateAndReload()
                 
-                if !Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.isEmpty { //遷移先に本がある場合。ないと時々（？）落ちる
+                if !Variables.shared.booksData[Variables.shared.categories[Variables.shared.currentCategory]]!.isEmpty { //TODO: 遷移先に本がある場合。ないと時々（？）落ちる
                     table.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 }
                 

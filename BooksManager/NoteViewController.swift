@@ -75,7 +75,7 @@ class NoteViewController: UIViewController {
         if bookshop == "" {
             bookshopLabel.text = "NOTE_NOBOOKSHOP".localized
         } else {
-            bookshopLabel.text = bookshop //TODO: 文言を考える
+            bookshopLabel.text = bookshop
         }
         
         if coverImageView.image == nil {

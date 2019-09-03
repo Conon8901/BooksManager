@@ -76,14 +76,24 @@ extension UIBarButtonItem {
 }
 
 extension UIColor {
-    var complementary: UIColor {
+//    var complementary: UIColor {
+//        let originRed = self.cgColor.components![0]
+//        let originGreen = self.cgColor.components![1]
+//        let originBlue = self.cgColor.components![2]
+//        let originAlpha = self.cgColor.components![3]
+//
+//        let min_max_sum = [originRed, originGreen, originBlue].min()! + [originRed, originGreen, originBlue].max()!
+//
+//        return UIColor(red: min_max_sum - originRed, green: min_max_sum - originGreen, blue: min_max_sum - originBlue, alpha: 1)
+//    }
+    
+    var inversed: UIColor {
         let originRed = self.cgColor.components![0]
         let originGreen = self.cgColor.components![1]
         let originBlue = self.cgColor.components![2]
+        let originAlpha = self.cgColor.components![3]
         
-        let min_max_sum = [originRed, originGreen, originBlue].min()! + [originRed, originGreen, originBlue].max()!
-        
-        return UIColor(red: min_max_sum - originRed, green: min_max_sum - originGreen, blue: min_max_sum - originBlue, alpha: 1)
+        return UIColor(red: 1-originRed, green: 1-originGreen, blue: 1-originBlue, alpha: originAlpha)
     }
 }
 
